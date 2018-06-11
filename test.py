@@ -4,9 +4,10 @@ from urllib import request
 from nltk.corpus import wordnet as wn
 from nltk.chunk import RegexpParser
 
-#Recomendation: try applying parser (below) to test examples array
-#NOTE: Removes all description text that appears before the first instance of 'Appetizers' and the last instance of 'Menu'
+#PARAM: name of file to be processed
+# Removes all description text that appears before the first instance of 'Appetizers' and the last instance of 'Menu' 
 # Does not negatively overwrite files which do not follow said output
+#RETURN: Processed file
 def process_text(filename):
     with open(filename, 'r') as org_file:
         original_text = org_file.read()
@@ -14,7 +15,9 @@ def process_text(filename):
     with open(filename, 'w') as new_file:
         new_file.write(new_text)
 
-#NOTE: Removes extra words such as time, date and prices from file containing menu
+#PARAM: name of file to be processed
+#Removes extra words such as time, date and prices from file containing menu
+#RETURN: Processed file
 def iterate_menu(filename):
     f= open(filename)
     lines = f.readlines()
@@ -29,8 +32,10 @@ def iterate_menu(filename):
     f.close()
 
 #NOTE: User should manually input full path to Menu File to be read into files array
+#PARAM: name of file to be processed
 # Parses through file text using NLTK RegexParser and finds chunks which correspond to the specified grammar
 # Parses through resulting NLTK tree and retrieves matched chunks
+#RETURN: NLTK tree 
 files = ['/Users/priyadhawka/Desktop/rigtester/menu-www.laiguanarestaurant.com.txt','/Users/priyadhawka/Desktop/rigtester/menu-www.noodles13.com.txt', '/Users/priyadhawka/Desktop/rigtester/menu-hamiltonroyalindiagrill.com.txt']
 filename = files[2]
 process_text(filename)
