@@ -39,8 +39,8 @@ def process_text(filename):
     new_text = re.sub('Menu.*Appetizers\n', '', original_text, flags=re.DOTALL)
     with open(filename, 'w') as new_file:
         new_file.write(new_text)
-        
-#NOTE: Removes extra 'buzzwords such as time, date' and prices from file containing menu
+
+#NOTE: Removes extra words such as time, date and prices from file containing menu
 def iterate_menu(filename):
     f= open(filename)
     lines = f.readlines()
@@ -54,7 +54,9 @@ def iterate_menu(filename):
         f.write(lines[i])
     f.close()
 
-#Note: User should manually input path to Menu File to be read
+#NOTE: User should manually input full path to Menu File to be read into files array
+# Parses through file text using NLTK RegexParser and finds chunks which correspond to the specified grammar
+# Parses through resulting NLTK tree and retrieves matched chunks
 files = ['/Users/priyadhawka/Desktop/rigtester/menu-www.laiguanarestaurant.com.txt','/Users/priyadhawka/Desktop/rigtester/menu-www.noodles13.com.txt', '/Users/priyadhawka/Desktop/rigtester/menu-hamiltonroyalindiagrill.com.txt']
 filename = files[2]
 process_text(filename)
