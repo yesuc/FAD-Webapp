@@ -51,3 +51,15 @@ def parse_chunk(filename):
             keys.append(s)
     f.close()
     return keys
+
+def parse_ingredients(ingredients_array):
+    for list in ingredients_array:
+        list = re.sub('[^a-z]\s+','',list)
+        print(list)
+        # for char in list:
+        #     print(char,char.isalpha(),ord(char))
+        # print(list.split())
+        # list = ''.join(i for i in list.split() if not i.isdigit())
+        # list = re.sub('cup','',list)
+
+    return ingredients_array

@@ -22,10 +22,8 @@ def process_html(soup):
     return text
 
 def process_url(url):
-    print(url)
     first_dot = url.find('.')
     second_dot = url.find('.',first_dot+1)
-    print(second_dot)
     if second_dot < 0 and first_dot < 0:
         return None
     elif second_dot < 0:
@@ -55,9 +53,9 @@ class MenuSpider(scrapy.Spider):
 
     def parse(self, response):
         pdf_urls = imitator.find_menu_pdf(response.url)
-        print('Dictionary Len: ', len(pdf_urls))
         page = process_url(response.url.split("/")[2])
         text_array = []
+
         if len(pdf_urls) == 0:
             soup = BeautifulSoup(response.text, 'lxml')
             text = process_html(soup)
@@ -66,14 +64,13 @@ class MenuSpider(scrapy.Spider):
                 f.write(text)
             self.log('Saved file %s' % filename)
             return_items = chunker.parse_chunk(filename)
+            
         else:
-            i = 0
             for title, url in pdf_urls.items():
                 text = ocr.pdf_to_text(url)
                 with open(title + '.txt', 'w+') as f:
                     f.write(text)
                 self.log('Saved file %s' % title)
                 text_array.append(title)
-                i+=1
             for filename in text_array:
                 return_items = chunker.parse_chunk(filename)
