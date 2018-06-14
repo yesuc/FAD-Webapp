@@ -24,7 +24,7 @@ def iterate_menu(filename):
     for i in range(0, len(lines)):
         lines[i] = lines[i].replace('$',' ')
         lines[i] = ''.join(j for j in lines[i] if not j.isdigit())
-        # lines[i] = re.sub('\s?(?:A.M|P.M|a.m|p.m)', ' ',lines[i])
+        lines[i] = re.sub('\s?(?:A\.M|P\.M|a\.m|p\.m)', ' ',lines[i])
         lines[i] = re.sub('[a-z]?i+day', ' ',lines[i])
         f.write(lines[i])
     f.close()
@@ -58,6 +58,11 @@ def parse_ingredients(ingredients_array):
         ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha())
         ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons"])
         # list = re.sub('[^a-z]\s+','',list)
-        # print(ingredients_array[i])
-    print(ingredients_array)
     return ingredients_array
+
+def clean_ingredients(ingredients_array):
+    print(ingredients_array)
+    for i in range(len(ingredients_array)):
+        ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if nltk.pos_tag(j) == 'JJ')
+        print(ingredients_array[i])
+    # print(ingredients_array)
