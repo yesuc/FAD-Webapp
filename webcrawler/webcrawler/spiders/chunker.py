@@ -4,6 +4,7 @@ from urllib import request
 from nltk.corpus import wordnet as wn
 from nltk.chunk import RegexpParser
 
+
 #Recomendation: try applying parser (below) to test examples array
 #NOTE: Removes all description text that appears before the first instance of 'Appetizers' and the last instance of 'Menu'
 # Does not negatively overwrite files which do not follow said output
@@ -53,13 +54,10 @@ def parse_chunk(filename):
     return keys
 
 def parse_ingredients(ingredients_array):
-    for list in ingredients_array:
-        list = re.sub('[^a-z]\s+','',list)
-        print(list)
-        # for char in list:
-        #     print(char,char.isalpha(),ord(char))
-        # print(list.split())
-        # list = ''.join(i for i in list.split() if not i.isdigit())
-        # list = re.sub('cup','',list)
-
+    for i in range(len(ingredients_array)):
+        ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha())
+        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons"])
+        # list = re.sub('[^a-z]\s+','',list)
+        # print(ingredients_array[i])
+    print(ingredients_array)
     return ingredients_array

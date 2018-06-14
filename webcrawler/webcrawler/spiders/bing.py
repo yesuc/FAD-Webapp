@@ -5,9 +5,21 @@ import chunker
 browser = webdriver.Safari()
 browser.set_page_load_timeout(60)
 browser.get('https://www4.bing.com/search?q=Fried%20Rice%20Recipe')
-check_boxes = browser.find_elements_by_class_name('comp_check_unchecked')
-for check in check_boxes[:4]:
-    check.click()
+
+items = browser.find_element_by_class_name('items').find_elements_by_tag_name('li')
+print(len(items))
+count = 0
+for i in items:
+    ename = i.find_element_by_class_name('tit').text
+    print(ename)
+    if 'Fried Rice' == ename and count <= 4:
+        i.find_element_by_class_name('comp_check_unchecked').click()
+        count+=1
+print("count is", count)
+# check_boxes = browser.find_elements_by_class_name('comp_check_unchecked')
+#
+# for check in check_boxes[:4]:
+#     check.click()
 
 button = browser.find_element_by_id('cmp_btn')
 while not browser.find_element_by_id('ent_ovlc').is_displayed():
@@ -22,7 +34,6 @@ while titles == []:
     c+=1
     titles = browser.find_elements_by_class_name('ec_title cbl')
 print('c = ',c)
-print(len(titles))
 ingredients_list_title = ''
 for list in titles:
     if list.text == 'Ingredients List':
