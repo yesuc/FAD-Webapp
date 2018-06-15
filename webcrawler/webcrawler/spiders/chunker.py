@@ -45,7 +45,6 @@ def parse_ingredients(ingredients_array):
     for i in range(len(ingredients_array)):
         ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha())
         ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","dashes","pinch","cubes"])
-        # list = re.sub('[^a-z]\s+','',list)
     return ingredients_array
 
 # PARAM: Array of Strings depicting ingredients
@@ -58,15 +57,17 @@ def clean_ingredients2(ingredients_array):
                     temp = ingredients_array[i].split()
                     temp.remove(word)
                     ingredients_array[i]= ' '.join(j for j in temp)
-            print(ingredients_array[i])
+        print(ingredients_array)
         return ingredients_array
+
 def clean_ingredients(ingredients_array):
     clean_ingredients_array = []
     grammar = r"""Chunk: {<JJ.?>* <NN.?>{,3}}"""
     for ingredient in ingredients_array:
+        ingredient = ingredient.strip()
+        if len(ingredient) < 1: continue
         # chunker returns a list containing single string, must index return array to access value
         clean_ingredients_array.append(chunker(grammar,ingredient)[0])
-    print(clean_ingredients_array)
     return clean_ingredients_array
 
 # PARAM: String Regular Expression depicting Grammar to be applied to String text
@@ -85,4 +86,5 @@ def chunker(grammar,text):
                     else:
                         s = s + ' ' + word[0]
                 keys.append(s)
+        # print(keys)
         return keys
