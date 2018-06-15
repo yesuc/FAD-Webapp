@@ -35,7 +35,9 @@ for ingredient_list in children:
     for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
         if ingredient.text not in recipe_ingredients:
             recipe_ingredients.append(ingredient.text)
-chunker.parse_ingredients(recipe_ingredients)
-chunker.clean_ingredients(recipe_ingredients)
+recipe_ingredients = chunker.parse_ingredients(recipe_ingredients)
+print(recipe_ingredients)
+print()
+print(chunker.clean_ingredients(recipe_ingredients))
 
 browser.close()

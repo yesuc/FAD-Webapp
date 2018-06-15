@@ -44,14 +44,11 @@ def parse_chunk(filename):
 def parse_ingredients(ingredients_array):
     for i in range(len(ingredients_array)):
         ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha())
-        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","dashes","pinch","cubes"])
-        # list = re.sub('[^a-z]\s+','',list)
+        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","dashes","pinch","cubes", "bunch"])
     return ingredients_array
 
-# PARAM: Array of Strings depicting ingredients
-# Tokenizes each string into word-tag pairs, applies nltk regex to filter only Adjective-Noun Strings
-# RETURN: An array strings depicting basic ingredients
-def clean_ingredients2(ingredients_array):
+
+def clean_ingredients(ingredients_array):
         for i in range(len(ingredients_array)):
             for word,pos in nltk.pos_tag(nltk.word_tokenize(ingredients_array[i])):
                 if pos == 'VBD' or pos == 'VB' or pos == 'IN' or pos == 'CC' or pos == 'RB' or pos == 'TO':
@@ -60,14 +57,19 @@ def clean_ingredients2(ingredients_array):
                     ingredients_array[i]= ' '.join(j for j in temp)
             print(ingredients_array[i])
         return ingredients_array
-def clean_ingredients(ingredients_array):
-    clean_ingredients_array = []
-    grammar = r"""Chunk: {<JJ.?>* <NN.?>{,3}}"""
-    for ingredient in ingredients_array:
-        # chunker returns a list containing single string, must index return array to access value
-        clean_ingredients_array.append(chunker(grammar,ingredient)[0])
-    print(clean_ingredients_array)
-    return clean_ingredients_array
+
+# PARAM: Array of Strings depicting ingredients
+# Tokenizes each string into word-tag pairs, applies nltk regex to filter only Adjective-Noun Strings
+# RETURN: An array strings depicting basic ingredients
+# def clean_ingredients(ingredients_array):
+#     clean_ingredients_array = []
+#     grammar = r"""Chunk: {<JJ.?|VB.?>* <NN.?>{,3}}"""
+#     for ingredient in ingredients_array:
+#         ingredient = ingredient.strip()
+#         if len(ingredient) < 1: continue
+#         # chunker returns a list containing single string, must index return array to access value
+#         clean_ingredients_array.append(chunker(grammar,ingredient)[0])
+#     return clean_ingredients_array
 
 # PARAM: String Regular Expression depicting Grammar to be applied to String text
 # Tokenizes the given text into words-tag pairs, applies grammar nltk regex and filters words
