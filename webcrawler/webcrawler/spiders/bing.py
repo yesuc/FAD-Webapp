@@ -33,7 +33,8 @@ children = parent.find_elements_by_class_name('ec_value')
 recipe_ingredients = []
 for ingredient_list in children:
     for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
-        recipe_ingredients.append(ingredient.text)
+        if ingredient.text not in recipe_ingredients:
+            recipe_ingredients.append(ingredient.text)
 chunker.parse_ingredients(recipe_ingredients)
 chunker.clean_ingredients(recipe_ingredients)
 
