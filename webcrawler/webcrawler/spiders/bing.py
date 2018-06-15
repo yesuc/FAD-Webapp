@@ -1,8 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 import chunker
-
-browser = webdriver.Safari()
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+options.add_argument('window-size = 1200x600')
+browser = webdriver.Chrome(chrome_options=options)
 browser.set_page_load_timeout(60)
 browser.get('https://www4.bing.com/search?q=Fried%20Rice%20Recipe')
 items = browser.find_elements_by_xpath('//*[@id="ent-car-exp"]/div/div/div[2]/div/ol/*')
@@ -18,23 +20,22 @@ if count >=2:
     while not browser.find_element_by_id('ent_ovlc').is_displayed():
         button.click()
 
-titles = browser.find_elements_by_class_name('ec_title cbl')
-c = 0
+titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
 while titles == []:
-    c+=1
-    titles = browser.find_elements_by_class_name('ec_title cbl')
-
-ingredients_list_title = ''
-for list in titles:
-    if list.text == 'Ingredients List':
-        ingredients_list_title = list
-parent = ingredients_list_title.find_element_by_xpath('..')
+    titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
+# ingredients_list_title = ''
+# for list in titles:
+#     if list.text == 'Ingredients List':
+#         ingredients_list_title = list
+# parent = ingredients_list_title.find_element_by_xpath('..')
+parent = titles[0].find_element_by_xpath('..')
 children = parent.find_elements_by_class_name('ec_value')
 recipe_ingredients = []
 for ingredient_list in children:
     for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
-        recipe_ingredients.append(ingredient.text)
+        if ingredient.text not in recipe_ingredients:
+            recipe_ingredients.append(ingredient.text)
 chunker.parse_ingredients(recipe_ingredients)
 chunker.clean_ingredients(recipe_ingredients)
 
-# browser.close()
+browser.close()

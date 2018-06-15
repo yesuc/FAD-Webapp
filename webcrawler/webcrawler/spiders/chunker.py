@@ -56,13 +56,16 @@ def parse_chunk(filename):
 def parse_ingredients(ingredients_array):
     for i in range(len(ingredients_array)):
         ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha())
-        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons"])
-        # list = re.sub('[^a-z]\s+','',list)
+        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons", "pound", "pounds", "dash","dashes","cube","cubes", "bunch"])
+    print(ingredients_array)
     return ingredients_array
 
 def clean_ingredients(ingredients_array):
-    print(ingredients_array)
     for i in range(len(ingredients_array)):
-        ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if nltk.pos_tag(j) == 'JJ')
+        for word,pos in nltk.pos_tag(nltk.word_tokenize(ingredients_array[i])):
+            if pos == 'VBD' or pos == 'VB' or pos == 'IN' or pos == 'CC' or pos == 'RB' or pos == 'TO':
+                temp = ingredients_array[i].split()
+                temp.remove(word)
+                ingredients_array[i]= ' '.join(j for j in temp)
         print(ingredients_array[i])
-    # print(ingredients_array)
+    return ingredients_array
