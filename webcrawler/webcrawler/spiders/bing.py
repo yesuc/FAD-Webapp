@@ -1,6 +1,7 @@
+from . import chunker
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
-import chunker
+
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('window-size = 1200x600')
@@ -21,21 +22,23 @@ if count >=2:
         button.click()
 
 titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
+
 while titles == []:
     titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
-# ingredients_list_title = ''
-# for list in titles:
-#     if list.text == 'Ingredients List':
-#         ingredients_list_title = list
-# parent = ingredients_list_title.find_element_by_xpath('..')
-parent = titles[0].find_element_by_xpath('..')
+ingredients_list_title = ''
+for list in titles:
+    if list.text == 'Ingredients List':
+        ingredients_list_title = list
+parent = ingredients_list_title.find_element_by_xpath('..')
+# parent = titles[0].find_element_by_xpath('..')
 children = parent.find_elements_by_class_name('ec_value')
 recipe_ingredients = []
 for ingredient_list in children:
     for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
         if ingredient.text not in recipe_ingredients:
             recipe_ingredients.append(ingredient.text)
-chunker.parse_ingredients(recipe_ingredients)
-chunker.clean_ingredients(recipe_ingredients)
+recipe_ingredients = chunker.parse_ingredients(recipe_ingredients)
+recipe_ingredients = chunker.clean_ingredients(recipe_ingredients)
+print(recipe_ingredients)
 
 browser.close()

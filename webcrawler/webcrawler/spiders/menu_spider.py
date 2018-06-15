@@ -64,7 +64,7 @@ class MenuSpider(scrapy.Spider):
                 f.write(text)
             self.log('Saved file %s' % filename)
             return_items = chunker.parse_chunk(filename)
-            
+
         else:
             for title, url in pdf_urls.items():
                 text = ocr.pdf_to_text(url)

@@ -15,7 +15,10 @@ from selenium import webdriver
 # RETURN: String url to perspective menu or None indicating no page found
 def find_menu_page(home_url):
     # Open Safari window - make sure to not have other windows open on same url
-    browser = webdriver.Safari()
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    options.add_argument('window-size = 1200x600')
+    browser = webdriver.Chrome(chrome_options=options)
     # NOTE: Experiencing "errno 54 connection reset by peer selenium." Set load time helps prevent error
     browser.set_page_load_timeout(60)
     # Key words that may indicate a link leading to menu -- ordered in most 'popular' usage
@@ -50,7 +53,10 @@ def find_menu_page(home_url):
 # RETURN: A dict of menu titles mapped to string urls for perspective menus
 def find_menu_pdf(url):
     # Open Safari window - make sure to not have other windows open on same url
-    browser = webdriver.Safari()
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    options.add_argument('window-size = 1200x600')
+    browser = webdriver.Chrome(chrome_options=options)
     # NOTE: Experiencing "errno 54 connection reset by peer selenium." Set load time helps prevent error
     browser.set_page_load_timeout(60)
     # Key words that may indicate a link leading to menu -- ordered in most 'popular' usage
