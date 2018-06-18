@@ -69,7 +69,7 @@ class MenuSpider(scrapy.Spider):
         else:
             for title, url in pdf_urls.items():
                 text = ocr.pdf_to_text(url)
-                title = title + '.txt'
+                title = title +'.txt'
                 with open(title, 'w+') as f:
                     f.write(text)
                 self.log('Saved file %s' % title)
