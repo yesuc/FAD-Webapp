@@ -1,7 +1,6 @@
 import nltk, re, pprint
 from nltk import word_tokenize
 from urllib import request
-from nltk.corpus import wordnet as wn
 from nltk.chunk import RegexpParser
 
 
@@ -44,32 +43,39 @@ def parse_chunk(filename):
 def parse_ingredients(ingredients_array):
     for i in range(len(ingredients_array)):
         ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha())
-        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","dashes","pinch","cubes", "bunch"])
+        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["large","medium","small","cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","pounds","dashes","pinch","cubes", "bunch", "ounce"])
+        ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["ground","boneless","canned","skinless","breast","can","fresh","plain","regular"])
+        # ingredients_array[i] = ' '.join(i for i in list(set(ingredients_array[i].split())))
+        # ingredients_array[i] = list(set(ingredients_array[i].split()))
     return ingredients_array
 
 
-def clean_ingredients(ingredients_array):
-        for i in range(len(ingredients_array)):
-            for word,pos in nltk.pos_tag(nltk.word_tokenize(ingredients_array[i])):
-                if pos == 'VBD' or pos == 'VB' or pos == 'IN' or pos == 'CC' or pos == 'RB' or pos == 'TO':
-                    temp = ingredients_array[i].split()
-                    temp.remove(word)
-                    ingredients_array[i]= ' '.join(j for j in temp)
-        print(ingredients_array)
-        return ingredients_array
-
-# PARAM: Array of Strings depicting ingredients
-# Tokenizes each string into word-tag pairs, applies nltk regex to filter only Adjective-Noun Strings
-# RETURN: An array strings depicting basic ingredients
 # def clean_ingredients(ingredients_array):
-#     clean_ingredients_array = []
-#     grammar = r"""Chunk: {<JJ.?|VB.?>* <NN.?>{,3}}"""
-#     for ingredient in ingredients_array:
-#         ingredient = ingredient.strip()
-#         if len(ingredient) < 1: continue
-#         # chunker returns a list containing single string, must index return array to access value
-#         clean_ingredients_array.append(chunker(grammar,ingredient)[0])
-#     return clean_ingredients_array
+#         for i in range(len(ingredients_array)):
+#             for word,pos in nltk.pos_tag(nltk.word_tokenize(ingredients_array[i])):
+#                 if pos in ['VBD','VB','VBG','IN','CC','RB','TO']:
+#                 # if pos == 'VBD' or pos == 'VB' or pos == 'IN' or pos == 'CC' or pos == 'RB' or pos == 'TO' or pos == "JJ":
+#                     temp = ingredients_array[i].split()
+#                     temp.remove(word)
+#                     ingredients_array[i]= ' '.join(j for j in temp)
+#         return ingredients_array
+
+#PARAM: Array of Strings depicting ingredients
+#Tokenizes each string into word-tag pairs, applies nltk regex to filter only Adjective-Noun Strings
+#RETURN: An array strings depicting basic ingredients
+def clean_ingredients(ingredients_array):
+    clean_ingredients_array = []
+    grammar = r"""Chunk: {<JJ.?|NN.?>? <NN.?>{1,2} <VB.?>?}"""
+    for ingredient in ingredients_array:
+        ingredient = ingredient.strip()
+        if len(ingredient) < 1: continue
+        print(ingredient)
+        # chunker returns a list containing single string, must index return array to access value
+        # print (chunker(grammar,ingredient))
+        for chunk in chunker(grammar,ingredient):
+            if chunk not in clean_ingredients_array:
+                clean_ingredients_array.append(chunk)
+    return clean_ingredients_array
 
 # PARAM: String Regular Expression depicting Grammar to be applied to String text
 # Tokenizes the given text into words-tag pairs, applies grammar nltk regex and filters words
@@ -77,6 +83,7 @@ def clean_ingredients(ingredients_array):
 def chunker(grammar,text):
         cp = nltk.RegexpParser(grammar)
         result = cp.parse(nltk.pos_tag(nltk.word_tokenize(text)))
+        print(result)
         keys = []
         for t in result:
             s = ''
