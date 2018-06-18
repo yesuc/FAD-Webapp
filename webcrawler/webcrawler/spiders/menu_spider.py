@@ -43,6 +43,7 @@ class MenuSpider(scrapy.Spider):
             for url in urls:
                 if 'menu' not in url[-4:]:
                     if requests.get(url+'menu').status_code == 404:
+                        print(url)
                         yield scrapy.Request(url=imitator.find_menu_page(url), callback=self.parse)
                     else:
                         yield scrapy.Request(url=url+'menu', callback=self.parse)
@@ -68,7 +69,8 @@ class MenuSpider(scrapy.Spider):
         else:
             for title, url in pdf_urls.items():
                 text = ocr.pdf_to_text(url)
-                with open(title + '.txt', 'w+') as f:
+                title = title + '.txt'
+                with open(title, 'w+') as f:
                     f.write(text)
                 self.log('Saved file %s' % title)
                 text_array.append(title)

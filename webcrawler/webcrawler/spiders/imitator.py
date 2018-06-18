@@ -9,7 +9,6 @@ from selenium import webdriver
 #   attempt to extract the item(s) and should transfer the links and control to
 #   OCR/Tika for processing.
 
-
 # PARAM: String url of restaurant website homepage
 # Attempts to find a Menu link using key word that match href html attributes
 # RETURN: String url to perspective menu or None indicating no page found
@@ -19,6 +18,7 @@ def find_menu_page(home_url):
     options.add_argument('headless')
     options.add_argument('window-size = 1200x600')
     browser = webdriver.Chrome(chrome_options=options)
+    # browser = webdriver.Safari()
     # NOTE: Experiencing "errno 54 connection reset by peer selenium." Set load time helps prevent error
     browser.set_page_load_timeout(60)
     # Key words that may indicate a link leading to menu -- ordered in most 'popular' usage
@@ -34,7 +34,7 @@ def find_menu_page(home_url):
             while not followed_link and j < len(link_matches):
                 link = link_matches[j]
                 link_href = link.get_attribute('href')
-                if link_href is not None and key_words[i].lower() in link_href.lower():
+                if link_href is not None:
                     # In case request incomplete, link is not immediately returned
                     browser.get(link_href)
                     followed_link = True
@@ -57,6 +57,7 @@ def find_menu_pdf(url):
     options.add_argument('headless')
     options.add_argument('window-size = 1200x600')
     browser = webdriver.Chrome(chrome_options=options)
+    # browser = webdriver.Safari()
     # NOTE: Experiencing "errno 54 connection reset by peer selenium." Set load time helps prevent error
     browser.set_page_load_timeout(60)
     # Key words that may indicate a link leading to menu -- ordered in most 'popular' usage
