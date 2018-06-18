@@ -87,5 +87,4 @@ def chunker(grammar,text):
                     else:
                         s = s + ' ' + word[0]
                 keys.append(s)
-        # print(keys)
         return keys

@@ -26,7 +26,7 @@ def find_menu_page(home_url):
     # flag indcates whether successfully found a link using key_words
     i = 0
     followed_link = False
-    browser.get('https://www.colgateinn.com/')
+    browser.get(home_url)
     while not followed_link and i < len(key_words):
         try:
             link_matches = browser.find_elements_by_partial_link_text(key_words[i])
@@ -34,9 +34,8 @@ def find_menu_page(home_url):
             while not followed_link and j < len(link_matches):
                 link = link_matches[j]
                 link_href = link.get_attribute('href')
-                if link_href is not None and key_words[i].lower() in link_href.lower():
+                if link_href is not None:
                     # In case request incomplete, link is not immediately returned
-                    browser.get(link_href)
                     followed_link = True
                 j+=1
         except:  #catch error or exception
@@ -75,7 +74,6 @@ def find_menu_pdf(url):
                 if link_href is not None:
                     for key in ['pdf','download']:
                         if key in link_href and link_href not in pdf_urls:
-                            print('Added ', link.text)
                             pdf_urls[link.text] = link_href
                 j+=1
         except:  #catch error or exception
