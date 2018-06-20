@@ -10,9 +10,6 @@ import urllib, io
 def img_to_text(url):
     file = io.StringIO(urllib.urlopen(url).read())
     text = tesserocr.file_to_text(file)
-    filename = 'colgate.txt'
-    with open(filename, 'w+') as f:
-        f.write(text)
     return text
 
 # PARAM: String url of menu pdf

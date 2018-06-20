@@ -49,30 +49,46 @@ class MenuSpider(scrapy.Spider):
                         yield scrapy.Request(url=url+'menu', callback=self.parse)
                 else:
                     yield scrapy.Request(url=url, callback=self.parse)
+            # menu_urls = ['menu', 'dinner', 'children','takeout']
+            # i =0
+            # for url in urls:
+            #     if menu_urls[i] not in url:
+            #         if requests.get(url+ menu_urls[i]).status_code == 404 and i < 4:
+            #             i+=1
+            #             yield scrapy.Request(url+menu_urls[i], callback=self.parse)
+            #         else:
+            #             yield scrapy.Request(url=imitator.find_menu_page(url), callback=self.parse)
+            #     else:
+            #         yield scrapy.Request(url=url, callback=self.parse)
 
 
 
     def parse(self, response):
         pdf_urls = imitator.find_menu_pdf(response.url)
-        page = process_url(response.url.split("/")[2])
-        text_array = []
-
+        text_array = {}
+        return_items = {}
+# Case: Menu is in HTML form
         if len(pdf_urls) == 0:
+            page = process_url(response.url.split("/")[2])
             soup = BeautifulSoup(response.text, 'lxml')
             text = process_html(soup)
-            filename = 'menus-%s.txt' % page
-            with open(filename, 'w+') as f:
-                f.write(text)
-            self.log('Saved file %s' % filename)
-            return_items = chunker.parse_chunk(filename)
-
+            # print(text)
+            # filename = 'menus-%s.txt' % page
+            # with open(filename, 'w+') as f:
+            #     f.write(text)
+            # self.log('Saved file %s' % filename)
+            return_items[page] = chunker.parse_chunk(text)
+            # print(return_items)
+# Case: Menu is in PDF form
         else:
             for title, url in pdf_urls.items():
                 text = ocr.pdf_to_text(url)
-                title = title +'.txt'
-                with open(title, 'w+') as f:
-                    f.write(text)
-                self.log('Saved file %s' % title)
-                text_array.append(title)
-            for filename in text_array:
-                return_items = chunker.parse_chunk(filename)
+                # print(text)
+                # title = title +'.txt'
+                # with open(title, 'w+') as f:
+                #     f.write(text)
+                # self.log('Saved file %s' % title)
+                text_array[title] = text
+            for key in text_array.keys():
+                return_items[key] = chunker.parse_chunk(text_array[key])
+                # print(return_items)

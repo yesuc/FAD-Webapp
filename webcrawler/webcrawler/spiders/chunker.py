@@ -6,38 +6,34 @@ from nltk.chunk import RegexpParser
 
 #NOTE: Removes all description text that appears before the first instance of 'Appetizers' and the last instance of 'Menu'
 # Does not negatively overwrite files which do not follow said output
-def process_text(filename):
-    with open(filename, 'r') as org_file:
-        original_text = org_file.read()
-    new_text = re.sub('Menu.*Appetizers\n', '', original_text, flags=re.DOTALL)
-    with open(filename, 'w') as new_file:
-        new_file.write(new_text)
+def process_text(raw_text):
+    new_text = re.sub('Menu.*Appetizers\n', '', raw_text, flags=re.DOTALL)
+    return new_text
+
 
 #NOTE: Removes extra words such as time, date and prices from file containing menu
-def iterate_menu(filename):
-    f= open(filename)
-    lines = f.readlines()
-    f.close()
-    f = open(filename,"w+")
+def iterate_menu(raw_text):
+    lines = raw_text.split()
     for i in range(0, len(lines)):
         lines[i] = lines[i].replace('$',' ')
         lines[i] = ''.join(j for j in lines[i] if not j.isdigit())
         lines[i] = re.sub('\s?(?:A\.M|P\.M|a\.m|p\.m)', ' ',lines[i])
         lines[i] = re.sub('[a-z]?i+day', ' ',lines[i])
-        f.write(lines[i])
-    f.close()
+        lines[i] = ''.join(j for j in lines[i])
+    raw_text = ' '.join(j for j in lines)
+    return raw_text
 
 #NOTE: User should manually input full path to Menu File to be read into files array
 # Parses through file text using NLTK RegexParser and finds chunks which correspond to the specified grammar
 # Parses through resulting NLTK tree and retrieves matched chunks
-def parse_chunk(filename):
-    process_text(filename)
-    iterate_menu(filename)
-    f = open(filename,'r')
-    text = f.read()
+def parse_chunk(raw_text):
+    raw_text = process_text(raw_text)
+    text = iterate_menu(raw_text)
     grammar = r"""Chunk: {<JJ.?>* <NN.?>* <VB.?>* <NN.?>*}"""
     keys = chunker(grammar,text)
-    f.close()
+    print("Printing keys")
+    print()
+    print(keys)
     return keys
 
 measurements_dict = ["large","medium","small","cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","pounds","dashes","pinch","cubes", "bunch", "ounce", "cloves","ground","boneless","canned","skinless","can","fresh","plain","regular", "long","centimeters", "half", "double", "inch","milliliters", "handful"]

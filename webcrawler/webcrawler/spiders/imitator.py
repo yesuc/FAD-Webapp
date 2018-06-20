@@ -22,7 +22,7 @@ def find_menu_page(home_url):
     # NOTE: Experiencing "errno 54 connection reset by peer selenium." Set load time helps prevent error
     browser.set_page_load_timeout(60)
     # Key words that may indicate a link leading to menu -- ordered in most 'popular' usage
-    key_words = ['Menu', 'Dining', 'Food', 'Dinner','Lunch', 'Sandwich', 'Breakfast', 'Soups', 'Pastries']
+    key_words = ['Menus', 'Dining','Food', 'Dinner','Lunch', 'Sandwich', 'Breakfast', 'Soups', 'Pastries']
     # flag indcates whether successfully found a link using key_words
     i = 0
     followed_link = False
@@ -30,10 +30,12 @@ def find_menu_page(home_url):
     while not followed_link and i < len(key_words):
         try:
             link_matches = browser.find_elements_by_partial_link_text(key_words[i])
+            print("Link Matches", link_matches)
             j = 0
             while not followed_link and j < len(link_matches):
                 link = link_matches[j]
                 link_href = link.get_attribute('href')
+                print("HREF:", link_href)
                 if link_href is not None:
                     # In case request incomplete, link is not immediately returned
                     followed_link = True
