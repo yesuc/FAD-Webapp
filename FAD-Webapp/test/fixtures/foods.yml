@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  contains_gluten: false
+  contains_dairy: false
+  contains_treenuts: false
+  contains_beef: false
+  contains_pork: false
+  contains_soy: false
+  contains_egg: false
+  contains_shellfish: false
+  contains_peanut: false
+  contains_fish: false
+  contains_sesame: false
+  contains_wheat: false
+  contains_other: MyString
+
+two:
+  contains_gluten: false
+  contains_dairy: false
+  contains_treenuts: false
+  contains_beef: false
+  contains_pork: false
+  contains_soy: false
+  contains_egg: false
+  contains_shellfish: false
+  contains_peanut: false
+  contains_fish: false
+  contains_sesame: false
+  contains_wheat: false
+  contains_other: MyString
