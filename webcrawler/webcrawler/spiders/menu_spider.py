@@ -43,26 +43,15 @@ class MenuSpider(scrapy.Spider):
             for url in urls:
                 if 'menu' not in url[-4:]:
                     if requests.get(url+'menu').status_code == 404:
-                        print(url)
                         yield scrapy.Request(url=imitator.find_menu_page(url), callback=self.parse)
                     else:
                         yield scrapy.Request(url=url+'menu', callback=self.parse)
                 else:
                     yield scrapy.Request(url=url, callback=self.parse)
-            # menu_urls = ['menu', 'dinner', 'children','takeout']
-            # i =0
-            # for url in urls:
-            #     if menu_urls[i] not in url:
-            #         if requests.get(url+ menu_urls[i]).status_code == 404 and i < 4:
-            #             i+=1
-            #             yield scrapy.Request(url+menu_urls[i], callback=self.parse)
-            #         else:
-            #             yield scrapy.Request(url=imitator.find_menu_page(url), callback=self.parse)
-            #     else:
-            #         yield scrapy.Request(url=url, callback=self.parse)
 
 
-
+#return_items: dictionary of restaurant titles or menu titles mapped to cleaned menu text, e.g N13 -> stripped menu
+#text_array: dictionary of menu titles at a specific restaurant mapped to the said menu, e.g Dessert Menu -> desserts
     def parse(self, response):
         pdf_urls = imitator.find_menu_pdf(response.url)
         text_array = {}
@@ -72,23 +61,13 @@ class MenuSpider(scrapy.Spider):
             page = process_url(response.url.split("/")[2])
             soup = BeautifulSoup(response.text, 'lxml')
             text = process_html(soup)
-            # print(text)
-            # filename = 'menus-%s.txt' % page
-            # with open(filename, 'w+') as f:
-            #     f.write(text)
-            # self.log('Saved file %s' % filename)
             return_items[page] = chunker.parse_chunk(text)
-            # print(return_items)
 # Case: Menu is in PDF form
         else:
             for title, url in pdf_urls.items():
                 text = ocr.pdf_to_text(url)
-                # print(text)
-                # title = title +'.txt'
-                # with open(title, 'w+') as f:
-                #     f.write(text)
-                # self.log('Saved file %s' % title)
                 text_array[title] = text
             for key in text_array.keys():
                 return_items[key] = chunker.parse_chunk(text_array[key])
-                # print(return_items)
+        chunker.clean_menu(return_items)
+        return return_items

@@ -8,6 +8,7 @@ from nltk.chunk import RegexpParser
 # Does not negatively overwrite files which do not follow said output
 def process_text(raw_text):
     new_text = re.sub('Menu.*Appetizers\n', '', raw_text, flags=re.DOTALL)
+    new_text = re.sub('Menu.*APPS\n','', new_text, flags=re.DOTALL)
     return new_text
 
 
@@ -31,20 +32,13 @@ def parse_chunk(raw_text):
     text = iterate_menu(raw_text)
     grammar = r"""Chunk: {<JJ.?>* <NN.?>* <VB.?>* <NN.?>*}"""
     keys = chunker(grammar,text)
-    print("Printing keys")
-    print()
-    print(keys)
     return keys
 
-measurements_dict = ["large","medium","small","cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","pounds","dashes","pinch","cubes", "bunch", "ounce", "cloves","ground","boneless","canned","skinless","can","fresh","plain","regular", "long","centimeters", "half", "double", "inch","milliliters", "handful"]
+measurements_dict = ["large","medium","small","cup","cups", "teaspoon","teaspoons", "tablespoon", "tablespoons", "ounce", "ounces", "pound", "pounds","pinch","pinches","cube","cubes", "bunch","bunches", "clove","cloves","ground","boneless","canned","skinless","can","cans","fresh","plain","regular", "long","centimeter","centimeters", "half","halves", "double", "inch","inches","milliliter","milimeters", "handful", "handfuls"]
 def parse_ingredients(ingredients_array):
     for i in range(len(ingredients_array)):
-        ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha() and j not in measurements_dict)
-        # ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["large","medium","small","cup", "teaspoon", "tablespoon", "ounces", "cups", "teaspoons","tablespoons","pound","pounds","dashes","pinch","cubes", "bunch", "ounce", "cloves"])
-        # ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["ground","boneless","canned","skinless","can","fresh","plain","regular", "long"])
-        # ingredients_array[i] = ' '.join(k for k in ingredients_array[i].split() if k not in ["centimeters", "half", "double", "inch","milliliters", "handful"])
+         ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha() and j not in measurements_dict)
     return ingredients_array
-
 
 def clean_ingredients(ingredients_array):
         for i in range(len(ingredients_array)):
@@ -94,3 +88,47 @@ def chunker(grammar,text):
                         s = s + ' ' + word[0]
                 keys.append(s)
         return keys
+
+#NOTE: Checks if words in a string start with uppercase letter
+def check_upper(word):
+    split_word = word.split()
+    temp = word.title().split()
+    result_str =''
+    for i in range(len(split_word)):
+        if split_word[i] == temp[i]:
+            result_str+=' '
+            result_str+= split_word[i]
+    return result_str
+
+#NOTE: Save menu items mapped to description
+def build_menu(return_items, j):
+    v_list = list(return_items.values())
+    str = ' '
+    menu_items = {}
+    for i in range(len(v_list[j])):
+        word = v_list[j][i]
+        matched = check_upper(word)
+        length = len(matched.split())
+        substring = ' '.join(j for j in word.split()[:length])
+        not_string = ' '.join(k for k in word.split()[length:])
+        if substring != matched and length >=2:
+            str+='\n'
+            str+= substring.upper()
+            str +='\n'
+            str+= not_string
+        else:
+            str+= ' '
+            str+= word.lower()
+    lines = str.splitlines()
+    for i in range(len(lines)):
+        if lines[i] not in menu_items and i % 2 != 0:
+            # if lines[i+1].split() != []:
+            menu_items[lines[i]] = lines[i+1].split()
+    print(menu_items)
+    return menu_items
+def clean_menu(return_items):
+    keys_list = list(return_items.keys())
+    for j in range(len(keys_list)):
+        return_items[keys_list[j]] = build_menu(return_items, j)
+    print(return_items)
+    return return_items
