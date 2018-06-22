@@ -5,7 +5,7 @@ from nltk import word_tokenize
 from . import chunker, imitator, ocr
 import requests
 
-# NOTE: scrapy crawl MenuSpider -a urls='http://www.hamiltoneatery.com/menu'
+# NOTE: scrapy crawl MenuSpider -a urls='http://www.hamiltoneatery.com/'
 
 
 # Takes a soup object, removes html & script & style tags & strips white space
@@ -33,6 +33,8 @@ def process_url(url):
 
 class MenuSpider(scrapy.Spider):
     name = "MenuSpider"
+    # NOTE: Set SEARCH_IMAGE = True to attempt to find image on menu pageself. Spider will not scrap HTML.
+    SEARCH_IMAGE = False
 
     def start_requests(self):
         urls = [getattr(self,'urls', None)]
@@ -40,47 +42,50 @@ class MenuSpider(scrapy.Spider):
             raise ValueError('No URL string given')
         else:
             tag = getattr(self, 'tag', None)
+            key_words = ['menu','menus','dinner','dining','food']
             for url in urls:
-                if 'menu' not in url[-4:]:
-                    if requests.get(url+'menu').status_code == 404:
-                        print(url)
-                        yield scrapy.Request(url=imitator.find_menu_page(url), callback=self.parse)
-                    else:
-                        yield scrapy.Request(url=url+'menu', callback=self.parse)
+                # NOTE: This code is in case the given URL does not have standard url form
+                # if 'com' not in url[-4:]:
+                #     begin_tags_index = url.find('com')
+                #     if begin_tags_index == -1:
+                #         raise ValueError('Bad URL: Is not in standard Domain Name <www.xxx.com/> structure')
+                #     else:
+                #         url = url[:begin_tags_index+4] #Add four to begin splicing after </> in <.com/>
+                followed_link = False
+                new_url = ''
+                i = 0
+                # Attempt to visit menu containing url by attaching key_words to given url
+                while not followed_link and i < len(key_words):
+                    if key_words[i] not in url[-4:]:
+                        new_url = url+key_words[i]
+                        if requests.get(new_url).status_code == 404:
+                            i+=1
+                            continue
+                        else:
+                            followed_link = True
+                        i+=1
+                if followed_link:
+                    print('Found Matching Key Word URL')
+                    yield scrapy.Request(url=new_url, callback=self.parse)
                 else:
-                    yield scrapy.Request(url=url, callback=self.parse)
-            # menu_urls = ['menu', 'dinner', 'children','takeout']
-            # i =0
-            # for url in urls:
-            #     if menu_urls[i] not in url:
-            #         if requests.get(url+ menu_urls[i]).status_code == 404 and i < 4:
-            #             i+=1
-            #             yield scrapy.Request(url+menu_urls[i], callback=self.parse)
-            #         else:
-            #             yield scrapy.Request(url=imitator.find_menu_page(url), callback=self.parse)
-            #     else:
-            #         yield scrapy.Request(url=url, callback=self.parse)
-
-
+                    # Attempt to find menu url on the given webpage
+                    menu_page = imitator.find_menu_page(url)
+                    if menu_page is None:
+                        raise ValueError('Bad url, could not find menu page')
+                    else:
+                        print('Initiating Imitator')
+                        yield scrapy.Request(url=menu_page, callback=self.parse)
 
     def parse(self, response):
-        pdf_urls = imitator.find_menu_pdf(response.url)
+        pdf_urls = imitator.find_menu_pdf(response.url) # type = dict
+        if SEARCH_IMAGE:
+            img_urls = imitator.find_menu_image(response.url) # type = array
+        else:
+            img_urls = []
         text_array = {}
         return_items = {}
-# Case: Menu is in HTML form
-        if len(pdf_urls) == 0:
-            page = process_url(response.url.split("/")[2])
-            soup = BeautifulSoup(response.text, 'lxml')
-            text = process_html(soup)
-            # print(text)
-            # filename = 'menus-%s.txt' % page
-            # with open(filename, 'w+') as f:
-            #     f.write(text)
-            # self.log('Saved file %s' % filename)
-            return_items[page] = chunker.parse_chunk(text)
-            # print(return_items)
-# Case: Menu is in PDF form
-        else:
+        # Case: Menu is in PDF form
+        if len(pdf_urls) > 0:
             for title, url in pdf_urls.items():
                 text = ocr.pdf_to_text(url)
                 # print(text)
@@ -92,3 +97,21 @@ class MenuSpider(scrapy.Spider):
             for key in text_array.keys():
                 return_items[key] = chunker.parse_chunk(text_array[key])
                 # print(return_items)
+        # Case: Menu is in IMG form
+        elif SEARCH_IMAGE and len(img_urls) > 0:
+            i = 0
+            for url in img_urls:
+                text = ocr.img_to_text(url)
+                return_items[i] = chunker.parse_chunk(text)
+        # Case: Menu is in HTML form
+        else:
+            page = process_url(response.url.split("/")[2])
+            soup = BeautifulSoup(response.text, 'lxml')
+            text = process_html(soup)
+            # print(text)
+            # filename = 'menus-%s.txt' % page
+            # with open(filename, 'w+') as f:
+            #     f.write(text)
+            # self.log('Saved file %s' % filename)
+            return_items[page] = chunker.parse_chunk(text)
+            # print(return_items)

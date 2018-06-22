@@ -1,4 +1,4 @@
-import chunker
+from . import chunker
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -12,40 +12,46 @@ def find_common_ingredients(query_string):
     browser = webdriver.Chrome(chrome_options=options)
     browser.set_page_load_timeout(60)
     browser.get('https://www4.bing.com/search?q=' + '%20'.join(query_string.split()) +'%20Recipe')
-    # Finds all matching recipe comparison check boxes, checks them.
+
+    # Finds all matching recipe items from bing query
     items = browser.find_elements_by_xpath('//*[@id="ent-car-exp"]/div/div/div[2]/div/ol/*')
-    # Max of 4 items can be compared at a time, must compare at least 2
     common_ingredients = {}
     clean_recipe_ingredients = []
     recipe_count = 0
     count = 0
     for i in items:
+        # ename - name of recipe
         ename = i.find_element_by_class_name('tit').text
+        # NOTE: Bing query requires at least 2 but no more than 4 compared recipes
         if query_string in ename and count <= 4:
             i.find_element_by_class_name('comp_check_unchecked').click()
             count+=1
             recipe_count+=1
-        # Find Compare Button, click it
+
+        # Find Compare Checkboxes, clicks them
         if count >=2:
+            # button - compare checkbox
             button = browser.find_element_by_id('cmp_btn')
             while not browser.find_element_by_id('ent_ovlc').is_displayed():
                 button.click()
+
             # Get recipe titles
             titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
-
             while titles == []:
                 titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
+            # Element with Find Ingredients List text, get parent element and use parent to find ingredient lists
             ingredients_list_title = ''
             for list in titles:
                 if list.text == 'Ingredients List':
                     ingredients_list_title = list
             parent = ingredients_list_title.find_element_by_xpath('..')
-            # Children == ingredients in list form
+            # Children - ingredients in list form
             children = parent.find_elements_by_class_name('ec_value')
-
+            # See_more element can hide ingredients; attempt to click it
             see_more_button = parent.find_elements_by_tag_name('a')
             for btn in see_more_button:
                 if btn is not None:
+                    # Must do execute scritp; normal get,clicks, etc do not work
                     browser.execute_script("arguments[0].click();", btn)
 
             recipe_ingredients = []
@@ -76,4 +82,3 @@ def find_common_ingredients(query_string):
         c = common_ingredients[key]
         if c > recipe_count/4: final_array.append(key)
     return final_array
-print(find_common_ingredients('Chicken Tikka Masala'))
