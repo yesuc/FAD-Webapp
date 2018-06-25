@@ -57,7 +57,6 @@ def find_common_ingredients(query_string):
             recipe_ingredients = []
             for ingredient_list in children:
                 for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
-                    # if ingredient.text not in recipe_ingredients:
                     recipe_ingredients.append(ingredient.text)
                     print(ingredient.text)
             clean_recipe_ingredients += chunker.clean_ingredients(chunker.parse_ingredients(recipe_ingredients))
