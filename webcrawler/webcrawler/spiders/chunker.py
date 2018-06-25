@@ -46,7 +46,6 @@ def clean_ingredients(ingredients_array):
             tokens = nltk.word_tokenize(ingredients_array[i])
             for word,pos in nltk.pos_tag(tokens):
                 if pos not in ['NN', 'NNS', 'JJ'] or pos in ['VBD','VB','VBG','IN','CC','RB','TO', 'PRP', 'DT', 'WRB','JJR', 'JJS']:
-                # if pos == 'VBD' or pos == 'VB' or pos == 'IN' or pos == 'CC' or pos == 'RB' or pos == 'TO' or pos == "JJ":
                     temp = ingredients_array[i].split()
                     temp.remove(word)
                     ingredients_array[i]= ' '.join(j for j in temp)
@@ -122,10 +121,10 @@ def build_menu(return_items, j):
     lines = str.splitlines()
     for i in range(len(lines)):
         if lines[i] not in menu_items and i % 2 != 0:
-            # if lines[i+1].split() != []:
             menu_items[lines[i]] = lines[i+1].split()
     print(menu_items)
     return menu_items
+
 def clean_menu(return_items):
     keys_list = list(return_items.keys())
     for j in range(len(keys_list)):

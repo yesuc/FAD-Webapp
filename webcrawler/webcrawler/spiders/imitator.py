@@ -90,8 +90,6 @@ def find_menu_image(url):
     browser = webdriver.Chrome(chrome_options=options)
     # NOTE: Experiencing "errno 54 connection reset by peer selenium." Set load time helps prevent error
     browser.set_page_load_timeout(60)
-    # Key words that may indicate a link leading to menu -- ordered in most 'popular' usage
-    # key_words = ['menu','food','dinner','lunch','breakfast','sandwiches','dining']
     key_words = ['image','jpg','png']
     img_urls = []
     i = 0
@@ -108,12 +106,8 @@ def find_menu_image(url):
                     if link_attr is not None:
                         for ext in ['jpg','png']:
                             if ext in link_attr and link_attr not in img_urls:
-                                # for trimmer in ['menupic','breakfast','lunch','dinner','dining','food']:
-                                    # if trimmer in link_attr and link_attr not in img_urls:
                                 img_urls.append(link_attr)
         except:
             pass
     browser.close()
     return img_urls
-
-print(find_menu_image('http://www.puzzlesbakerycafe.com/menu/#/cafe-menu/'))

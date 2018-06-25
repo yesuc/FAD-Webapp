@@ -19,6 +19,3 @@ def img_to_text(url):
 def pdf_to_text(url):
     parsed = parser.from_file(url)
     return parsed['content'] # pdf text
-
-print(img_to_text('https://image.zmenu.com/menupic/438004/5d2bc4a8-735b-4bf2-a2bb-4de783d45a83.jpg'))
-# print(img_to_text('http://nebula.wsimg.com/16225cabe938eab1fb14fe72679831b2?AccessKeyId=4067A1CA44DD4686EEB3&disposition=0&alloworigin=1'))
