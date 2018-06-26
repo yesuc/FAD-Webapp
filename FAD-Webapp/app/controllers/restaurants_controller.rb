@@ -62,10 +62,13 @@ class RestaurantsController < ApplicationController
   end
 
  def search
-   
+
  end
 
-  private
+private
+  def create_update_params
+    params.require(:restaurant).permit(:name)
+  end
     # Use callbacks to share common setup or constraints between actions.
     def set_restaurant
       @restaurant = Restaurant.find(params[:id])
