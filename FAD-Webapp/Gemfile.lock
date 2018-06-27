@@ -288,7 +288,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
-  capybara (~> 2.13)
+  capybara (>= 2.15, < 4.0)
   chromedriver-helper
   coffee-rails (~> 4.2)
   cucumber-rails
