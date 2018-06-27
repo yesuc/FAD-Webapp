@@ -8,7 +8,8 @@ from nltk.chunk import RegexpParser
 # Does not negatively overwrite files which do not follow said output
 def process_text(raw_text):
     new_text = re.sub('Menu.*Appetizers\n', '', raw_text, flags=re.DOTALL)
-    new_text = re.sub('Menu.*APPS\n','', new_text, flags=re.DOTALL)
+    new_text = re.sub('Dinner.*MENU','', new_text, flags=re.DOTALL)
+    new_text = re.sub('Menu.*APPS','', new_text, flags=re.DOTALL)
     return new_text
 
 
@@ -23,6 +24,8 @@ def iterate_menu(raw_text):
         lines[i] = ''.join(j for j in lines[i])
     raw_text = ' '.join(j for j in lines)
     return raw_text
+
+
 
 #NOTE: User should manually input full path to Menu File to be read into files array
 # Parses through file text using NLTK RegexParser and finds chunks which correspond to the specified grammar
@@ -89,46 +92,29 @@ def chunker(grammar,text):
                 keys.append(s)
         return keys
 
-#NOTE: Checks if words in a string start with uppercase letter
-def check_upper(word):
-    split_word = word.split()
-    temp = word.title().split()
-    result_str =''
-    for i in range(len(split_word)):
-        if split_word[i] == temp[i]:
-            result_str+=' '
-            result_str+= split_word[i]
-    return result_str
+def build_menu(return_items, number):
+    items_array = []
+    description_array = []
+    menu_items = []
+    values_list = list(return_items.values())
+    for i in range(len(values_list[number])):
+        for word,pos in nltk.tag.pos_tag(nltk.word_tokenize(values_list[number][i])):
+            if word[0].isupper() and pos in ['NN', 'NNS', 'NNP'] and i not in items_array and word not in ['Crisp', 'Boneless', 'Monterey']:
+                items_array.append(i)
+            elif i not in description_array:
+                description_array.append(i)
 
-#NOTE: Save menu items mapped to description
-def build_menu(return_items, j):
-    v_list = list(return_items.values())
-    str = ' '
-    menu_items = {}
-    for i in range(len(v_list[j])):
-        word = v_list[j][i]
-        matched = check_upper(word)
-        length = len(matched.split())
-        substring = ' '.join(j for j in word.split()[:length])
-        not_string = ' '.join(k for k in word.split()[length:])
-        if substring != matched and length >=2:
-            str+='\n'
-            str+= substring.upper()
-            str +='\n'
-            str+= not_string
-        else:
-            str+= ' '
-            str+= word.lower()
-    lines = str.splitlines()
-    for i in range(len(lines)):
-        if lines[i] not in menu_items and i % 2 != 0:
-            # if lines[i+1].split() != []:
-            menu_items[lines[i]] = lines[i+1].split()
-    print(menu_items)
+    for j in range(len(items_array)-1):
+        index = items_array[j]
+        str = ' '
+        for k in range(index+1, items_array[j+1]-1):
+            str+=' '
+            str+= values_list[number][k]
+        menu_items.append([values_list[number][index], str])
     return menu_items
+
 def clean_menu(return_items):
     keys_list = list(return_items.keys())
     for j in range(len(keys_list)):
-        return_items[keys_list[j]] = build_menu(return_items, j)
-    print(return_items)
+        return_items[keys_list[j]] = build_menu(return_items,j)
     return return_items

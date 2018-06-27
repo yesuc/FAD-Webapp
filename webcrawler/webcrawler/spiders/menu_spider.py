@@ -4,6 +4,7 @@ import nltk, re, pprint
 from nltk import word_tokenize
 from . import chunker, imitator, ocr
 import requests
+import json
 
 # NOTE: scrapy crawl MenuSpider -a urls='http://www.hamiltoneatery.com/'
 
@@ -65,7 +66,6 @@ class MenuSpider(scrapy.Spider):
                             followed_link = True
                         i+=1
                 if followed_link:
-                    print('Found Matching Key Word URL')
                     yield scrapy.Request(url=new_url, callback=self.parse)
                 else:
                     # Attempt to find menu url on the given webpage
@@ -80,10 +80,10 @@ class MenuSpider(scrapy.Spider):
 #text_array: dictionary of menu titles at a specific restaurant mapped to the said menu, e.g Dessert Menu -> desserts
     def parse(self, response):
         pdf_urls = imitator.find_menu_pdf(response.url) # type = dict
-        if SEARCH_IMAGE:
-            img_urls = imitator.find_menu_image(response.url) # type = array
-        else:
-            img_urls = []
+        # if SEARCH_IMAGE:
+        #     img_urls = imitator.find_menu_image(response.url) # type = array
+        # else:
+        #     img_urls = []
         text_array = {}
         return_items = {}
         # Case: Menu is in PDF form
@@ -95,22 +95,21 @@ class MenuSpider(scrapy.Spider):
                 return_items[key] = chunker.parse_chunk(text_array[key])
                 # print(return_items)
         # Case: Menu is in IMG form
-        elif SEARCH_IMAGE and len(img_urls) > 0:
-            i = 0
-            for url in img_urls:
-                text = ocr.img_to_text(url)
-                return_items[i] = chunker.parse_chunk(text)
+        # elif SEARCH_IMAGE and len(img_urls) > 0:
+        #     i = 0
+        #     for url in img_urls:
+        #         text = ocr.img_to_text(url)
+        #         return_items[i] = chunker.parse_chunk(text)
         # Case: Menu is in HTML form
         else:
             page = process_url(response.url.split("/")[2])
             soup = BeautifulSoup(response.text, 'lxml')
             text = process_html(soup)
-            # print(text)
-            # filename = 'menus-%s.txt' % page
-            # with open(filename, 'w+') as f:
-            #     f.write(text)
-            # self.log('Saved file %s' % filename)
             return_items[page] = chunker.parse_chunk(text)
-            # print(return_items)
         chunker.clean_menu(return_items)
+        filename = 'menu.json'
+        with open(filename, 'w') as f:
+            json.dump(return_items, f)
+        # # print(return_items)
         return return_items
+        # return return_items
