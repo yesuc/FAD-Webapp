@@ -49,7 +49,6 @@ def clean_ingredients(ingredients_array):
             tokens = nltk.word_tokenize(ingredients_array[i])
             for word,pos in nltk.pos_tag(tokens):
                 if pos not in ['NN', 'NNS', 'JJ'] or pos in ['VBD','VB','VBG','IN','CC','RB','TO', 'PRP', 'DT', 'WRB','JJR', 'JJS']:
-                # if pos == 'VBD' or pos == 'VB' or pos == 'IN' or pos == 'CC' or pos == 'RB' or pos == 'TO' or pos == "JJ":
                     temp = ingredients_array[i].split()
                     temp.remove(word)
                     ingredients_array[i]= ' '.join(j for j in temp)

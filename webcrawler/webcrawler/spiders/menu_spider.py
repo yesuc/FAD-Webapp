@@ -46,12 +46,12 @@ class MenuSpider(scrapy.Spider):
             key_words = ['menu','menus','dinner','dining','food']
             for url in urls:
                 # NOTE: This code is in case the given URL does not have standard url form
-                # if 'com' not in url[-4:]:
-                #     begin_tags_index = url.find('com')
-                #     if begin_tags_index == -1:
-                #         raise ValueError('Bad URL: Is not in standard Domain Name <www.xxx.com/> structure')
-                #     else:
-                #         url = url[:begin_tags_index+4] #Add four to begin splicing after </> in <.com/>
+                if 'com' not in url[-4:]:
+                    begin_tags_index = url.find('com')
+                    if begin_tags_index == -1:
+                        raise ValueError('Bad URL: Is not in standard Domain Name <www.xxx.com/> structure')
+                    else:
+                        url = url[:begin_tags_index+4] #Add four to begin splicing after </> in <.com/>
                 followed_link = False
                 new_url = ''
                 i = 0
@@ -93,7 +93,6 @@ class MenuSpider(scrapy.Spider):
                 text_array[title] = text
             for key in text_array.keys():
                 return_items[key] = chunker.parse_chunk(text_array[key])
-                # print(return_items)
         # Case: Menu is in IMG form
         # elif SEARCH_IMAGE and len(img_urls) > 0:
         #     i = 0
