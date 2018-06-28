@@ -1,3 +1,4 @@
+require 'json'
 class RestaurantsController < ApplicationController
   # before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
 
@@ -10,15 +11,20 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1
   # GET /restaurants/1.json
   def show
+    id = params[:id]
+    @restaurant = Restaurant.find(id)
+    @menus= @restaurant.menus
   end
 
   # GET /restaurants/new
   def new
     @restaurant = Restaurant.new
+    @menu = Menu.new
   end
 
   # GET /restaurants/1/edit
   def edit
+
   end
 
   # POST /restaurants
@@ -26,7 +32,15 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = Restaurant.new(create_update_params)
     if @restaurant.save
-      redirect_to(root, :success => "Restaurant was successfully created.") and return
+      @url = @restaurant.url
+      puts @url
+      python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
+      file = File.read('menu_data.json')
+      menu_hash = JSON.parse(file)
+      # params[:menu_data] = menu_hash.to_s
+      @menu = Menu.new(params[:menu])
+      @restaurant.menus << @menu
+      redirect_to(restaurants_path, :success => "Restaurant was successfully created.") and return
     else
       redirect_to(new_restaurant_path(@restaurant), :error => "Error creating new restaurant.") and return
     # respond_to do |format|
@@ -57,6 +71,7 @@ class RestaurantsController < ApplicationController
   # DELETE /restaurants/1
   # DELETE /restaurants/1.json
   def destroy
+    @restaurant = Restaurant.find(params[:id])
     @restaurant.destroy
     respond_to do |format|
       format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully destroyed.' }

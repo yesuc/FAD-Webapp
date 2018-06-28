@@ -1,4 +1,15 @@
 <p id="notice"><%= notice %></p>
-
+<%= "#{@restaurant.name}" %>
+<br/>
+<%= "#{@restaurant.url}" %>
+<br/>
+<%= "#{@restaurant.address}" %>
+<br/>
+<%= @restaurant.menus.each do |menu|%>
+  <td class="menu_data">
+    <%= menu.menu_data.to_s %>
+  </td>
+  <% end %>
+<br/>
 <%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
 <%= link_to 'Back', restaurants_path %>
