@@ -1,6 +1,23 @@
-%p#notice= notice
+%body
+  %p#notice= notice
+  %div.row
+    .col-md-offset-1
+    .col-md-4
+      %h3.header.name= "#{@restaurant.name}"
+  %div.row
+    .col-md-offset-2
+    .col-md-8.url= "#{@restaurant.url}"
+  %div.row
+    .col-md-offset-2
+    .col-md-8.address= "#{@restaurant.address}"
+  %div.row
+    .col-md-offset-2
+    .col-md-8= "#{@restaurant.cuisine}"
 
 
-= link_to 'Edit', edit_restaurant_path(@restaurant)
+
+
+
+-# = link_to 'Edit', edit_restaurant_path(@restaurant)
 \|
 = link_to 'Back', restaurants_path

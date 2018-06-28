@@ -1,8 +1,9 @@
-#main
-
-  =form_tag search_restaurants_path, :method => :get do
-
-    %input{:class => "search_full_width", :id => "searchbar", :name => "query", :placeholder => "Search Restaurants, Restrictions...",:type => "text", :autocomplete => "off"}
-
-  %h1 Home#index
+%body
+  %h1 FAD-Webapp Homepage
   %p Find me in app/views/home/index.html.haml
+
+  %div
+    =form_tag search_restaurants_path, :method => :get do
+      %input{:class => "search_full_width", :id => "searchbar", :name => "query", :placeholder => "Search Restaurants, Restrictions...",:type => "text", :autocomplete => "off", :min => 1}
+  %div
+    =link_to "All Restaurants", restaurants_path
