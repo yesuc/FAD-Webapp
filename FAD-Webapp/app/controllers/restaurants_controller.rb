@@ -13,13 +13,12 @@ class RestaurantsController < ApplicationController
   def show
     id = params[:id]
     @restaurant = Restaurant.find(id)
-    @menus= @restaurant.menus
+    get_menu
   end
 
   # GET /restaurants/new
   def new
     @restaurant = Restaurant.new
-    @menu = Menu.new
   end
 
   # GET /restaurants/1/edit
@@ -32,14 +31,6 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = Restaurant.new(create_update_params)
     if @restaurant.save
-      @url = @restaurant.url
-      puts @url
-      python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
-      file = File.read('menu_data.json')
-      menu_hash = JSON.parse(file)
-      # params[:menu_data] = menu_hash.to_s
-      @menu = Menu.new(params[:menu])
-      @restaurant.menus << @menu
       redirect_to(restaurants_path, :success => "Restaurant was successfully created.") and return
     else
       redirect_to(new_restaurant_path(@restaurant), :error => "Error creating new restaurant.") and return
@@ -53,19 +44,26 @@ class RestaurantsController < ApplicationController
     #   end
     end
   end
-
+  def get_menu
+    @restaurant = Restaurant.find(params[:id])
+    @url = @restaurant.url
+    python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
+    file = File.read('menu_data.json')
+    menu_hash = JSON.parse(file)
+    @restaurant.menu = menu_hash.to_s
+  end
   # PATCH/PUT /restaurants/1
   # PATCH/PUT /restaurants/1.json
   def update
-    respond_to do |format|
-      if @restaurant.update(restaurant_params)
-        format.html { redirect_to @restaurant, notice: 'Restaurant was successfully updated.' }
-        format.json { render :show, status: :ok, location: @restaurant }
-      else
-        format.html { render :edit }
-        format.json { render json: @restaurant.errors, status: :unprocessable_entity }
-      end
-    end
+    # respond_to do |format|
+    #   if @restaurant.update(restaurant_params)
+    #     format.html { redirect_to @restaurant, notice: 'Restaurant was successfully updated.' }
+    #     format.json { render :show, status: :ok, location: @restaurant }
+    #   else
+    #     format.html { render :edit }
+    #     format.json { render json: @restaurant.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /restaurants/1
@@ -73,10 +71,10 @@ class RestaurantsController < ApplicationController
   def destroy
     @restaurant = Restaurant.find(params[:id])
     @restaurant.destroy
-    respond_to do |format|
-      format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    # respond_to do |format|
+    #   format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
 
  def search

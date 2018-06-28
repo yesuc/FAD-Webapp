@@ -5,11 +5,7 @@
 <br/>
 <%= "#{@restaurant.address}" %>
 <br/>
-<%= @restaurant.menus.each do |menu|%>
-  <td class="menu_data">
-    <%= menu.menu_data.to_s %>
-  </td>
-  <% end %>
+<%= "#{@restaurant.menu}"%>
 <br/>
 <%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
 <%= link_to 'Back', restaurants_path %>

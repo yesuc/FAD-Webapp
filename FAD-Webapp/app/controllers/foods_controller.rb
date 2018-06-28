@@ -15,7 +15,6 @@ class FoodsController < ApplicationController
   :wheat=>['bread crumbs', 'bulgur', 'cereal extract', 'club wheat', 'couscous','cracker meal','durum','einkorn','emmer','farina','flour','hydrolyzed wheat protein','Kamut','matzoh','matzo', 'matzah', 'pasta', 'seitan', 'semolina', 'spelt', 'sprouted wheat', 'triticale', 'vital wheat gluten', 'bran', 'wheat germ', 'wheat grass', 'wheat malt', 'wheat sprouts', 'wheat starch', 'wheat', 'wheat flour', 'wheat germ oil', 'wheat protein isolate', 'whole wheat berries', 'glucose syrup', 'oats', 'soy sauce', 'surimi', 'starch']
   }
   def show
-    @food = Menu.find(params[:menu_id]).foods
   end
 
   def index
@@ -27,7 +26,6 @@ class FoodsController < ApplicationController
   end
 
   def create
-    @menu = Menu.find(params[:restaurant_id])
     @food = Food.new(create_update_params)
 
   end
