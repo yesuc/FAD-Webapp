@@ -31,17 +31,18 @@ class RestaurantsController < ApplicationController
     @restaurant = Restaurant.new(create_update_params)
     if @restaurant.save
       scrape_menu
-      redirect_to(restaurant_path(@restaurant), :success => "Restaurant was successfully created.") and return
+      redirect_to(restaurant_path(@restaurant), flash: {success: "Restaurant was successfully created."}) and return
     else
-      redirect_to(new_restaurant_path(@restaurant), :error => "Error creating new restaurant.") and return
+      redirect_to(new_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
     end
   end
+
   def scrape_menu
     if @restaurant.menu.present?
       return @restaurant.foods
     else
       @url = @restaurant.url
-      python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
+      python_output = `python run_spiders.py #{@url}`
       file = File.read('menu_data.json')
       menu_hash = JSON.parse(file)
       @restaurant.menu = menu_hash
@@ -53,18 +54,17 @@ class RestaurantsController < ApplicationController
     end
     return @restaurant.foods
   end
+
   # PATCH/PUT /restaurants/1
   # PATCH/PUT /restaurants/1.json
   def update
-    # respond_to do |format|
-    #   if @restaurant.update(restaurant_params)
-    #     format.html { redirect_to @restaurant, notice: 'Restaurant was successfully updated.' }
-    #     format.json { render :show, status: :ok, location: @restaurant }
-    #   else
-    #     format.html { render :edit }
-    #     format.json { render json: @restaurant.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    @restaurant = Restaurant.find(params[:id])
+    @restaurant.update(create_update_params)
+    if @restaurant.save
+      redirect_to(restaurant_path(@restaurant), flash: {success: "Restaurant was successfully updated."}) and return
+    else
+      redirect_to(edit_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
+    end
   end
 
   # DELETE /restaurants/1
@@ -72,10 +72,7 @@ class RestaurantsController < ApplicationController
   def destroy
     @restaurant = Restaurant.find(params[:id])
     @restaurant.destroy
-    # respond_to do |format|
-    #   format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully destroyed.' }
-    #   format.json { head :no_content }
-    # end
+    redirect_to(restaurants_path, flash: {success: "Restaurant was successfully deleted"}) and return
   end
 
  def search
@@ -90,8 +87,8 @@ private
     params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
   end
     # Use callbacks to share common setup or constraints between actions.
-    def set_restaurant
+  def set_restaurant
       @restaurant = Restaurant.find(params[:id])
-    end
+  end
 
 end

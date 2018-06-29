@@ -1,4 +1,5 @@
-
+%body
+  %h1 FAD-Webapp Homepage
   %div
     =form_tag search_restaurants_path, :method => :get do
       %input{:class => "search_full_width", :id => "searchbar", :name => "query", :placeholder => "Search Restaurants, Restrictions...",:type => "text", :autocomplete => "off", :min => 1}
