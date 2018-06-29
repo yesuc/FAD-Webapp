@@ -11,8 +11,7 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1
   # GET /restaurants/1.json
   def show
-    id = params[:id]
-    @restaurant = Restaurant.find(id)
+    @restaurant = Restaurant.find(params[:id])
     scrape_menu
   end
 
@@ -23,7 +22,7 @@ class RestaurantsController < ApplicationController
 
   # GET /restaurants/1/edit
   def edit
-
+    @restaurant = Restaurant.find(params[:id])
   end
 
   # POST /restaurants
@@ -32,7 +31,7 @@ class RestaurantsController < ApplicationController
     @restaurant = Restaurant.new(create_update_params)
     if @restaurant.save
       scrape_menu
-      redirect_to(restaurants_path, :success => "Restaurant was successfully created.") and return
+      redirect_to(restaurant_path(@restaurant), :success => "Restaurant was successfully created.") and return
     else
       redirect_to(new_restaurant_path(@restaurant), :error => "Error creating new restaurant.") and return
     end
@@ -80,7 +79,9 @@ class RestaurantsController < ApplicationController
   end
 
  def search
-   @q = params[:searchbar]
+   @q = "#{params[:query]}"
+   @restaurants = Restaurant.filter_on_constraints()
+   # @restaurants = Restaurant.where("name LIKE ? or url LIKE ? or address LIKE ? or cuisine LIKE ?", @q,@q,@q,@q).distinct
  end
 
 private

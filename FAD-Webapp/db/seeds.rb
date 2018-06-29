@@ -5,6 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
 Restaurant.delete_all
 
 Restaurant.create!(name: "Hamilton Royal India Grill", address: "6 Broad Street, Hamilton, NY 13346", url:"http://hamiltonroyalindiagrill.com/contact/", cuisine: "Indian")
