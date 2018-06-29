@@ -3,13 +3,11 @@ class RestaurantsController < ApplicationController
   # before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
 
   # GET /restaurants
-  # GET /restaurants.json
   def index
     @restaurants = Restaurant.all
   end
 
   # GET /restaurants/1
-  # GET /restaurants/1.json
   def show
     @restaurant = Restaurant.find(params[:id])
     scrape_menu
@@ -26,7 +24,6 @@ class RestaurantsController < ApplicationController
   end
 
   # POST /restaurants
-  # POST /restaurants.json
   def create
     @restaurant = Restaurant.new(create_update_params)
     if @restaurant.save
@@ -56,7 +53,6 @@ class RestaurantsController < ApplicationController
   end
 
   # PATCH/PUT /restaurants/1
-  # PATCH/PUT /restaurants/1.json
   def update
     @restaurant = Restaurant.find(params[:id])
     @restaurant.update(create_update_params)
@@ -68,13 +64,13 @@ class RestaurantsController < ApplicationController
   end
 
   # DELETE /restaurants/1
-  # DELETE /restaurants/1.json
   def destroy
     @restaurant = Restaurant.find(params[:id])
     @restaurant.destroy
     redirect_to(restaurants_path, flash: {success: "Restaurant was successfully deleted"}) and return
   end
 
+ # GET /restaurant/search
  def search
    @q = "#{params[:query]}"
    @restaurants = Restaurant.filter_on_constraints()
@@ -85,10 +81,6 @@ private
   # Filter Params for creating and updating restaurant objects
   def create_update_params
     params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
-  end
-    # Use callbacks to share common setup or constraints between actions.
-  def set_restaurant
-      @restaurant = Restaurant.find(params[:id])
   end
 
 end
