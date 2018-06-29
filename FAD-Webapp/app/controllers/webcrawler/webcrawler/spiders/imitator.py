@@ -98,7 +98,6 @@ def find_menu_image(url):
     for tag in ['img']:
         try:
             link_matches = browser.find_elements_by_tag_name(tag)
-            print("Link Matches:", len(link_matches))
             link_attr = None
             for link in link_matches:
                 for attr in ['href','src']:

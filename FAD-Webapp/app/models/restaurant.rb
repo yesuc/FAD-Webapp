@@ -1,5 +1,5 @@
 class Restaurant < ApplicationRecord
-  has_many :menus
+  has_many :foods
 
   def self.filter_on_constraints(constraints)
     filtered = Restaurant.all
@@ -17,6 +17,4 @@ class Restaurant < ApplicationRecord
     end
     return filtered
   end
-
-
 end
