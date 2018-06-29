@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'restaurants#index'
+  root 'home#index'
   resources :restaurants do
     collection do
       get 'search' => 'restaurants#search', as: 'search'

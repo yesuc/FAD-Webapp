@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Restaurant, type: :model do
+
   it "should be able to create a Restaurant object which has the correct methods on it" do
     r = Restaurant.create!(name: "Hamilton Royal India Grill", url: "http://hamiltonroyalindiagrill.com/", address: "6 Broad Street Hamilton, NY 13346" , cuisine: "Indian")
     expect(r).to respond_to(:name)
@@ -15,6 +16,7 @@ RSpec.describe Restaurant, type: :model do
   end
 
   describe "filter_on_constraints test" do
+    
     before(:example) do
       Restaurant.create!(name: "Hamilton Royal India Grill", url: "http://hamiltonroyalindiagrill.com/", address: "6 Broad Street Hamilton, NY 13346" , cuisine: "Indian")
       Restaurant.create!(name: "Another Indian Restaurant", address: "Hamilton, NY", cuisine: "Indian")
@@ -42,6 +44,12 @@ RSpec.describe Restaurant, type: :model do
       q = Restaurant.filter_on_constraints(address: "Hamilton, NY", cuisine: "Indian")
       expect(q.length).to eq(1)
     end
+
+    it "should ignore invalid constraints" do
+      q = Restaurant.filter_on_constraints(title: "Another Indian Restaurant", cuisine: "Asian")
+      expect(q.length).to eq(1)
+    end
+
   end
 
 end

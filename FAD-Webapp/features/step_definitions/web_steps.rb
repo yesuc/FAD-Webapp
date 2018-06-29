@@ -226,7 +226,7 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
     end
   end
 end
- 
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
@@ -240,8 +240,8 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   query = URI.parse(current_url).query
   actual_params = query ? CGI.parse(query) : {}
   expected_params = {}
-  expected_pairs.rows_hash.each_pair{|k,v| expected_params[k] = v.split(',')} 
-  
+  expected_pairs.rows_hash.each_pair{|k,v| expected_params[k] = v.split(',')}
+
   if actual_params.respond_to? :should
     actual_params.should == expected_params
   else
@@ -252,3 +252,16 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
+################## Personal Websteps ##########################
+Given("these Restaurants:") do |table|
+  table.hashes.each do |hash|
+    hash['name'] = hash.delete('name')
+    hash['url'] = hash.delete('url')
+    hash['address'] = hash.delete('address')
+    hash['cuisine'] = hash.delete('cuisine')
+    Restaurant.create!(hash)
+  end
+end
+
+###############################################################
