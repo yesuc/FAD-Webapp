@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_27_175931) do
+ActiveRecord::Schema.define(version: 2018_06_28_174218) do
 
   create_table "foods", force: :cascade do |t|
     t.boolean "contains_gluten"
@@ -29,6 +29,10 @@ ActiveRecord::Schema.define(version: 2018_06_27_175931) do
     t.string "ingredients"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", default: ""
+    t.text "description", default: ""
+    t.integer "restaurant_id"
+    t.index ["restaurant_id"], name: "index_foods_on_restaurant_id"
   end
 
   create_table "restaurants", force: :cascade do |t|

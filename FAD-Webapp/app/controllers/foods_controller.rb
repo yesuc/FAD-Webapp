@@ -15,19 +15,25 @@ class FoodsController < ApplicationController
   :wheat=>['bread crumbs', 'bulgur', 'cereal extract', 'club wheat', 'couscous','cracker meal','durum','einkorn','emmer','farina','flour','hydrolyzed wheat protein','Kamut','matzoh','matzo', 'matzah', 'pasta', 'seitan', 'semolina', 'spelt', 'sprouted wheat', 'triticale', 'vital wheat gluten', 'bran', 'wheat germ', 'wheat grass', 'wheat malt', 'wheat sprouts', 'wheat starch', 'wheat', 'wheat flour', 'wheat germ oil', 'wheat protein isolate', 'whole wheat berries', 'glucose syrup', 'oats', 'soy sauce', 'surimi', 'starch']
   }
   def show
+
   end
 
   def index
-    @foods = Food.all
+
   end
 
   def new
-    @food = Food.new
+    # @food = Food.new
   end
 
   def create
-    @food = Food.new(create_update_params)
-
+    # @restaurant = Restaurant.find(params[:restaurant_id])
+    # @menu = @restaurant.menu.keys
+    # puts @menu
+    # @menu.each do |item|
+    #   @food = Food.new(:name => item[0], :description => item[1])
+    #   @restaurant.foods << @food
+    # end
   end
 
   def update
@@ -37,8 +43,8 @@ class FoodsController < ApplicationController
   end
 
 
-  private
-  def create_update_params
-    params.require(:food).permit(:contains_gluten, :contains_dairy, :contains_treenuts, :contains_beef, :contains_pork, :contains_soy, :contains_egg, :contains_shellfish, :contains_peanut, :contains_fish, :contains_sesame, :contains_other)
-  end
+  # private
+  # def create_update_params
+  #   params.require(:food).permit(:contains_gluten, :contains_dairy, :contains_treenuts, :contains_beef, :contains_pork, :contains_soy, :contains_egg, :contains_shellfish, :contains_peanut, :contains_fish, :contains_sesame, :contains_other)
+  # end
 end

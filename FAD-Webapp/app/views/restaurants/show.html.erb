@@ -5,7 +5,12 @@
 <br/>
 <%= "#{@restaurant.address}" %>
 <br/>
-<%= "#{@restaurant.menu}"%>
+<% @restaurant.foods.each do |food|%>
+<%= "#{food.name}"%>
+<br/>
+<%= "#{food.description}"%>
+<br/>
+<% end %>
 <br/>
 <%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
 <%= link_to 'Back', restaurants_path %>

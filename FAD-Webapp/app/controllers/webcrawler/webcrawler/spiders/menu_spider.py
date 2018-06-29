@@ -112,7 +112,7 @@ class MenuSpider(scrapy.Spider):
         filename = 'menu_data.json'
         with open(filename, 'w') as f:
             json.dump(return_items, f)
-        return return_items
+        # return return_items
 
 def spiderCrawl(urls):
     settings = get_project_settings()
