@@ -72,6 +72,7 @@ class RestaurantsController < ApplicationController
 
  # GET /restaurant/search
  def search
+   @tags = query_params
    @q = "#{params[:query]}"
    @restaurants = Restaurant.filter_on_constraints()
    # @restaurants = Restaurant.where("name LIKE ? or url LIKE ? or address LIKE ? or cuisine LIKE ?", @q,@q,@q,@q).distinct
@@ -81,6 +82,17 @@ private
   # Filter Params for creating and updating restaurant objects
   def create_update_params
     params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
+  end
+
+  def query_params
+    permits = []
+    Food.column_names.each do |name|
+      # e.g. contains_gluten
+      if name =~ /^contains/
+        permits << name[name.index('_')+1..-1] + "_free" # e.g. gluten_free
+      end
+    end
+    params.permit(permits)
   end
 
 end
