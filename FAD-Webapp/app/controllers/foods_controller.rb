@@ -15,7 +15,8 @@ class FoodsController < ApplicationController
   :wheat=>['bread crumbs', 'bulgur', 'cereal extract', 'club wheat', 'couscous','cracker meal','durum','einkorn','emmer','farina','flour','hydrolyzed wheat protein','Kamut','matzoh','matzo', 'matzah', 'pasta', 'seitan', 'semolina', 'spelt', 'sprouted wheat', 'triticale', 'vital wheat gluten', 'bran', 'wheat germ', 'wheat grass', 'wheat malt', 'wheat sprouts', 'wheat starch', 'wheat', 'wheat flour', 'wheat germ oil', 'wheat protein isolate', 'whole wheat berries', 'glucose syrup', 'oats', 'soy sauce', 'surimi', 'starch']
   }
   def show
-
+    @restaurant = Restaurant.find(params[:id])
+    @foods = @restaurant.foods
   end
 
   def index
@@ -23,17 +24,16 @@ class FoodsController < ApplicationController
   end
 
   def new
-    # @food = Food.new
+    @food = Food.new
   end
 
   def create
-    # @restaurant = Restaurant.find(params[:restaurant_id])
-    # @menu = @restaurant.menu.keys
-    # puts @menu
-    # @menu.each do |item|
-    #   @food = Food.new(:name => item[0], :description => item[1])
-    #   @restaurant.foods << @food
-    # end
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @menu = @restaurant.menu.keys
+      @menu.each_with_index do |item, index|
+      @food = Food.new(:name => @menu[index][0], :description => @menu[index][1])
+      @restaurant.foods << @food
+    end
   end
 
   def update

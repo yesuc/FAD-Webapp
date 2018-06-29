@@ -1,6 +1,8 @@
-from . import chunker
+import chunker
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
+import sys
+import json
 
 # PARAM: String of the quiered Food item e.g "Chicken Tikka Masala"
 # Queries recipe of string on Bing, extracts ingredients finds common ingredients
@@ -74,11 +76,12 @@ def find_common_ingredients(query_string):
             common_ingredients[key] = 1
         else:
             common_ingredients[key] += 1
-    del common_ingredients['']
-    print(common_ingredients)
-    print()
     final_array = []
     for key in common_ingredients.keys():
         c = common_ingredients[key]
         if c > recipe_count/4: final_array.append(key)
+    filename = 'ingredients_data.json'
+    with open(filename, 'w') as f:
+        json.dump(final_array, f)
     return final_array
+find_common_ingredients(sys.argv[0])
