@@ -1,15 +1,16 @@
+require 'json'
 class RestaurantsController < ApplicationController
   # before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
 
   # GET /restaurants
-  # GET /restaurants.json
   def index
     @restaurants = Restaurant.all
   end
 
   # GET /restaurants/1
-  # GET /restaurants/1.json
   def show
+    @restaurant = Restaurant.find(params[:id])
+    scrape_menu
   end
 
   # GET /restaurants/new
@@ -19,63 +20,79 @@ class RestaurantsController < ApplicationController
 
   # GET /restaurants/1/edit
   def edit
+    @restaurant = Restaurant.find(params[:id])
   end
 
   # POST /restaurants
-  # POST /restaurants.json
   def create
     @restaurant = Restaurant.new(create_update_params)
     if @restaurant.save
-      redirect_to(root, :success => "Restaurant was successfully created.") and return
+      scrape_menu
+      redirect_to(restaurant_path(@restaurant), flash: {success: "Restaurant was successfully created."}) and return
     else
-      redirect_to(new_restaurant_path(@restaurant), :error => "Error creating new restaurant.") and return
-    # respond_to do |format|
-    #   if @restaurant.save
-    #     format.html { redirect_to @restaurant, notice: 'Restaurant was successfully created.' }
-    #     format.json { render :show, status: :created, location: @restaurant }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @restaurant.errors, status: :unprocessable_entity }
-    #   end
+      redirect_to(new_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
     end
   end
 
-  # PATCH/PUT /restaurants/1
-  # PATCH/PUT /restaurants/1.json
-  def update
-    respond_to do |format|
-      if @restaurant.update(restaurant_params)
-        format.html { redirect_to @restaurant, notice: 'Restaurant was successfully updated.' }
-        format.json { render :show, status: :ok, location: @restaurant }
-      else
-        format.html { render :edit }
-        format.json { render json: @restaurant.errors, status: :unprocessable_entity }
+  def scrape_menu
+    if @restaurant.menu.present?
+      return @restaurant.foods
+    else
+      @url = @restaurant.url
+      python_output = `python run_spiders.py #{@url}`
+      file = File.read('menu_data.json')
+      menu_hash = JSON.parse(file)
+      @restaurant.menu = menu_hash
+      @menu = menu_hash.values
+      @menu.each_with_index do |item, i|
+        food = Food.create(:name => item[i][0], :description => item[i][1])
+        @restaurant.foods << food
       end
+    end
+    return @restaurant.foods
+  end
+
+  # PATCH/PUT /restaurants/1
+  def update
+    @restaurant = Restaurant.find(params[:id])
+    @restaurant.update(create_update_params)
+    if @restaurant.save
+      redirect_to(restaurant_path(@restaurant), flash: {success: "Restaurant was successfully updated."}) and return
+    else
+      redirect_to(edit_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
     end
   end
 
   # DELETE /restaurants/1
-  # DELETE /restaurants/1.json
   def destroy
+    @restaurant = Restaurant.find(params[:id])
     @restaurant.destroy
-    respond_to do |format|
-      format.html { redirect_to restaurants_url, notice: 'Restaurant was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to(restaurants_path, flash: {success: "Restaurant was successfully deleted"}) and return
   end
 
+ # GET /restaurant/search
  def search
-   @q = params[:searchbar]
+   @tags = query_params
+   @q = "#{params[:query]}"
+   @restaurants = Restaurant.filter_on_constraints()
+   # @restaurants = Restaurant.where("name LIKE ? or url LIKE ? or address LIKE ? or cuisine LIKE ?", @q,@q,@q,@q).distinct
  end
 
 private
   # Filter Params for creating and updating restaurant objects
   def create_update_params
-    params.require(:restaurant).permit(:name, :url, :address, :cuisine)
+    params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
   end
-    # Use callbacks to share common setup or constraints between actions.
-    def set_restaurant
-      @restaurant = Restaurant.find(params[:id])
+
+  def query_params
+    permits = []
+    Food.column_names.each do |name|
+      # e.g. contains_gluten
+      if name =~ /^contains/
+        permits << name[name.index('_')+1..-1] + "_free" # e.g. gluten_free
+      end
     end
+    params.permit(permits)
+  end
 
 end

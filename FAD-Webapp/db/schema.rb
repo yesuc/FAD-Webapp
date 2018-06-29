@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_22_184308) do
+ActiveRecord::Schema.define(version: 2018_06_28_174218) do
 
   create_table "foods", force: :cascade do |t|
     t.boolean "contains_gluten"
@@ -26,14 +26,13 @@ ActiveRecord::Schema.define(version: 2018_06_22_184308) do
     t.boolean "contains_sesame"
     t.boolean "contains_wheat"
     t.string "contains_other"
+    t.string "ingredients"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "menus", force: :cascade do |t|
-    t.string "menu_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name", default: ""
+    t.text "description", default: ""
+    t.integer "restaurant_id"
+    t.index ["restaurant_id"], name: "index_foods_on_restaurant_id"
   end
 
   create_table "restaurants", force: :cascade do |t|
@@ -43,6 +42,7 @@ ActiveRecord::Schema.define(version: 2018_06_22_184308) do
     t.string "cuisine"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "menu", default: ""
   end
 
 end
