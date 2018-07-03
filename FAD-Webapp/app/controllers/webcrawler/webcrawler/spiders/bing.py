@@ -7,6 +7,7 @@ import json
 # PARAM: String of the quiered Food item e.g "Chicken Tikka Masala"
 # Queries recipe of string on Bing, extracts ingredients finds common ingredients
 # RETURN: String Array of common ingredients used to make query_string's food
+
 def find_common_ingredients(query_string):
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
@@ -14,7 +15,6 @@ def find_common_ingredients(query_string):
     browser = webdriver.Chrome(chrome_options=options)
     browser.set_page_load_timeout(60)
     browser.get('https://www4.bing.com/search?q=' + '%20'.join(query_string.split()) +'%20Recipe')
-
     # Finds all matching recipe items from bing query
     items = browser.find_elements_by_xpath('//*[@id="ent-car-exp"]/div/div/div[2]/div/ol/*')
     common_ingredients = {}
@@ -42,11 +42,12 @@ def find_common_ingredients(query_string):
             while titles == []:
                 titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
             # Element with Find Ingredients List text, get parent element and use parent to find ingredient lists
-            ingredients_list_title = ''
+            ingredients_list_title = None
             for list in titles:
                 if list.text == 'Ingredients List':
                     ingredients_list_title = list
-            parent = ingredients_list_title.find_element_by_xpath('..')
+            # parent = ingredients_list_title.find_element_by_xpath('..')
+            parent =browser.find_element_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]').find_element_by_xpath('..')
             # Children - ingredients in list form
             children = parent.find_elements_by_class_name('ec_value')
             # See_more element can hide ingredients; attempt to click it
@@ -60,7 +61,6 @@ def find_common_ingredients(query_string):
             for ingredient_list in children:
                 for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
                     recipe_ingredients.append(ingredient.text)
-                    print(ingredient.text)
             clean_recipe_ingredients += chunker.clean_ingredients(chunker.parse_ingredients(recipe_ingredients))
             close_btn = browser.find_element_by_class_name("ovlcb")
             close_btn.click()
@@ -69,7 +69,6 @@ def find_common_ingredients(query_string):
                 check.click()
             count = 0
     browser.close()
-    print()
     for key in clean_recipe_ingredients:
         key = key.lower()
         if key not in common_ingredients:
@@ -79,9 +78,13 @@ def find_common_ingredients(query_string):
     final_array = []
     for key in common_ingredients.keys():
         c = common_ingredients[key]
-        if c > recipe_count/4: final_array.append(key)
-    filename = 'ingredients_data.json'
-    with open(filename, 'w') as f:
-        json.dump(final_array, f)
-    return final_array
-find_common_ingredients(sys.argv[0])
+        print(key)
+        if c > recipe_count/4:
+            final_array.append(key)
+    # filename = 'ingredients_data.json'
+    # with open(filename, 'w') as f:
+    #     json.dump(final_array, f)
+    # return filename
+    return json.dumps(final_array)
+
+find_common_ingredients(sys.argv[1])

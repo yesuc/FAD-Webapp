@@ -15,36 +15,23 @@ class Food < ApplicationRecord
   :wheat=>['bread crumbs', 'bulgur', 'cereal extract', 'club wheat', 'couscous','cracker meal','durum','einkorn','emmer','farina','flour','hydrolyzed wheat protein','Kamut','matzoh','matzo', 'matzah', 'pasta', 'seitan', 'semolina', 'spelt', 'sprouted wheat', 'triticale', 'vital wheat gluten', 'bran', 'wheat germ', 'wheat grass', 'wheat malt', 'wheat sprouts', 'wheat starch', 'wheat', 'wheat flour', 'wheat germ oil', 'wheat protein isolate', 'whole wheat berries', 'glucose syrup', 'oats', 'soy sauce', 'surimi', 'starch']
   }
 
+#PARAMS: a food item name to be queried
+#RETURNS: an array as a json string
   def self.get_ingredients(food_query)
-    python_script = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{food_query.name}`
-    file = File.read('ingredients_data.json')
-    ingredients_hash = JSON.parse(file)
-    food_query.ingredients = ingredients_hash
+    python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py food_query`
+    return python_output
   end
 
-
-  def self.check_restrictions(food, restriction)
-    food_name = food.name.split()
-    food_description = food.description.split()
-    food_ingredients = food.ingredients.split()
+#PARAMS: a food name, description or ingredients in list form, food restriction input by User
+#RETURNS: true or false depending on whether the food text contains any allergen matching food restriction
+  def self.check_restrictions(food_text, restriction)
     allergen = @@allergens[restriction]
-    contains = "contains_"+ restriction.to_s
-
-    food_name.each do |f|
-      if allergen.include?(f)
-        food[contains.to_sym] = true
+    food_text.each do |f|
+      if allergen.include?(f.downcase)
+        return true
       end
     end
-    food_description.each do |f|
-      if allergen.include?(f)
-        food[contains.to_sym] = true
-      end
-    end
-    food_ingredients.each do |f|
-      if allergen.include?(f)
-        food[contains.to_sym]  = true
-      end
-    end
+    return true
   end
 
 end
