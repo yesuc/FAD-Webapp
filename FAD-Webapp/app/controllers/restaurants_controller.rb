@@ -10,7 +10,10 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1
   def show
     @restaurant = Restaurant.find(params[:id])
+    foods = @restaurant.foods
     scrape_menu
+    # double_check = easy_check_restrictions(foods, :dairy)
+    # hard_check_restrictions(double_check, :dairy)
   end
 
   # GET /restaurants/new
@@ -33,25 +36,66 @@ class RestaurantsController < ApplicationController
       redirect_to(new_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
     end
   end
-
+# If a restaurant does not contain a menu:
+# Get menu items and descriptions from menu_data.json, create new food items, with name and description
+# Runs python script in run_spiders.py which in turn calls menu_spider.py with the restaurant url
+#NOTE: scrape_menu is currently called in controller function show since no new restaurants are being created
   def scrape_menu
-    if @restaurant.menu.present?
-      return @restaurant.foods
-    else
+    if !@restaurant.menu.present?
       @url = @restaurant.url
-      python_output = `/python run_spiders.py #{@url}`
+      python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
       file = File.read('menu_data.json')
       menu_hash = JSON.parse(file)
-      @restaurant.menu = menu_hash
+      @restaurant.menu = menu_hash.values
       @menu = menu_hash.values
-      @menu.each_with_index do |item, i|
-        food = Food.create(:name => item[i][0], :description => item[i][1])
-        @restaurant.foods << food
+        @menu.each do |item|
+          item.each do |i|
+            @food = Food.create(:name => i[0], :description => i[1])
+            @restaurant.foods << @food
+          end
+      end
+      else
+        return @restaurant.foods
+      end
+  end
+# Takes a 'list' of food items from a specific restaurant and the dietary restriction (s) from user input
+# Returns an array of foods containing the said restriction
+# Calls check_restrictions method from Food model to check if food item name and description contains allergen matching food restriction
+  def easy_check_restrictions(foods,restriction)
+    contains = "contains_"+ restriction.to_s
+    double_check = []
+    foods.each do |food|
+      food_name = food.name
+      food_description = food.description
+      if Food.check_restrictions(food_description.split(), restriction) && Food.check_restrictions(food_name.split(), restriction)
+        puts food_name + ' with' + food_description + 'might contain' + restriction.to_s
+        double_check << food
       end
     end
-    return @restaurant.foods
+    return double_check
   end
 
+# Takes list returned by easy_check_restrictions and food restriction
+# Sets contains_restriction attribute of food item
+#Calls get_ingredients method from food Model which in turn runs a python script, bing.py with user input arguments
+  def hard_check_restrictions(double_check, restriction)
+    if double_check.empty?
+      return
+    else
+      contains = "contains_"+ restriction.to_s
+      ingredients_array = Food.get_ingredients(double_check)
+      double_check.each do |f|
+        ingredients = Food.get_ingredients(f.name)
+        f.ingredients = ingredients.to_s.strip().gsub('\n', ', ')
+        if Food.check_restrictions(ingredients.split(), restriction)
+          puts f.name + ' && '+f.description + ' && '+f.ingredients
+          f[contains] = true
+        else
+          f[contains] = false
+        end
+      end
+    end
+  end
   # PATCH/PUT /restaurants/1
   def update
     @restaurant = Restaurant.find(params[:id])
@@ -73,8 +117,8 @@ class RestaurantsController < ApplicationController
  # GET /restaurant/search
  def search
    @tags = query_params
-  # @q = "#{params[:query]}"
-   @restaurants = Restaurant.filter_on_constraints(params)
+   @q = "#{params[:query]}"
+   @restaurants = Restaurant.filter_on_constraints()
    # @restaurants = Restaurant.where("name LIKE ? or url LIKE ? or address LIKE ? or cuisine LIKE ?", @q,@q,@q,@q).distinct
  end
 
@@ -83,8 +127,7 @@ private
   def create_update_params
     params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
   end
-  
-  # Filter Params for querying a restaurant via url/name along with allergens not desired
+
   def query_params
     permits = []
     Food.column_names.each do |name|
@@ -93,7 +136,6 @@ private
         permits << name[name.index('_')+1..-1] + "_free" # e.g. gluten_free
       end
     end
-    permits << ["query_type","query"]
     params.permit(permits)
   end
 
