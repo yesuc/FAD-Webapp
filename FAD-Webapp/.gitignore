@@ -30,4 +30,3 @@
 /config/master.key
 
 # Ignore coverage files
-/coverage/*
