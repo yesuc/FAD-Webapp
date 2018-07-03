@@ -109,7 +109,10 @@ def build_menu(return_items, number):
         for k in range(index+1, items_array[j+1]-1):
             str+=' '
             str+= values_list[number][k]
-        menu_items.append([values_list[number][index], str])
+        if len(str.strip()) == 0:
+            menu_items.append([values_list[number][index], values_list[number][index+1]])
+        else:
+            menu_items.append([values_list[number][index],str])
     return menu_items
 
 def clean_menu(return_items):

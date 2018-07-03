@@ -48,5 +48,4 @@ class Food < ApplicationRecord
     end
   end
 
-
 end
