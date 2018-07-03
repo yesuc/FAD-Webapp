@@ -98,7 +98,7 @@ RSpec.describe Restaurant, type: :model do
       q = Restaurant.query_on_constraints(query_type: "name", query: "La Iguana", gluten: true)
       expect(q.length).to eq(1)
       q = Restaurant.query_on_constraints(query_type: "url", query: "http://www.laiguanarestaurant.com/", pork: true)
-      expect(q.length).to eq(2)
+      expect(q.length).to eq(1)
     end
 
   end

@@ -1,7 +1,11 @@
 class Restaurant < ApplicationRecord
   has_many :foods
 
-  # BUG:
+  scope :allergen_free, -> (allergen){ joins(:foods).where(foods: {"contains_#{allergen}".to_sym => false}) }
+  # Given Restaurants with foods where e.g. contains gluten => false
+  # ex: Restaurants.all.allergen_free("dairy")
+
+
   def self.query_on_constraints(constraints)
     filtered = Restaurant.all
     if constraints[:query_type] == "name"
@@ -12,18 +16,8 @@ class Restaurant < ApplicationRecord
     constraints.delete(:query)
     constraints.delete(:query_type)
     constraints.each_pair do |sym,val|
-        if val == true
-          if sym == :gluten
-            filtered = filtered.foods.gluten_free
-          elsif sym == :dairy
-            filtered = filtered.foods.dairy_free
-          elsif sym == :treenuts
-            filtered = filtered.foods.treenuts_free
-          elsif sym == :beef
-            filtered = filtered.foods.beef_free
-          elsif sym == :pork
-            filtered = filtered.foods.pork_free
-          end
+        if val == true && filtered.length > 0
+          filtered = filtered.where(allergen_free(sym))
         end
     end
     return filtered
