@@ -2,14 +2,20 @@
   %h1 FAD-Webapp Homepage
   %div
     =form_tag search_restaurants_path, :method => :get do
-      %input{:class => "search_full_width", :id => "searchbar", :name => "query", :placeholder => "Search Restaurants, Restrictions...",:type => "text", :autocomplete => "off", :min => 1}
-      -Food.column_names.each do |name|
-        -if name =~ /^contains/
-          -name = name[name.index('_')+1..-1]
-          %div
-            %span
-              %input{ type: "checkbox", name: "#{name}_free", id:"Gluten Free", value: "unchecked"}
-              %label{:class => "checkbox inline",for: "Gluten Free"}= "#{name}_free"
-      %input{type: "submit", value: "Search"}
+      %input{:class => "search_full_width", :id => "searchbar", :name => "query", :placeholder => "Search Restaurants",:type => "text", :autocomplete => "off", :min => 1}
+      =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
+      %div
+        -@tags.each do |tag|
+          %span
+            %input{type: "checkbox", name: "#{tag}", id:"Gluten Free", value: "unchecked"}
+            %label{:class => "checkbox inline", for: "#{tag}"}= "#{tag} free".titleize
   %div
     =link_to "All Restaurants", restaurants_path
+  -# -Food.column_names.each do |name|
+  -#   -if name =~ /^contains/
+  -#     -name = name[name.index('_')+1..-1]
+  -#     %div
+  -#       %span
+  -#         %input{ type: "checkbox", name: "#{name}_free", id:"Gluten Free", value: "unchecked"}
+  -#         %label{:class => "checkbox inline",for: "Gluten Free"}= "#{name}_free"
+  -# %input{type: "submit", value: "Search"}

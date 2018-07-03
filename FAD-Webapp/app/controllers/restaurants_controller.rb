@@ -39,7 +39,7 @@ class RestaurantsController < ApplicationController
       return @restaurant.foods
     else
       @url = @restaurant.url
-      python_output = `python run_spiders.py #{@url}`
+      python_output = `/python run_spiders.py #{@url}`
       file = File.read('menu_data.json')
       menu_hash = JSON.parse(file)
       @restaurant.menu = menu_hash
@@ -73,8 +73,8 @@ class RestaurantsController < ApplicationController
  # GET /restaurant/search
  def search
    @tags = query_params
-   @q = "#{params[:query]}"
-   @restaurants = Restaurant.filter_on_constraints()
+  # @q = "#{params[:query]}"
+   @restaurants = Restaurant.filter_on_constraints(params)
    # @restaurants = Restaurant.where("name LIKE ? or url LIKE ? or address LIKE ? or cuisine LIKE ?", @q,@q,@q,@q).distinct
  end
 
@@ -83,7 +83,8 @@ private
   def create_update_params
     params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
   end
-
+  
+  # Filter Params for querying a restaurant via url/name along with allergens not desired
   def query_params
     permits = []
     Food.column_names.each do |name|
@@ -92,6 +93,7 @@ private
         permits << name[name.index('_')+1..-1] + "_free" # e.g. gluten_free
       end
     end
+    permits << ["query_type","query"]
     params.permit(permits)
   end
 

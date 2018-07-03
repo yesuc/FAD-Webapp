@@ -1,4 +1,5 @@
-from . import chunker
+import chunker
+import selenium
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -6,12 +7,13 @@ from selenium.webdriver.common.action_chains import ActionChains
 # Queries recipe of string on Bing, extracts ingredients finds common ingredients
 # RETURN: String Array of common ingredients used to make query_string's food
 def find_common_ingredients(query_string):
-    options = webdriver.ChromeOptions()
-    options.add_argument('headless')
-    options.add_argument('window-size = 1200x600')
-    browser = webdriver.Chrome(chrome_options=options)
+    # options = webdriver.ChromeOptions()
+    # options.add_argument('headless')
+    # options.add_argument('window-size = 1200x600')
+    # browser = webdriver.Chrome(chrome_options=options)
+    browser = webdriver.Safari()
     browser.set_page_load_timeout(60)
-    browser.get('https://www4.bing.com/search?q=' + '%20'.join(query_string.split()) +'%20Recipe')
+    browser.get('https://www.bing.com/search?q=' + '%20'.join(query_string.split()) +'%20Recipe')
 
     # Finds all matching recipe items from bing query
     items = browser.find_elements_by_xpath('//*[@id="ent-car-exp"]/div/div/div[2]/div/ol/*')
@@ -39,26 +41,38 @@ def find_common_ingredients(query_string):
             titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
             while titles == []:
                 titles = browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]')
+                print(browser.find_elements_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]'))
             # Element with Find Ingredients List text, get parent element and use parent to find ingredient lists
-            ingredients_list_title = ''
-            for list in titles:
-                if list.text == 'Ingredients List':
-                    ingredients_list_title = list
-            parent = ingredients_list_title.find_element_by_xpath('..')
+            # ingredients_list_title = ''
+            # for list in titles:
+            #     if list.text == 'Ingredients List':
+            #         ingredients_list_title = list
+            # parent = ingredients_list_title.find_element_by_xpath('..')
+
+            parent =browser.find_element_by_xpath('//*[@id="ec_facts"]/div[5]/div[1]').find_element_by_xpath('..')
             # Children - ingredients in list form
             children = parent.find_elements_by_class_name('ec_value')
             # See_more element can hide ingredients; attempt to click it
             see_more_button = parent.find_elements_by_tag_name('a')
             for btn in see_more_button:
                 if btn is not None:
-                    # Must do execute scritp; normal get,clicks, etc do not work
-                    browser.execute_script("arguments[0].click();", btn)
+                    for i in range(3):
+                        try:
+                            # Must do execute script; normal get,clicks, etc do not work
+                            browser.execute_script("arguments[0].click();", btn)
+                        except selenium.common.exceptions.StaleElementReferenceException as e:
+                            pass
+
 
             recipe_ingredients = []
             for ingredient_list in children:
-                for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
-                    recipe_ingredients.append(ingredient.text)
-                    print(ingredient.text)
+                try:
+                    for ingredient in ingredient_list.find_elements_by_class_name('b_paractl'):
+                        recipe_ingredients.append(ingredient.text)
+                        print(ingredient.text)
+                except selenium.common.exceptions.StaleElementReferenceException as e:
+                    pass
+
             clean_recipe_ingredients += chunker.clean_ingredients(chunker.parse_ingredients(recipe_ingredients))
             close_btn = browser.find_element_by_class_name("ovlcb")
             close_btn.click()
@@ -82,3 +96,4 @@ def find_common_ingredients(query_string):
         c = common_ingredients[key]
         if c > recipe_count/4: final_array.append(key)
     return final_array
+print(find_common_ingredients("Butter Chicken"))
