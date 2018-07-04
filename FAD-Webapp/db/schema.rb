@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2018_06_28_174218) do
     t.string "url"
     t.string "address"
     t.string "cuisine"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "menu", default: ""
