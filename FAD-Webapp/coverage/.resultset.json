@@ -21,34 +21,6 @@
         1,
         null
       ],
-      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/foods_controller.rb": [
-        1,
-        1,
-        null,
-        null,
-        1,
-        null,
-        null,
-        null,
-        1,
-        null,
-        null,
-        1,
-        null,
-        null,
-        1,
-        null,
-        null,
-        1,
-        null,
-        null,
-        null,
-        null
-      ],
-      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/application_controller.rb": [
-        1,
-        null
-      ],
       "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/models/food.rb": [
         1,
         1,
@@ -67,6 +39,7 @@
         1,
         1,
         1,
+        null,
         null,
         1,
         0,
@@ -111,26 +84,31 @@
         1,
         1,
         null,
-        3,
+        7,
         null,
         null,
         null,
         null,
         1,
-        10,
-        10,
-        5,
+        11,
+        11,
+        11,
+        3,
         null,
-        5,
-        null,
-        10,
-        10,
-        10,
+        8,
         4,
-        2,
+        null,
+        4,
         null,
         null,
-        10,
+        11,
+        11,
+        11,
+        6,
+        6,
+        null,
+        null,
+        11,
         null,
         null,
         1,
@@ -158,6 +136,10 @@
         0
       ],
       "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/jobs/application_job.rb": [
+        0,
+        0
+      ],
+      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/application_controller.rb": [
         0,
         0
       ],
@@ -390,6 +372,30 @@
         null,
         0
       ],
+      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/foods_controller.rb": [
+        0,
+        0,
+        0,
+        null,
+        0,
+        null,
+        0,
+        null,
+        0,
+        0,
+        null,
+        0,
+        0,
+        null,
+        0,
+        0,
+        null,
+        0,
+        0,
+        null,
+        null,
+        0
+      ],
       "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/channels/application_cable/connection.rb": [
         0,
         0,
@@ -403,7 +409,7 @@
         0
       ]
     },
-    "timestamp": 1530644209
+    "timestamp": 1530719097
   },
   "Cucumber Features": {
     "coverage": {

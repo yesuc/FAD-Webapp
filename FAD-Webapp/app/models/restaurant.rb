@@ -7,11 +7,14 @@ class Restaurant < ApplicationRecord
 
 
   def self.query_on_constraints(constraints)
-    filtered = Restaurant.all
-    if constraints[:query_type] == "name"
-      filtered = filtered.where("name LIKE ?", constraints[:query])
+    if constraints[:query] == ""
+      filtered = Restaurant.all
     else
-      filtered = filtered.where("url LIKE ?", constraints[:query])
+      if constraints[:query_type] == "name"
+        filtered = Restaurant.where("name LIKE ?", constraints[:query])
+      else
+        filtered = Restaurant.where("url LIKE ?", constraints[:query])
+      end
     end
     constraints.delete(:query)
     constraints.delete(:query_type)

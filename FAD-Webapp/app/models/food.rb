@@ -15,6 +15,7 @@ class Food < ApplicationRecord
   scope :fish_free, -> { where contains_fish: false }
   scope :sesame_free, -> { where contains_sesame: false }
   scope :wheat_free, -> { where contains_wheat: false}
+  # TODO: scope for "other"_free foods
 
   def self.get_ingredients(food_query)
     python_script = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{food_query.name}`
