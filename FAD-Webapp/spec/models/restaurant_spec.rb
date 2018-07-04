@@ -6,6 +6,10 @@ RSpec.describe Restaurant, type: :model do
     expect(r).to respond_to(:name)
     expect(r).to respond_to(:url)
     expect(r).to respond_to(:cuisine)
+    expect(r).to respond_to(:address)
+    expect(r).to respond_to(:description)
+
+    expect(Restaurant).to respond_to(:query_on_constraints)
     expect(Restaurant).to respond_to(:filter_on_constraints)
   end
 
