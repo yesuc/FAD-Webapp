@@ -19,9 +19,9 @@ class Restaurant < ApplicationRecord
     constraints.delete(:query)
     constraints.delete(:query_type)
     constraints.each_pair do |sym,val|
-        if val == true && filtered.length > 0
-          filtered = filtered.where(allergen_free(sym))
-        end
+      if val == true && filtered.length > 0
+        filtered = filtered.where(allergen_free(sym))
+      end
     end
     return filtered
   end
