@@ -2,6 +2,7 @@ import nltk, re, pprint
 from nltk import word_tokenize
 from urllib import request
 from nltk.chunk import RegexpParser
+import os
 
 
 #NOTE: Removes all description text that appears before the first instance of 'Appetizers' and the last instance of 'Menu'
@@ -15,15 +16,29 @@ def process_text(raw_text):
 
 #NOTE: Removes extra words such as time, date and prices from file containing menu
 def iterate_menu(raw_text):
-    lines = raw_text.split()
-    for i in range(0, len(lines)):
+    buzzwords_dict = ["soup", "beverages", "specials", "dessert", "condiments", "menu", "desserts","soup & salads", "shorbe/salads","tapas","entrees","large", "medium", "small", "mini", "servings", "special", "specials", "choices","scoops","extras","sides","soups","salads", "biryanis"]
+    lines = raw_text.splitlines()
+    title = {}
+    for i in range(len(lines)-1):
+        print(lines[i])
         lines[i] = lines[i].replace('$',' ')
-        lines[i] = ''.join(j for j in lines[i] if not j.isdigit())
-        lines[i] = re.sub('\s?(?:A\.M|P\.M|a\.m|p\.m)', ' ',lines[i])
-        lines[i] = re.sub('[a-z]?i+day', ' ',lines[i])
-        lines[i] = ''.join(j for j in lines[i])
-    raw_text = ' '.join(j for j in lines)
-    return raw_text
+        lines[i] = lines[i].replace('!',' ')
+        lines[i] = lines[i].replace(':',' ')
+        lines[i] = ' '.join(j for j in lines[i].split() if j.isalpha() and j.lower() not in buzzwords_dict)
+    raw_text = os.linesep.join([s for s in lines if s])
+    clean_lines = raw_text.splitlines()
+    for i in range(len(clean_lines)-1):
+        title_1 = clean_lines[i].title()
+        title_2 = clean_lines[i+1].title()
+        if  clean_lines[i] == title_1 and clean_lines[i+1] == title_2 and clean_lines[i] not in title.values():
+            title[clean_lines[i]] = "No description found"
+        elif clean_lines[i][0].isupper() and clean_lines[i+1].isupper() and clean_lines[i] not in title.values():
+            title[clean_lines[i]] = "No description found"
+        # elif clean_lines[i].isupper() is False and clean_lines[i+1].isupper() is False and clean_lines[i] not in title.values():
+        #     title[clean_lines[i]] = "No description found"
+        elif clean_lines[i] not in title.values() and clean_lines[i+1] not in title.values() and clean_lines[i][0].isupper() and clean_lines[i] not in ['Chicken', 'Lamb','Fish Shrimp', 'Add']:
+            title[clean_lines[i]] = clean_lines[i+1]
+    return title
 
 
 
@@ -33,11 +48,12 @@ def iterate_menu(raw_text):
 def parse_chunk(raw_text):
     raw_text = process_text(raw_text)
     text = iterate_menu(raw_text)
-    grammar = r"""Chunk: {<JJ.?>* <NN.?>* <VB.?>* <NN.?>*}"""
-    keys = chunker(grammar,text)
-    return keys
+    return text
+    # grammar = r"""Chunk: {<JJ.?>* <NN.?>* <VB.?>* <NN.?>*}"""
+    # keys = chunker(grammar,text)
+    # return keys
 
-measurements_dict = ["large","medium","small","cup","cups", "teaspoon","teaspoons", "tablespoon", "tablespoons", "ounce", "ounces", "pound", "pounds","pinch","pinches","cube","cubes", "bunch","bunches", "clove","cloves","ground","boneless","canned","skinless","can","cans","fresh","plain","regular", "long","centimeter","centimeters", "half","halves", "double", "inch","inches","milliliter","milimeters", "handful", "handfuls"]
+measurements_dict = ["large","medium","small","cup","cups", "teaspoon","teaspoons", "tablespoon", "tablespoons", "ounce", "ounces", "pound", "pounds","pinch","pinches","cube","cubes", "bunch","bunches", "clove","cloves","ground","boneless","canned","skinless","can","cans","fresh","plain","regular", "long","centimeter","centimeters", "half","halves", "double", "inch","inches","milliliter","milimeters", "handful", "handfuls", "grams"]
 def parse_ingredients(ingredients_array):
     for i in range(len(ingredients_array)):
          ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha() and j not in measurements_dict)
@@ -91,32 +107,29 @@ def chunker(grammar,text):
                 keys.append(s)
         return keys
 
-def build_menu(return_items, number):
-    items_array = []
-    description_array = []
-    menu_items = []
-    values_list = list(return_items.values())
-    for i in range(len(values_list[number])):
-        for word,pos in nltk.tag.pos_tag(nltk.word_tokenize(values_list[number][i])):
-            if word[0].isupper() and pos in ['NN', 'NNS', 'NNP'] and i not in items_array and word not in ['Crisp', 'Boneless', 'Monterey']:
-                items_array.append(i)
-            elif i not in description_array:
-                description_array.append(i)
-
-    for j in range(len(items_array)-1):
-        index = items_array[j]
-        str = ' '
-        for k in range(index+1, items_array[j+1]-1):
-            str+=' '
-            str+= values_list[number][k]
-        if len(str.strip()) == 0:
-            menu_items.append([values_list[number][index], values_list[number][index+1]])
-        else:
-            menu_items.append([values_list[number][index],str])
-    return menu_items
-
-def clean_menu(return_items):
-    keys_list = list(return_items.keys())
-    for j in range(len(keys_list)):
-        return_items[keys_list[j]] = build_menu(return_items,j)
-    return return_items
+# def build_menu(return_items, number):
+#     items_array = []
+#     description_array = []
+#     menu_items = []
+#     values_list = list(return_items.values())
+#     for i in range(len(values_list[number])):
+#         for word,pos in nltk.tag.pos_tag(nltk.word_tokenize(values_list[number][i])):
+#             # and word not in ['Crisp', 'Boneless', 'Monterey', 'Non Vegetarian', 'Chopped', 'Delicious', 'Succulent', 'Juicy', 'Hot','Tender'
+#             if word[0].isupper() and pos in ['NN', 'NNS', 'NNP','FW'] and i not in items_array:
+#                 items_array.append(i)
+#             elif i not in description_array:
+#                 description_array.append(i)
+#     for j in range(len(items_array)-1):
+#         index = items_array[j]
+#         str = ' '
+#         for k in range(index+1, items_array[j+1]-1):
+#             str+=' '
+#             str+= values_list[number][k]
+#         menu_items.append([values_list[number][index],str])
+#     return menu_items
+#
+# def clean_menu(return_items):
+#     keys_list = list(return_items.keys())
+#     for j in range(len(keys_list)):
+#         return_items[keys_list[j]] = build_menu(return_items,j)
+#     return return_items

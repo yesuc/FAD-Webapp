@@ -108,7 +108,7 @@ class MenuSpider(scrapy.Spider):
             soup = BeautifulSoup(response.text, 'lxml')
             text = process_html(soup)
             return_items[page] = chunker.parse_chunk(text)
-        chunker.clean_menu(return_items)
+        # chunker.clean_menu(return_items)
         filename = 'menu_data.json'
         with open(filename, 'w') as f:
             json.dump(return_items, f)

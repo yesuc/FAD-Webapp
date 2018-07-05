@@ -2,7 +2,7 @@ class Food < ApplicationRecord
   belongs_to :restaurant
   @@allergens = {
   :gluten => ['wheat', 'wheat flour','barley', 'rye', 'oats', 'malt', 'brewer’s yeast', 'triticale', 'wheatberies', 'durum', 'emmer', 'semolina', 'spelt', 'farina', 'farro', 'graham', 'einkorn wheat','pastas','raviolis','dumplings', 'couscous', 'gnocchi','noodles', 'ramen', 'udon', 'soba', 'chow mein', 'egg noodles','croissants', 'pita', 'naan', 'bagels', 'flatbreads', 'cornbread', 'potato bread', 'muffins', 'donuts', 'rolls', 'flour tortillas','cakes', 'cookies', 'pie crusts', 'brownies','cereal', 'granola', 'corn flakes', 'rice puffs','pancakes', 'waffles', 'french toast', 'crepes', 'biscuits','panko breadcrumbs', 'croutons', 'stuffings', 'dressings', 'soy sauce', 'roux','beer'],
-  :dairy => ['butter', 'butter fat', 'butter oil', 'butter acid', 'butter ester','casein hydrolysate', 'cheese', 'cottage cheese', 'cream', 'custard', 'diacetyl', 'ghee', 'half-and-half', 'lactalbumin', 'lactalbumin phosphate', 'lactoferrin', 'lactose', 'lactulose', 'milk', 'buttermilk', 'malted milk', 'goat milk','non-fat dry milk powder', 'dry milk solids','whey', 'whey protein concentrate','curds', 'casein','margarine', 'sour cream', 'tagatose', 'rennet casein', 'whey protein hydrolysate', 'sweet cream', 'yogurt', 'yoghurt','heavy cream', 'caseinates', 'nougat', 'pudding', 'sour milk solids', 'Recaldent', 'nisin'],
+  :dairy => ['cheddar','butter', 'butter fat', 'butter oil', 'butter acid', 'butter ester','casein hydrolysate', 'cheese', 'cottage cheese', 'cream', 'custard', 'diacetyl', 'ghee', 'half-and-half', 'lactalbumin', 'lactalbumin phosphate', 'lactoferrin', 'lactose', 'lactulose', 'milk', 'buttermilk', 'malted milk', 'goat milk','non-fat dry milk powder', 'dry milk solids','whey', 'whey protein concentrate','curds', 'casein','margarine', 'sour cream', 'tagatose', 'rennet casein', 'whey protein hydrolysate', 'sweet cream', 'yogurt', 'yoghurt','heavy cream', 'caseinates', 'nougat', 'pudding', 'sour milk solids', 'Recaldent', 'nisin'],
   :beef =>['beef', 'veal', 'wagyu beef', 'hamburger', 'hotdog', 'ribs','steak'],
   :egg=>['albumin', 'albumen', 'eggnog', 'globulin', 'livetin', 'lysozyme', 'mayonnaise', 'meringue', 'meringue powder', 'surimi', 'vitelin', 'egg', 'egg powder', 'omelette', 'ovalbumin'],
   :pork=>['pork', 'ham', 'hotdog', 'chashu pork', 'ribs'],
@@ -18,7 +18,7 @@ class Food < ApplicationRecord
 #PARAMS: a food item name to be queried
 #RETURNS: an array as a json string
   def self.get_ingredients(food_query)
-    python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py food_query`
+    python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{food_query}`
     return python_output
   end
 
@@ -26,12 +26,12 @@ class Food < ApplicationRecord
 #RETURNS: true or false depending on whether the food text contains any allergen matching food restriction
   def self.check_restrictions(food_text, restriction)
     allergen = @@allergens[restriction]
-    food_text.each do |f|
-      if allergen.include?(f.downcase)
-        return true
-      end
+    found_allergen = food_text & allergen
+    if found_allergen.empty?
+      return false
+    else
+      return true
     end
-    return true
   end
 
 end

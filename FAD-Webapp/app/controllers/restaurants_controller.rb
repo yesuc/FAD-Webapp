@@ -10,10 +10,10 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1
   def show
     @restaurant = Restaurant.find(params[:id])
-    foods = @restaurant.foods
     scrape_menu
-    # double_check = easy_check_restrictions(foods, :dairy)
-    # hard_check_restrictions(double_check, :dairy)
+    foods = @restaurant.foods
+    double_check = easy_check_restrictions(foods, :dairy)
+    hard_check_restrictions(double_check, :dairy)
   end
 
   # GET /restaurants/new
@@ -41,7 +41,7 @@ class RestaurantsController < ApplicationController
 # Runs python script in run_spiders.py which in turn calls menu_spider.py with the restaurant url
 #NOTE: scrape_menu is currently called in controller function show since no new restaurants are being created
   def scrape_menu
-    if !@restaurant.menu.present?
+    if @restaurant.foods.empty?
       @url = @restaurant.url
       python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
       file = File.read('menu_data.json')
@@ -54,22 +54,24 @@ class RestaurantsController < ApplicationController
             @restaurant.foods << @food
           end
       end
-      else
-        return @restaurant.foods
-      end
+    else
+      return @restaurant.foods
+    end
   end
 # Takes a 'list' of food items from a specific restaurant and the dietary restriction (s) from user input
 # Returns an array of foods containing the said restriction
 # Calls check_restrictions method from Food model to check if food item name and description contains allergen matching food restriction
   def easy_check_restrictions(foods,restriction)
     contains = "contains_"+ restriction.to_s
-    double_check = []
+    contains = contains.to_sym
+    double_check = {}
     foods.each do |food|
-      food_name = food.name
-      food_description = food.description
-      if Food.check_restrictions(food_description.split(), restriction) && Food.check_restrictions(food_name.split(), restriction)
-        puts food_name + ' with' + food_description + 'might contain' + restriction.to_s
-        double_check << food
+      food_name = food.name.downcase
+      food_description = food.description.downcase
+      if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction)
+        food[contains] = true
+      else
+        double_check[food] = food_name
       end
     end
     return double_check
@@ -83,15 +85,19 @@ class RestaurantsController < ApplicationController
       return
     else
       contains = "contains_"+ restriction.to_s
-      ingredients_array = Food.get_ingredients(double_check)
-      double_check.each do |f|
-        ingredients = Food.get_ingredients(f.name)
-        f.ingredients = ingredients.to_s.strip().gsub('\n', ', ')
-        if Food.check_restrictions(ingredients.split(), restriction)
-          puts f.name + ' && '+f.description + ' && '+f.ingredients
-          f[contains] = true
-        else
-          f[contains] = false
+      double_check_values = double_check.values.to_json
+      python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
+      file = File.read('ingredients_data.json')
+      ingredients_hash = JSON.parse(file)
+      ingredients_hash = ingredients_hash.values
+      double_check.keys.each_with_index do |key,index|
+        if !ingredients_hash[index].nil?
+          key.ingredients = ingredients_hash.to_s.strip().downcase
+          if Food.check_restrictions(key.ingredients.split(), restriction)
+            key[contains] = true
+          else
+            key[contains] = false
+          end
         end
       end
     end

@@ -14,10 +14,7 @@
   %div.row
     .col-md-offset-2
     .col-md-8= "#{@restaurant.cuisine}"
-    -@restaurant.foods.each do |food|
-      .col-md-8=food.name + ' || ' + food.description
-      -# .col-md-8=food.contains_dairy
-      -# .col-md-8=food.ingredients
+    -@restaurant.foods
 
 
 
