@@ -1,5 +1,16 @@
-%main
-    %title= "Search Results for #{@q}"
-    %h1= "Search Results for #{@q}"
-    
+%body
+  %title= "Search Results for #{@query}"
+  %h1= "Search Results for #{@query}"
+  %div.results_container
+    -@restaurants.each do |r|
+      %div.result
+        %div.result#title
+          %a=link_to "#{r.name.titleize}", restaurant_path(r)
+        %div.result#url
+          %div= "#{r.url}"
+        %div.result#cuisine
+          %div= "#{r.cuisine}"
+        %div.result#description
+          %div= "#{r.description}"
+
 =link_to "Back to Home Page", root_path

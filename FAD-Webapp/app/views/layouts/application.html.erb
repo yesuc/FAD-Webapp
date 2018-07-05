@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>FADWebapp</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Armata' rel='stylesheet'>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,7 +12,20 @@
   </head>
 
   <body>
+    <h1 class="webtitle">  Eat Safe!</h1>
+    <div class="navigations">
+      <div class="box">
+        <li>
+          <a href=root_path>Home</a>
+        </li>
+        <li>
+          <a href="All Restaurants">All Restaurants</a>
+        </li>
+      </div>
+
+    </div>
     <%= render 'flash_message'%>
+    <%= render 'search_bar'%>
     <%= yield %>
   </body>
 </html>

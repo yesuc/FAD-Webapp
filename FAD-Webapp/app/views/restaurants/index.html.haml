@@ -1,21 +1,21 @@
 %h1 Listing restaurants
-
-%table
-  %thead
-    %tr
-      %th
-      %th
-      %th
-
-  %tbody
-    - @restaurants.each do |restaurant|
+%body
+  %table
+    %thead
       %tr
-        %td= link_to 'Show', restaurant
-        %td= link_to 'Edit', edit_restaurant_path(restaurant)
-        %td= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' }
+        %th
+        %th
+        %th
 
-%br
+    %tbody
+      - @restaurants.each do |restaurant|
+        %tr
+          %td= link_to 'Show', restaurant
+          %td= link_to 'Edit', edit_restaurant_path(restaurant)
+          %td= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' }
 
-= link_to 'New Restaurant', new_restaurant_path
+  %br
 
-%div= link_to 'Back to homepage', root_path
+  = link_to 'New Restaurant', new_restaurant_path
+
+  %div= link_to 'Back to homepage', root_path
