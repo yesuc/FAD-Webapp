@@ -1,3 +1,46 @@
 // Place all the styles related to the home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.top{
+  background: lightblue;
+  width: 90%;
+  height: 50%;
+  margin: auto;
+
+  .box{
+    background: orange;
+    margin: auto;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    align-content: center;
+    position: relative;
+    padding: 5%;
+
+    .icon{
+      position: absolute;
+      color: #4f5b66;
+    }
+
+    .search_full_width#searchbar{
+      margin: auto;
+      position: relative;
+
+      background: white;
+      border-style: none;
+      border-radius: 5px;
+
+
+      width: 50%;
+      height: 10%;
+      padding: 20px;
+      font-family: 'Armata';
+      font-size: 12pt;
+    }
+    .attributes{
+      background: green;
+    }
+
+  }
+}
