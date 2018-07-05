@@ -1,15 +1,4 @@
 %body
   %h1 FAD-Webapp Homepage
-  %div.top
-    %div.box
-      =form_tag search_restaurants_path, :method => :get do
-        %input{:type => "search",:class => "search_full_width", :id => "searchbar", :name => "query", :placeholder => "Search Restaurants", :autocomplete => "off", :min => 1}
-        %span.icon
-          %i.fas.fa-search
-        %input{:type => "submit"}
-        =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
-        %div.attributes
-          -@tags.each do |tag|
-            %input{type: "checkbox", name: "#{tag}", id:"#{tag} Free", value: "unchecked", display: "inline-block"}= "#{tag} free".titleize
   %div
     =link_to "All Restaurants", restaurants_path

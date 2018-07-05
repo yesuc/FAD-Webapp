@@ -116,10 +116,8 @@ class RestaurantsController < ApplicationController
 
  # GET /restaurant/search
  def search
-   @tags = query_params
    @query = "#{params[:query]}"
    @restaurants = Restaurant.query_on_constraints(query_params)
-   # @restaurants = Restaurant.where("name LIKE ? or url LIKE ? or address LIKE ? or cuisine LIKE ?", @q,@q,@q,@q).distinct
  end
 
 private
@@ -129,14 +127,7 @@ private
   end
 
   def query_params
-    permits = []
-    Food.column_names.each do |name|
-      # e.g. contains_gluten
-      if name =~ /^contains/
-        permits << name[name.index('_')+1..-1] + "_free" # e.g. gluten_free
-      end
-    end
-    permits << [:query_type, :query]
+    permits = Food.generate_tags << [:query_type, :query]
     params.permit(permits)
   end
 
