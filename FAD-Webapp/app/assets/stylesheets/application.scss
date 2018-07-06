@@ -13,13 +13,28 @@
  *= require_tree .
  *= require_self
  */
-html, body { height: 100%; width: 100%; margin: 0; }
+html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
 .webtitle{
   font-size: 30pt;
 }
 .navigations{
-  .box li{
-     display: inline;
+  .nav_box ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  .nav_box li{
+     float: left;
+  }
+  .nav_box a{
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    padding: 14px 16px;
+
   }
 }
 
@@ -29,11 +44,10 @@ html, body { height: 100%; width: 100%; margin: 0; }
   height: 50%;
   margin: auto;
 
-  .box{
-    background: orange;
+  .search_box{
+    background: #baffc9;
     margin: auto;
     display: inline-block;
-    vertical-align: middle;
     white-space: normal;
     align-content: center;
     position: relative;
@@ -58,6 +72,19 @@ html, body { height: 100%; width: 100%; margin: 0; }
       padding: 20px;
       font-family: 'Armata';
       font-size: 12pt;
+    }
+    #submit{
+      display: inline-block;
+      margin-left: -1%;
+      width: 10%;
+      height: 60px;
+      padding-top: 4px;
+      position: relative;
+      border: none;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      background-color: #bae1ff;
     }
     .attributes{
       background: green;

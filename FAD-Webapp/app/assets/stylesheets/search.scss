@@ -1,0 +1,23 @@
+.bottom{
+  background-color: white;
+  margin: auto;
+  width: 90%;
+  height: auto;
+}
+.results_container{
+
+
+}
+.result#title a{
+  font-style: none;
+  font-size: 1.2em;
+  color: blue;
+  padding: 0;
+  height: 0;
+  -webkit-margin-after: -1em;
+}
+.result#url{
+  font-size: 1em;
+  display: block;
+  color: green;
+}

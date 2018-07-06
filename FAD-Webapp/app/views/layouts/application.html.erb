@@ -14,13 +14,15 @@
   <body>
     <h1 class="webtitle">  Eat Safe!</h1>
     <div class="navigations">
-      <div class="box">
-        <li>
-          <a href=root_path>Home</a>
-        </li>
-        <li>
-          <a href=restaurants_path>All Restaurants</a>
-        </li>
+      <div class="nav_box">
+        <ul>
+          <li>
+            <%=link_to "Home", root_path %>
+          </li>
+          <li>
+            <%=link_to "All Restaurants", restaurants_path%>
+          </li>
+        </ul>
       </div>
 
     </div>
