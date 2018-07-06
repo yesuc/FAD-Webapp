@@ -1,10 +1,9 @@
 %div.top
-  %div.box
+  %div.search_box
     =form_tag search_restaurants_path, :method => :get do
-      %input{:type => "search",:class => "search_full_width", :id => "searchbar", :name => "query", :placeholder => "Search Restaurants", :autocomplete => "off", :min => 1}
-      %span.icon
+      %input{:class => "search_full_width", :id => "searchbar",:type => "search", :name => "query", :placeholder => "Search Restaurants", :autocomplete => "off", :min => 1}
+      %button#submit{:type => "submit"}
         %i.fas.fa-search
-      %input{:type => "submit"}
       =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
       %div.attributes
         -Food.generate_tags.each do |tag|
