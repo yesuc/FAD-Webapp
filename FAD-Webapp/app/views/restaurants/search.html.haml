@@ -1,11 +1,11 @@
-%body
+%div.bottom
   %title= "Search Results for #{@query}"
-  %h1= "Search Results for #{@query}"
+  %h1= "Search Results for '#{@query}'"
   %div.results_container
     -@restaurants.each do |r|
       %div.result
-        %div.result#title
-          %a=link_to "#{r.name.titleize}", restaurant_path(r)
+        %h3.result#title
+          =link_to "#{r.name.titleize}", restaurant_path(r)
         %div.result#url
           %div= "#{r.url}"
         %div.result#cuisine
