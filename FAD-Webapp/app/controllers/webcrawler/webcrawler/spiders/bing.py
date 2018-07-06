@@ -16,7 +16,7 @@ def find_common_ingredients(query_string_array):
     browser = webdriver.Chrome(chrome_options=options)
     # browser = webdriver.Safari()
     browser.set_page_load_timeout(60)
-    # array = json.loads(query_string_array)
+    #Split array containing food names to open only one browser window
     array = query_string_array.split(',')
     q = 0
     clean_recipe_ingredients = {}
@@ -24,10 +24,13 @@ def find_common_ingredients(query_string_array):
         query_string = array[q]
         browser.get('https://www2.bing.com/search?q=' + '%20'.join(query_string.split()) +'%20Recipe')
         ingredients = []
+        #Check if bing results are in the expected layout
         try:
             i = browser.find_element_by_class_name('card')
             attr = i.find_element_by_tag_name('a').get_attribute('href')
+            #Get page for first recipe from search results
             browser.get(attr)
+            # Check if recipe has a 'see more' link for hidden ingredients
             try:
                 table_body = browser.find_element_by_class_name('b_tblWithExpansion')
                 see_more_btn = table_body.find_element_by_class_name('sml').find_element_by_tag_name('a')
@@ -35,16 +38,18 @@ def find_common_ingredients(query_string_array):
                     browser.execute_script("arguments[0].click();", see_more_btn)
                 if see_more_btn.is_displayed() is False:
                     table_elements = table_body.find_elements_by_tag_name('tr')
-
+            # If no 'see more' button is found, collect ingredients from search result
             except:
                 table_elements = browser.find_elements_by_tag_name('tr')
             for t in table_elements:
                 ingredients.append(t.text)
+            # Pass collected ingredients to chunker.py to remove extra words
             clean_recipe_ingredients[query_string] = [chunker.clean_ingredients(chunker.parse_ingredients(ingredients))]
-            print(chunker.clean_ingredients(chunker.parse_ingredients(ingredients)))
+        # If no search result is found
         except:
-            clean_recipe_ingredients[query_string] = "No search results found"
+            clean_recipe_ingredients[query_string] = ["No search results found"]
         q+=1
+    # Return ingredients for food items in a json file
     filename = 'ingredients_data.json'
     with open(filename, 'w') as f:
         json.dump(clean_recipe_ingredients, f)

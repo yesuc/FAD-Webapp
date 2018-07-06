@@ -10,10 +10,9 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1
   def show
     @restaurant = Restaurant.find(params[:id])
-    scrape_menu
     foods = @restaurant.foods
-    double_check = easy_check_restrictions(foods, :dairy)
-    hard_check_restrictions(double_check, :dairy)
+    get_menu_and_food_ingredients(foods, :dairy)
+    @foods = @restaurant.foods.collect{ |c| if !c.contains_dairy}
   end
 
   # GET /restaurants/new
@@ -36,6 +35,15 @@ class RestaurantsController < ApplicationController
       redirect_to(new_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
     end
   end
+  def get_menu_and_food_ingredients(foods, restriction)
+    # if foods.empty?
+    scrape_menu
+    double_check = easy_check_restrictions(foods, restriction)
+    hard_check_restrictions(double_check, restriction)
+    # else
+    #   return foods
+    # end
+  end
 # If a restaurant does not contain a menu:
 # Get menu items and descriptions from menu_data.json, create new food items, with name and description
 # Runs python script in run_spiders.py which in turn calls menu_spider.py with the restaurant url
@@ -50,7 +58,7 @@ class RestaurantsController < ApplicationController
       @menu = menu_hash.values
         @menu.each do |item|
           item.each do |i|
-            @food = Food.create(:name => i[0], :description => i[1])
+            @food = Food.create!(:name => i[0], :description => i[1])
             @restaurant.foods << @food
           end
       end
@@ -59,8 +67,9 @@ class RestaurantsController < ApplicationController
     end
   end
 # Takes a 'list' of food items from a specific restaurant and the dietary restriction (s) from user input
-# Returns an array of foods containing the said restriction
+# Returns an array of foods which need to be checked for the said restriction
 # Calls check_restrictions method from Food model to check if food item name and description contains allergen matching food restriction
+# Sets contains_restriction attribute if food name or description contains the said restriction
   def easy_check_restrictions(foods,restriction)
     contains = "contains_"+ restriction.to_s
     contains = contains.to_sym
@@ -69,7 +78,7 @@ class RestaurantsController < ApplicationController
       food_name = food.name.downcase
       food_description = food.description.downcase
       if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction)
-        food[contains] = true
+        food.contains_dairy = true
       else
         double_check[food] = food_name
       end
@@ -79,12 +88,13 @@ class RestaurantsController < ApplicationController
 
 # Takes list returned by easy_check_restrictions and food restriction
 # Sets contains_restriction attribute of food item
-#Calls get_ingredients method from food Model which in turn runs a python script, bing.py with user input arguments
+#Gets ingredients for unverified foods which in turn runs a python script, bing.py with user input arguments
   def hard_check_restrictions(double_check, restriction)
     if double_check.empty?
       return
     else
       contains = "contains_"+ restriction.to_s
+      contains = contains.to_sym
       double_check_values = double_check.values.to_json
       python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
       file = File.read('ingredients_data.json')
@@ -92,11 +102,11 @@ class RestaurantsController < ApplicationController
       ingredients_hash = ingredients_hash.values
       double_check.keys.each_with_index do |key,index|
         if !ingredients_hash[index].nil?
-          key.ingredients = ingredients_hash.to_s.strip().downcase
+          key.ingredients = ingredients_hash[index].join(' ').strip().downcase
           if Food.check_restrictions(key.ingredients.split(), restriction)
-            key[contains] = true
+            key.contains_dairy = true
           else
-            key[contains] = false
+            key.contains_dairy = false
           end
         end
       end
