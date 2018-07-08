@@ -6,6 +6,7 @@ class CreateRestaurants < ActiveRecord::Migration[5.2]
       t.string :address
       t.string :cuisine
       t.string :description
+      t.boolean :scraped, default: false
 
       t.timestamps
     end

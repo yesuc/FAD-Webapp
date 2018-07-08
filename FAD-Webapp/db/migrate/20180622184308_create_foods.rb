@@ -15,6 +15,8 @@ class CreateFoods < ActiveRecord::Migration[5.2]
       t.boolean :contains_wheat
       t.string :contains_other
       t.string :ingredients
+      t.string :name, null: false
+      t.text :description
 
       t.timestamps
     end

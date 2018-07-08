@@ -10,9 +10,13 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1
   def show
     @restaurant = Restaurant.find(params[:id])
-    foods = @restaurant.foods
-    get_menu_and_food_ingredients(foods, :dairy)
-    @foods = @restaurant.foods.collect{ |c| if !c.contains_dairy}
+    @foods = @restaurant.foods
+    if !@restaurant.scraped
+      get_menu_and_food_ingredients(@foods, :dairy)
+      @restaurant.scraped = true
+      @restaurant.save
+    end
+    # @foods = @restaurant.foods
   end
 
   # GET /restaurants/new
@@ -28,21 +32,25 @@ class RestaurantsController < ApplicationController
   # POST /restaurants
   def create
     @restaurant = Restaurant.new(create_update_params)
+    tags = Food.generate_tags
+    tags.each do |t|
+      if params[t]
+        get_menu_and_food_ingredients(@restaurant.foods, params[t])
+      end
+    end
     if @restaurant.save
-      scrape_menu
       redirect_to(restaurant_path(@restaurant), flash: {success: "Restaurant was successfully created."}) and return
     else
       redirect_to(new_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
     end
   end
+
   def get_menu_and_food_ingredients(foods, restriction)
-    # if foods.empty?
     scrape_menu
     double_check = easy_check_restrictions(foods, restriction)
     hard_check_restrictions(double_check, restriction)
-    # else
-    #   return foods
-    # end
+    @restaurant.scraped = true
+    @restaurant.save
   end
 # If a restaurant does not contain a menu:
 # Get menu items and descriptions from menu_data.json, create new food items, with name and description
@@ -79,6 +87,7 @@ class RestaurantsController < ApplicationController
       food_description = food.description.downcase
       if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction)
         food.contains_dairy = true
+        food.save!
       else
         double_check[food] = food_name
       end
@@ -105,8 +114,10 @@ class RestaurantsController < ApplicationController
           key.ingredients = ingredients_hash[index].join(' ').strip().downcase
           if Food.check_restrictions(key.ingredients.split(), restriction)
             key.contains_dairy = true
+            key.save!
           else
             key.contains_dairy = false
+            key.save!
           end
         end
       end

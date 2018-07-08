@@ -1,7 +1,7 @@
 class Restaurant < ApplicationRecord
   has_many :foods
 
-  # scope :allergen_free, -> (allergen){ joins(:foods).group(:restaurant_id).having("contains_#{allergen}".to_sym => false) }
+  scope :allergen_free, -> (allergen){ joins(:foods).where(foods: {"contains_#{allergen}".to_sym => false}) }
   # Given Restaurants with foods where e.g. contains gluten => false
   # ex: Restaurants.all.allergen_free("dairy")
 

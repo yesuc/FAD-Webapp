@@ -27,10 +27,10 @@ ActiveRecord::Schema.define(version: 2018_06_28_174218) do
     t.boolean "contains_wheat"
     t.string "contains_other"
     t.string "ingredients"
+    t.string "name", null: false
+    t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "name", default: ""
-    t.text "description", default: ""
     t.integer "restaurant_id"
     t.index ["restaurant_id"], name: "index_foods_on_restaurant_id"
   end
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 2018_06_28_174218) do
     t.string "address"
     t.string "cuisine"
     t.string "description"
+    t.boolean "scraped", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "menu", default: ""

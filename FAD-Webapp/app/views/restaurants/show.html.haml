@@ -14,19 +14,14 @@
   %div.row
     .col-md-offset-2
     .col-md-8= "#{@restaurant.cuisine}"
-    =@foods.each do |f|
+    -@restaurant.foods.dairy_free.each do |f|
       ="#{f.name}"
+      %br
+      ="#{f.description}"
+      %br
       ="#{f.ingredients}"
-    -# =@restaurant.foods.dairy_free.each do |f|
-    -#   ="#{f.name}"
-    -#   ="#{f.ingredients}"
-    -# =@restaurant.foods.dairy_free.each do |f|
-    -#   ="#{f.name}"
-    -#   ="#{f.ingredients}"
-    -# -@restaurant.foods.dairy_free.each do |food|
-    -#   .col-md-8="#{food.name}"
-    -#   .col-md-8="#{food.ingredients}"
-    -#   .col-md-8="#{food.contains_dairy}"
+      %br
+
 
 
 
