@@ -5,6 +5,7 @@
       %button#submit{:type => "submit"}
         %i.fas.fa-search
       =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
-      %div.attributes
+      %span.attribute
         -Food.generate_tags.each do |tag|
-          %input{type: "checkbox", name: "#{tag}", id:"#{tag} Free", value: "unchecked", display: "inline-block"}= "#{tag} free".titleize
+          %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", display: "inline-block"}= "#{tag} free".titleize
+      -puts(params)

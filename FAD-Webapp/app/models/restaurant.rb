@@ -10,10 +10,11 @@ class Restaurant < ApplicationRecord
     if constraints[:query] == ""
       filtered = Restaurant.all
     else
+      # % - indicates wildcard i.o.w substrings
       if constraints[:query_type] == "name"
-        filtered = Restaurant.where("name LIKE ?", constraints[:query])
+        filtered = Restaurant.where("name LIKE ?", "%#{constraints[:query]}%")
       else
-        filtered = Restaurant.where("url LIKE ?", constraints[:query])
+        filtered = Restaurant.where("url LIKE ?", "%#{constraints[:query]}%")
       end
     end
     constraints.delete(:query)
