@@ -1,6 +1,10 @@
 %div.bottom
-  %title= "Search Results for #{@query}"
   %h1= "Search Results for '#{@query}'"
+  %div.filter_container
+    %div#header
+    =form_for search_restaurants_path, method: :get do
+      %span.filter_by#name
+        %button{name: 'order_by_name', type: 'submit', action: @restaurants.order(:asc)}= "Name"
   %div.results_container
     -@restaurants.each do |r|
       %div.result

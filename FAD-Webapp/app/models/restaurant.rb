@@ -3,7 +3,7 @@ class Restaurant < ApplicationRecord
 
   scope :allergen_free, -> (allergen){ joins(:foods).where(foods: {"contains_#{allergen}".to_sym => false}) }
   # Given Restaurants with foods where e.g. contains gluten => false
-  # ex: Restaurants.all.allergen_free("dairy")
+  # ex: Restaurant.all.allergen_free("dairy")
 
 
   def self.query_on_constraints(constraints)

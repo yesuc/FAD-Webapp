@@ -21,6 +21,34 @@
         1,
         null
       ],
+      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/foods_controller.rb": [
+        1,
+        1,
+        null,
+        null,
+        1,
+        null,
+        null,
+        null,
+        1,
+        null,
+        null,
+        1,
+        null,
+        null,
+        1,
+        null,
+        null,
+        1,
+        null,
+        null,
+        null,
+        null
+      ],
+      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/application_controller.rb": [
+        1,
+        null
+      ],
       "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/models/food.rb": [
         1,
         1,
@@ -71,6 +99,17 @@
         0,
         null,
         null,
+        null,
+        null,
+        1,
+        0,
+        0,
+        null,
+        0,
+        0,
+        null,
+        null,
+        0,
         null,
         null,
         null
@@ -134,10 +173,6 @@
         0
       ],
       "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/jobs/application_job.rb": [
-        0,
-        0
-      ],
-      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/application_controller.rb": [
         0,
         0
       ],
@@ -331,18 +366,9 @@
         0,
         null,
         0,
-        null,
-        0,
-        0,
-        0,
-        null,
-        0,
         0,
         0,
         null,
-        0,
-        0,
-        0,
         0,
         0,
         0,
@@ -352,43 +378,6 @@
       ],
       "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/home_controller.rb": [
         0,
-        0,
-        0,
-        0,
-        null,
-        null,
-        0,
-        0,
-        0,
-        0,
-        null,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        null,
-        0
-      ],
-      "/Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/foods_controller.rb": [
-        0,
-        0,
-        0,
-        null,
-        0,
-        null,
-        0,
-        null,
-        0,
-        0,
-        null,
-        0,
-        0,
-        null,
-        0,
-        0,
-        null,
         0,
         0,
         null,
@@ -408,7 +397,7 @@
         0
       ]
     },
-    "timestamp": 1530730179
+    "timestamp": 1530985473
   },
   "Cucumber Features": {
     "coverage": {
