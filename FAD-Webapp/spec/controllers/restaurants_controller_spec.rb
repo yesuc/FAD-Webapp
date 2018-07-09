@@ -29,6 +29,14 @@ RSpec.describe RestaurantsController, type: :controller do
         expect(response).to have_http_status(:success)
       end
     end
+  describe "GET #show" do
+     it "returns http success" do
+       Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican")
+       get :search, params: {:query => "La Iguana", :query_type => "name"} ,session:{ :gluten => "on" }
+       expect(request.session[:gluten]).to eq "on"
+       expect(response).to have_http_status(:success)
+     end
+   end
 
  describe "GET #update" do
     it "returns http success" do
