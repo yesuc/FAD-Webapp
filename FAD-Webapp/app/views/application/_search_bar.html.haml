@@ -4,8 +4,13 @@
       %input{:class => "search_full_width", :id => "searchbar",:type => "search", :name => "query", :placeholder => "Search Restaurants", :autocomplete => "off", :min => 1}
       %button#submit{:type => "submit"}
         %i.fas.fa-search
+      =label_tag :query_type, "Search by"
       =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
-      %span.attribute
-        -Food.generate_tags.each do |tag|
-          %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", display: "inline-block"}= "#{tag} free".titleize
-      -puts(params)
+
+      =label_tag :query_distance, "Distance"
+      =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20]])
+
+      %div
+        %span.attribute
+          -Food.generate_tags.each do |tag|
+            %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", display: "inline-block"}= "#{tag} free".titleize
