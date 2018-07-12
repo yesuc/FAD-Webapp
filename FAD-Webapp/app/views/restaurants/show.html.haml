@@ -13,15 +13,17 @@
     .col-md-8.address= "#{@restaurant.address}"
   %div.row
     .col-md-offset-2
-    .col-md-8= "#{@restaurant.cuisine}"
+    .col-md-4= "#{@restaurant.cuisine}"
     =session[:tags]
-    -@foods.each do |f|
-      %h4="#{f.name}"
-      %br
-      ="#{f.description}"
-      %br
-      ="#{f.ingredients}"
-      %br
+  %div.row
+    .col-md-offset-2
+      -@foods.each do |f|
+        %h4="#{f.name}" + ' ~> ' +  "#{f.description}"
+        -# .col-md-offset-2
+        -# ='Description: '+ "#{f.description}"
+        .col-md-offset-2
+        ='Ingredients: '+ "#{f.ingredients.titleize}"
+        %br
 
 
 

@@ -16,7 +16,7 @@ def process_text(raw_text):
 
 #NOTE: Removes extra words such as time, date and prices from file containing menu
 def iterate_menu(raw_text):
-    buzzwords_dict = ["soup", "beverages", "specials", "dessert", "condiments", "menu", "desserts","soup & salads", "shorbe/salads","tapas","entrees","large", "medium", "small", "mini", "servings", "special", "specials", "choices","scoops","extras","sides","soups","salads", "biryanis"]
+    buzzwords_dict = ["soup", "beverages", "specials", "dessert", "condiments", "menu", "desserts","soup & salads", "shorbe/salads","tapas","entrees","large", "medium", "small", "mini", "servings", "special", "specials", "choices","scoops","extras","sides","soups","salads", "biryanis", "gluten free", "tax included", "drinks", "house made broths"]
     lines = raw_text.splitlines()
     title = {}
     for i in range(len(lines)-1):
@@ -53,7 +53,7 @@ def parse_chunk(raw_text):
     # keys = chunker(grammar,text)
     # return keys
 
-measurements_dict = ["quantity", "large","medium","small","cup","cups", "teaspoon","teaspoons", "tablespoon", "tablespoons", "ounce", "ounces", "pound", "pounds","pinch","pinches","cube","cubes", "bunch","bunches", "clove","cloves","ground","boneless","canned","skinless","can","cans","fresh","plain","regular", "long","centimeter","centimeters", "half","halves", "double", "inch","inches","milliliter","milliliters", "spoon", "pieces", "hot", "slice","fast", "sachet", "purpose","handful", "handfuls", "grams","kilogram", "add", "numbers", "jar","essential"]
+measurements_dict = ["quantity", "large","medium","small","cup","cups", "teaspoon","teaspoons", "tablespoon", "tablespoons", "ounce", "ounces", "pound", "pounds","pinch","pinches","cube","cubes", "bunch","bunches", "clove","cloves","ground","boneless","canned","skinless","can","cans","fresh","plain","regular", "long","centimeter","centimeters", "half","halves", "double", "inch","inches","milliliter","milliliters","liters",  "spoon", "pieces", "hot", "slice","fast", "sachet", "purpose","handful", "handfuls", "grams","kilogram", "add", "numbers", "jar","essential", "deep", "few", "original","homemade", "gallon", "stone","fluid", "part", "parts", "wedge", "number" ]
 def parse_ingredients(ingredients_array):
     for i in range(len(ingredients_array)):
          ingredients_array[i] = ' '.join(j for j in ingredients_array[i].split() if j.isalpha() and j not in measurements_dict)

@@ -13,7 +13,7 @@ RSpec.describe Restaurant, type: :model do
     expect(Restaurant).to respond_to(:filter_on_constraints)
   end
 
-
+  
   it "should fail to create a Restaurant object if no name is specified" do
     expect{Restaurant.create!(url: "http://hamiltonroyalindiagrill.com/", address: "6 Broad Street Hamilton, NY 13346" , cuisine: "Indian")}.to raise_exception(ActiveRecord::NotNullViolation)
     expect{Restaurant.create!(address: "6 Broad Street Hamilton, NY 13346" , cuisine: "Indian")}.to raise_exception(ActiveRecord::NotNullViolation)

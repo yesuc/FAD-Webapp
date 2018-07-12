@@ -1,5 +1,7 @@
 class Restaurant < ApplicationRecord
   has_many :foods
+  has_attached_file :image, :styles=> {:medium => "117x245>", :thumb => "20x25>" }, :default_url => "noimg.png"
+  validates_attachment :image, :content_type => {:content_type => ["image/jpeg", "image/png", "image/gif"]}
 
   scope :allergen_free, -> (allergen){ joins(:foods).where(foods: {"contains_#{allergen}".to_sym => false}) }
   # Given Restaurants with foods where e.g. contains gluten => false

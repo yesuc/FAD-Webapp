@@ -13,6 +13,7 @@ class RestaurantsController < ApplicationController
     @foods = @restaurant.foods
     if !@restaurant.scraped
         get_menu_and_food_ingredients
+        @restaurant.save
     end
     if session[:tags]
       session[:tags].each do |t|
@@ -38,7 +39,6 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = Restaurant.new(create_update_params)
     get_menu_and_food_ingredients
-    @restaurant.scraped = true
     if session[:tags]
       session[:tags].each do |t|
         check_food_for_allergens(@restaurant.foods, t.to_sym)
@@ -56,7 +56,6 @@ class RestaurantsController < ApplicationController
     if !double_check.empty?
       get_ingredients_for_all(double_check)
       @restaurant.scraped = true
-      @restaurant.save
     end
   end
 # If a restaurant does not contain a menu:
@@ -66,7 +65,7 @@ class RestaurantsController < ApplicationController
   def scrape_menu
     @url = @restaurant.url
     double_check = {}
-    python_output = `python /Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
+    python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
     file = File.read('menu_data.json')
     menu_hash = JSON.parse(file)
     @restaurant.menu = menu_hash.values
@@ -83,14 +82,14 @@ class RestaurantsController < ApplicationController
 
 # NOTE: Gets ingredients for all food items by running bing.py
 def get_ingredients_for_all(double_check)
-  double_check_values = double_check.values.to_json
-  python_output = `python /Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
+  double_check_values = double_check.values.join(', ').to_json
+  python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
   file = File.read('ingredients_data.json')
   ingredients_hash = JSON.parse(file)
   ingredients_hash = ingredients_hash.values
   double_check.keys.each_with_index do |key,index|
     if !ingredients_hash[index].nil?
-      key.ingredients = ingredients_hash[index].join(' ').strip().downcase
+      key.ingredients = ingredients_hash[index].join(', ').strip()
       key.save!
     end
   end
@@ -104,7 +103,7 @@ def check_food_for_allergens(foods, restriction)
       food_name = food.name.downcase
       food_description = food.description.downcase
       food_ingredients = food.ingredients
-      if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction) || Food.check_restrictions(food_ingredients.split(), restriction)
+      if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction) || Food.check_restrictions(food_ingredients.downcase.split(', '), restriction)
         food[contains]= true
         food.save!
       else
@@ -113,55 +112,7 @@ def check_food_for_allergens(foods, restriction)
       end
     end
 end
-# # Takes a 'list' of food items from a specific restaurant and the dietary restriction (s) from user input
-# # Returns an array of foods which need to be checked for the said restriction
-# # Calls check_restrictions method from Food model to check if food item name and description contains allergen matching food restriction
-# # Sets contains_restriction attribute if food name or description contains the said restriction
-#   def easy_check_restrictions(foods,restriction)
-#     contains = "contains_"+ restriction.to_s
-#     contains = contains.to_sym
-#     double_check = {}
-#     foods.each do |food|
-#       food_name = food.name.downcase
-#       food_description = food.description.downcase
-#       if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction)
-#         food[contains]= true
-#         food.save!
-#       else
-#         double_check[food] = food_name
-#       end
-#     end
-#     return double_check
-#   end
-#
-# # Takes list returned by easy_check_restrictions and food restriction
-# # Sets contains_restriction attribute of food item
-# #Gets ingredients for unverified foods which in turn runs a python script, bing.py with user input arguments
-#   def hard_check_restrictions(double_check, restriction)
-#     if double_check.empty?
-#       return
-#     else
-#       contains = "contains_"+ restriction.to_s
-#       contains = contains.to_sym
-#       double_check_values = double_check.values.to_json
-#       python_output = `python /Users/carteryesu/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
-#       file = File.read('ingredients_data.json')
-#       ingredients_hash = JSON.parse(file)
-#       ingredients_hash = ingredients_hash.values
-#       double_check.keys.each_with_index do |key,index|
-#         if !ingredients_hash[index].nil?
-#           key.ingredients = ingredients_hash[index].join(' ').strip().downcase
-#           if Food.check_restrictions(key.ingredients.split(), restriction)
-#             key[contains]= true
-#             key.save!
-#           else
-#             key[contains] = false
-#             key.save!
-#           end
-#         end
-#       end
-#     end
-#   end
+
   # PATCH/PUT /restaurants/1
   def update
     @restaurant = Restaurant.find(params[:id])

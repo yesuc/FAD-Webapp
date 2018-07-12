@@ -63,10 +63,7 @@ RSpec.describe RestaurantsController, type: :controller do
   end
 describe "bad paths for create/update" do
     it "should redirect to new on create failure" do
-      p =  Restaurant.new(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican")
-      expect(Restaurant).to receive(:new) { p }
-      expect(p).to receive(:save) { nil }
-      post :create, params: {:restaurant => { name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican"}}
+      post :create, params: {:restaurant => {name: nil,  url: nil, address: nil , cuisine: nil}}
       expect(response).to redirect_to(new_restaurant_path)
     end
   it "should redirect to show on update failure" do
