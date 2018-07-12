@@ -22,7 +22,7 @@ class Restaurant < ApplicationRecord
         filtered = Restaurant.where("url LIKE ?", "%#{constraints[:query]}%")
       end
     end
-    
+
     # Filter by Distance
     if Rails.env.development? || Rails.env.test?
       filtered = filtered.near('149.43.121.139', constraints[:query_distance])
@@ -35,9 +35,13 @@ class Restaurant < ApplicationRecord
     constraints.delete(:query_distance)
     # Filter by Allergens
     constraints.each_pair do |sym,val|
-      if val == true && filtered.length > 0
+      if sym.to_s == 'order'; next; end
+      if filtered.length > 0
         filtered = filtered.where(allergen_free(sym))
       end
+    end
+    if constraints[:order]
+      filtered = filtered.reorder(constraints[:order].to_sym => :desc)
     end
 
     return filtered

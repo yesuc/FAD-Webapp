@@ -1,6 +1,6 @@
 require 'json'
 class RestaurantsController < ApplicationController
-  # before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
+
   # GET /restaurants
   @@tags = Food.generate_tags
   def index
@@ -71,17 +71,33 @@ class RestaurantsController < ApplicationController
 
  # GET /restaurant/search
  def search
+   params = query_params
+   if !params[:query].nil?
+     session[:query] = params[:query]
+     session[:query_type] = params[:query_type]
+     session[:query_distance] = params[:query_distance]
+   else
+     params[:query] = session[:query]
+     params[:query_type] = session[:query_type]
+     params[:query_distance] = session[:query_distance]
+   end
    @query = params[:query]
-   session[:tags] = []
-   Food.generate_tags.each do |tag|
-     if params[tag]
-       session[:tags] << tag
+   if !session[:tags].nil?
+     session[:tags].each do |tag|
+       if !params.include?(tag)
+         params << tag
+       end
+     end
+   else
+     session[:tags] = []
+     Food.generate_tags.each do |tag|
+       if params[tag] && !session[:tags].include?(tag)
+         session[:tags] << tag
+       end
      end
    end
-   @restaurants = Restaurant.query_on_constraints(query_params)
-   if params[:order_by_name]
-     @restaurants = @restaurants.order(:name)
-   end
+   @allergens = session[:tags]
+   @restaurants = Restaurant.query_on_constraints(params)
  end
 
 
@@ -156,7 +172,7 @@ private
   end
 
   def query_params
-    permits = Food.generate_tags << [:query, :query_type, :query_distance]
+    permits = Food.generate_tags << [:query, :query_type, :query_distance,:order]
     params.permit(permits)
   end
 

@@ -230,7 +230,7 @@ end
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
-    current_path.should == path_to(page_name)
+    expect(current_path).to eq(path_to(page_name))
   else
     assert_equal path_to(page_name), current_path
   end
@@ -264,4 +264,25 @@ Given("these Restaurants:") do |table|
   end
 end
 
+When /^(?:|I )query "([^"]*)"$/ do |input|
+  fill_in('query', :with => input)
+  click_button('submit')
+end
+
+Then /^(?:|I )should see a button titled "([^"]*)"$/ do |title|
+  page.should have_button(title)
+end
+
+Then /each Restaurant should be ordered by name$/ do
+  titles = page.all(:css, "result#title")
+  titles.each_cons(2).all?{|i,j| i.text >= j.name}
+end
+
+Then /each Restaurant should be ordered by distance$/ do
+  # TODO: 
+end
+
+Then /^(?:|I )should see a link titled "([^"]*)"$/ do |title|
+  page.find_link(title).visible?
+end
 ###############################################################
