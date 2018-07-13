@@ -72,30 +72,29 @@ class RestaurantsController < ApplicationController
  # GET /restaurant/search
  def search
    params = query_params
-   if !params[:query].nil?
-     session[:query] = params[:query]
-     session[:query_type] = params[:query_type]
-     session[:query_distance] = params[:query_distance]
-   else
-     params[:query] = session[:query]
-     params[:query_type] = session[:query_type]
-     params[:query_distance] = session[:query_distance]
+
+   q_params = ['query', 'query_type', 'query_distance', 'order']
+   q_params.each do |param|
+    if !params[param].nil? && params[param] != session[param]
+      session[param] = params[param]
+    else
+      params[param] = session[param]
+    end
    end
+
+   Food.generate_tags.each do |tag|
+     if params.include?(tag)
+       session[:tags] << tag
+     else
+      session[:tags].delete(tag)
+     end
+   end
+
+   puts("Controller params: #{params}")
+   puts("Controller sessions tags: #{session[:tags]}")
    @query = params[:query]
-   if !session[:tags].nil?
-     session[:tags].each do |tag|
-       if !params.include?(tag)
-         params << tag
-       end
-     end
-   else
-     session[:tags] = []
-     Food.generate_tags.each do |tag|
-       if params[tag] && !session[:tags].include?(tag)
-         session[:tags] << tag
-       end
-     end
-   end
+   @query_type = params[:query_type]
+   @query_distance = params[:query_distance]
    @allergens = session[:tags]
    @restaurants = Restaurant.query_on_constraints(params)
  end
@@ -168,7 +167,7 @@ end
 private
   # Filter Params for creating and updating restaurant objects
   def create_update_params
-    params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
+    params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu, :description)
   end
 
   def query_params

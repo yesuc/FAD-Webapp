@@ -27,7 +27,7 @@
 
     </div>
     <%= render 'flash_message'%>
-    <%= render 'search_bar'%>
+    <%= render(partial: 'search_bar', locals: {q: nil, allergens: nil, q_dist: nil, q_type: nil}) if request.path != search_restaurants_path%>
     <%= yield %>
   </body>
 </html>
