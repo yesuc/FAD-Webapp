@@ -71,33 +71,34 @@ class RestaurantsController < ApplicationController
 
  # GET /restaurant/search
  def search
+   # byebug
    params = query_params
-
-   q_params = ['query', 'query_type', 'query_distance', 'order']
-   q_params.each do |param|
-    if !params[param].nil? && params[param] != session[param]
-      session[param] = params[param]
-    else
-      params[param] = session[param]
-    end
+   session[:init] = true
+   # puts("Before: Controller params: #{params}")
+   puts("Before: Controller Sessions: #{session[:query]}")
+   puts("Before: Controller sessions: #{session[:tags]}")
+   if should_set_session? params, session
+     session.clear
+     session = set_session(params, session)
+   elsif should_set_params? params
+     params = set_params(params, session)
+     session.clear
    end
-
-   Food.generate_tags.each do |tag|
-     if params.include?(tag)
-       session[:tags] << tag
-     else
-      session[:tags].delete(tag)
-     end
-   end
-
-   puts("Controller params: #{params}")
-   puts("Controller sessions tags: #{session[:tags]}")
+   puts("After: Controller params: #{params}")
+   puts("After: Controller sessions:#{session}")
    @query = params[:query]
    @query_type = params[:query_type]
    @query_distance = params[:query_distance]
-   @allergens = session[:tags]
+   @query_order = params[:order]
+   if session.nil?
+     @allergens = nil
+   else
+     @allergens = session[:tags]
+   end
    @restaurants = Restaurant.query_on_constraints(params)
  end
+
+
 
 
   def get_menu_and_food_ingredients
@@ -174,5 +175,99 @@ private
     permits = Food.generate_tags << [:query, :query_type, :query_distance,:order]
     params.permit(permits)
   end
+
+  def should_set_params?(parms)
+    if parms[:order]
+      return true
+    else
+      return false
+    end
+  end
+
+  def should_set_session?(parms,sess)
+    if !parms[:order] || !parms[:query].nil?
+      # if !sess[:query]
+        return true
+      # end
+    else
+      return false
+    end
+  end
+
+  # PARAMS: Set A, and destination Set B
+  # Moves or replaces query attributes from set A into set B
+  # RETURNS: destination Set B with query params from A
+  def set_query_attributes(a,b)
+    q_params = ['query', 'query_type', 'query_distance', 'order']
+    if a.nil?
+      a = {}
+    end
+    if b.nil?
+      b = {}
+    end
+    q_params.each do |param|
+      b[param] = a[param]
+    end
+    return b
+  end
+
+  def set_session(parms,sess)
+    sess = set_query_attributes(parms,sess)
+    ignore = ['query', 'query_type', 'query_distance', 'order']
+    sess[:tags] = []
+    parms.each do |atr,val|
+      if !ignore.include?(atr)
+        sess[:tags] << atr
+      end
+    end
+    return sess
+  end
+
+  def set_params(parms,sess)
+    parms = set_query_attributes(sess,parms)
+    ignore = ['query', 'query_type', 'query_distance', 'order']
+    sess[:tags].each do |tag|
+      parms[tag] = 'on'
+    end
+    return parms
+  end
+  #INIT: (from form) params != nil, session = nil => set session with new params
+  #MAINT-1: (from form) params != nil, session != nil => Wipe session and set with new params
+  #MAINT-2: (from link) params = order, session != nil => set params using session, wipe session
+  # def set_params_session(parm,sess)
+  #   q_params = ['query', 'query_type', 'query_distance', 'order']
+  #   q_params.each do |param|
+  #    if !params[param].nil?
+  #      session[param] = params[param]
+  #    else
+  #      params[param] = session[param]
+  #    end
+  #   end
+  #   puts("Controller sessions tags before: #{session[:tags]}")
+  #   if session[:tags].length == 0
+  #     Food.generate_tags.each do |tag|
+  #       if params[tag] && !session[:tags].include?(tag)
+  #         session[:tags] << tag
+  #       end
+  #     end
+  #   elsif params[:order]
+  #     session[:tags].each do |tag|
+  #       params[tag] = 'on'
+  #     end
+  #   else
+  #     session[:tags] = []
+  #     params.each do |param|
+  #       if !q_param.include?(param)
+  #          session[:tags] << tag
+  #       end
+  #     end
+  #     # Food.generate_tags.each do |tag|
+  #     #   if !params.include?(tag)
+  #     #     session[:tags].delete(tag)
+  #     #   elsif !session[:tags].include?(tag)
+  #     #     session[:tags] << tag
+  #     #   end
+  #     # end
+  #   end
 
 end

@@ -209,7 +209,8 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should be checked$/ do |label, pa
   with_scope(parent) do
     field_checked = find_field(label)['checked']
     if field_checked.respond_to? :should
-      field_checked.should be_true
+      # field_checked.should be_true
+      field_checked.should be_truthy
     else
       assert field_checked
     end
@@ -279,10 +280,20 @@ Then /each Restaurant should be ordered by name$/ do
 end
 
 Then /each Restaurant should be ordered by distance$/ do
-  # TODO: 
+  # TODO:
+end
+
+Then /each Restaurant should be order by best match/ do
+  # TODO:
 end
 
 Then /^(?:|I )should see a link titled "([^"]*)"$/ do |title|
   page.find_link(title).visible?
 end
+
+Then /^the "([^"]*)"" field should contain "([^"]*)"$/ do |field, q|
+  sb = page.find_by_id(field)
+  expect(sb.text).to eq(q)
+end
+
 ###############################################################
