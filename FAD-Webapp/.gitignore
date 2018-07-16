@@ -28,3 +28,8 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore Coverage
+FAD-Webapp/coverage
+# Ignore
+/app/controllers/webcrawler/webcrawler/spiders/__pycache__
