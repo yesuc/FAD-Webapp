@@ -22,11 +22,11 @@
     =f.label :cuisine, "Cuisine Type"
     -# TODO: Drop Down Menu with user option input
     =f.select :cuisine, [["Indian","Indian"],["Asian","Asian"],["Mexican","Mexican"],["American","American"]], :prompt => true
+  %div.field
+    =f.label :admin_approved, "Approved?"
+    =f.check_box :admin_approved
 
   %div.actions
     = f.submit 'Save'
 
-
-= link_to 'Show', @restaurant
-\|
 = link_to 'Back', restaurants_path

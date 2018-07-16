@@ -21,11 +21,7 @@ class UsersController < ApplicationController
       redirect_to edit_user_path(@user) and return
     end
   end
-
-  def view
-    @user = User.find(params[:id])
-  end
-
+  
   def destroy
    @user = current_user.id == params[:id] ? User.find(current_user.id) : User.find(params[:id])
    @user.destroy

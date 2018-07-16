@@ -45,7 +45,12 @@ class RestaurantsController < ApplicationController
       end
     end
     if @restaurant.save
-      redirect_to(restaurant_path(@restaurant), flash: {success: "Restaurant was successfully created."}) and return
+      if @restaurant.admin_approved
+        flash[:success] = "New restaurant \'#{@restaurant.name}\' created and added to the page"
+      else
+         flash[:notice] = "New restaurant \'#{@restaurant.name}\' awaiting approval"
+       end
+       redirect_to restaurants_path and return
     else
       redirect_to(new_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
     end
@@ -120,7 +125,7 @@ end
     if @restaurant.save
       redirect_to(restaurant_path(@restaurant), flash: {success: "Restaurant was successfully updated."}) and return
     else
-      redirect_to(edit_restaurant_path(@restaurant), flash: {error: "Error creating new restaurant."}) and return
+      redirect_to(edit_restaurant_path(@restaurant), flash: {error: "Attention Admin! Error creating new restaurant."}) and return
     end
   end
 
@@ -149,7 +154,7 @@ end
 private
   # Filter Params for creating and updating restaurant objects
   def create_update_params
-    params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu)
+    params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu, :admin_approved, :description, :scraped)
   end
 
   def query_params
