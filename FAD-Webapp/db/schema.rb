@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_11_144518) do
+ActiveRecord::Schema.define(version: 2018_07_13_191458) do
 
   create_table "foods", force: :cascade do |t|
     t.boolean "contains_gluten"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 2018_07_11_144518) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "menu", default: ""
+    t.boolean "admin_approved", default: false
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
@@ -52,13 +53,37 @@ ActiveRecord::Schema.define(version: 2018_07_11_144518) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "provider"
     t.string "uid"
     t.string "name"
-    t.string "oauth_token"
-    t.datetime "oauth_expires_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean "gluten", default: false
+    t.boolean "dairy", default: false
+    t.boolean "treenuts", default: false
+    t.boolean "beef", default: false
+    t.boolean "pork", default: false
+    t.boolean "soy", default: false
+    t.boolean "egg", default: false
+    t.boolean "shellfish", default: false
+    t.boolean "peanut", default: false
+    t.boolean "fish", default: false
+    t.boolean "sesame", default: false
+    t.boolean "wheat", default: false
+    t.string "other", default: ""
+    t.boolean "admin"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end

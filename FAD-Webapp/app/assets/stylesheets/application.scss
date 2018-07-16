@@ -92,3 +92,12 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
 
   }
 }
+ul.hmenu {
+  list-style: none;
+  margin: 0 0 2em;
+  padding: 0;
+}
+
+ul.hmenu li {
+  display: inline;
+}

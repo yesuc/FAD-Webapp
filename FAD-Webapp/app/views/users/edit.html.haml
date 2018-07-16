@@ -1,0 +1,8 @@
+#main.container
+  %h3.header Edit Food Allergens and Restrictions
+
+  =form_for @user, :method => :patch do |f|
+    =render 'food_form_template', f: f
+
+    .field
+      =f.submit "Update Food Allergens and Restrictions"

@@ -8,7 +8,7 @@
         %th= 'Cuisine'
 
     %tbody
-      - @restaurants.each do |restaurant|
+      - @restaurants.where('admin_approved=?', true).each do |restaurant|
         %tr
           %td= link_to "#{restaurant.name}", restaurant_path(restaurant)
           %td="#{restaurant.cuisine}"
