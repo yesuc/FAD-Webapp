@@ -1,4 +1,5 @@
--# %body
--#   %h1 FAD-Webapp Homepage
--#   %div
--#     =link_to "All Restaurants", restaurants_path
+%body
+  %h1 FAD-Webapp Homepage
+  %div
+    =link_to "All Restaurants", restaurants_path
+  %div= "My IP: #{Geocoder.search('149.43.121.139')}"

@@ -40,8 +40,10 @@ ActiveRecord::Schema.define(version: 2018_07_13_191458) do
     t.string "url"
     t.string "address"
     t.string "cuisine"
-    t.string "description"
+    t.text "description"
     t.boolean "scraped", default: false
+    t.decimal "latitude", precision: 15, scale: 10, null: false
+    t.decimal "longitude", precision: 15, scale: 10, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "menu", default: ""

@@ -71,25 +71,6 @@ def clean_ingredients(ingredients_array):
         ingredients_array = [x for x in ingredients_array if x]
         return ingredients_array
 
-# PARAM: Array of Strings depicting ingredients
-# Tokenizes each string into word-tag pairs, applies nltk regex to filter only Adjective-Noun Strings
-# RETURN: An array strings depicting basic ingredients
-# def clean_ingredients2(ingredients_array):
-#     clean_ingredients_array = []
-#     grammar = r"""Chunk: {<JJ.?|NN.?>? <NN.?>{1,2} <VB.?>?}"""
-#     for ingredient in ingredients_array:
-#         ingredient = ingredient.strip().lower()
-#         if len(ingredient) < 1: continue
-#         # print(ingredient)
-#         # chunker returns a list containing single string, must index return array to access value
-#         # print (chunker(grammar,ingredient))
-#         for chunk in chunker(grammar,ingredient):
-#             if chunk not in clean_ingredients_array:
-#                 clean_ingredients_array.append(chunk)
-#             # else:
-#             #     clean_ingredients_array[chunk]+=1
-#     return clean_ingredients_array
-
 # PARAM: String Regular Expression depicting Grammar to be applied to String text
 # Tokenizes the given text into words-tag pairs, applies grammar nltk regex and filters words
 # RETURN: Array of string words that suited the grammar regex
@@ -107,30 +88,3 @@ def chunker(grammar,text):
                         s = s + ' ' + word[0]
                 keys.append(s)
         return keys
-
-# def build_menu(return_items, number):
-#     items_array = []
-#     description_array = []
-#     menu_items = []
-#     values_list = list(return_items.values())
-#     for i in range(len(values_list[number])):
-#         for word,pos in nltk.tag.pos_tag(nltk.word_tokenize(values_list[number][i])):
-#             # and word not in ['Crisp', 'Boneless', 'Monterey', 'Non Vegetarian', 'Chopped', 'Delicious', 'Succulent', 'Juicy', 'Hot','Tender'
-#             if word[0].isupper() and pos in ['NN', 'NNS', 'NNP','FW'] and i not in items_array:
-#                 items_array.append(i)
-#             elif i not in description_array:
-#                 description_array.append(i)
-#     for j in range(len(items_array)-1):
-#         index = items_array[j]
-#         str = ' '
-#         for k in range(index+1, items_array[j+1]-1):
-#             str+=' '
-#             str+= values_list[number][k]
-#         menu_items.append([values_list[number][index],str])
-#     return menu_items
-#
-# def clean_menu(return_items):
-#     keys_list = list(return_items.keys())
-#     for j in range(len(keys_list)):
-#         return_items[keys_list[j]] = build_menu(return_items,j)
-#     return return_items

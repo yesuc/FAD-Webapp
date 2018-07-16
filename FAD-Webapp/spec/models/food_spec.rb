@@ -49,35 +49,35 @@ RSpec.describe Food, type: :model do
   describe "get_menu_and_food_ingredients test" do
 
     it "should scrape the menu from a given restaurant url" do
-      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican")
+      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican", latitude: "42.8270", longitude: "75.5446")
       r.foods << Food.create!(name: "NACHOS GRANDES", description: "A mound of our homemade tortilla chips topped with choice of beans (black or refried), melted cheddar and Monterey Jack cheese, pickled jalapeno, homemade guacamole, and sour cream Picadillo beef,Veggie (Corn & Zucchini) or Grilled Southwest Chicken, our homemade guacamole, and sour cream.", contains_gluten: true, contains_beef: true, contains_wheat: true, contains_other: "chicken", contains_dairy: true)
       r.foods << Food.create!(name: "SALMON RANCHERO", description: "Blackened broiled salmon served with rice, corn & zucchini and ranchero sauce.", contains_fish: true)
       q = r.foods
       expect(q.length).to eq(2)
     end
     it "should return foods fitting the food restriction- dairy" do
-      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican")
+      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican", latitude: "42.8270", longitude: "75.5446")
       r.foods << Food.create!(name: "NACHOS GRANDES", description: "A mound of our homemade tortilla chips topped with choice of beans (black or refried), melted cheddar and Monterey Jack cheese, pickled jalapeno, homemade guacamole, and sour cream Picadillo beef,Veggie (Corn & Zucchini) or Grilled Southwest Chicken, our homemade guacamole, and sour cream.", contains_gluten: true, contains_beef: true, contains_wheat: true, contains_other: "chicken", contains_dairy: true)
       r.foods << Food.create!(name: "SALMON RANCHERO", description: "Blackened broiled salmon served with rice, corn & zucchini and ranchero sauce.", contains_fish: true, contains_dairy: false)
       q = r.foods.dairy_free
       expect(q.length).to eq(1)
     end
     it "should return foods fitting the food restriction - gluten"do
-      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican")
+      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican", latitude: "42.8270", longitude: "75.5446")
       r.foods << Food.create!(name: "NACHOS GRANDES", description: "A mound of our homemade tortilla chips topped with choice of beans (black or refried), melted cheddar and Monterey Jack cheese, pickled jalapeno, homemade guacamole, and sour cream Picadillo beef,Veggie (Corn & Zucchini) or Grilled Southwest Chicken, our homemade guacamole, and sour cream.", contains_gluten: true, contains_beef: true, contains_wheat: true, contains_other: "chicken", contains_dairy: true)
       r.foods << Food.create!(name: "SALMON RANCHERO", description: "Blackened broiled salmon served with rice, corn & zucchini and ranchero sauce.", contains_fish: true, contains_gluten: false)
       q = r.foods.gluten_free
       expect(q.length).to eq(1)
     end
     it "should return foods fitting the food restriction - wheat"do
-      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican")
+      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican", latitude: "42.8270", longitude: "75.5446")
       r.foods << Food.create!(name: "NACHOS GRANDES", description: "A mound of our homemade tortilla chips topped with choice of beans (black or refried), melted cheddar and Monterey Jack cheese, pickled jalapeno, homemade guacamole, and sour cream Picadillo beef,Veggie (Corn & Zucchini) or Grilled Southwest Chicken, our homemade guacamole, and sour cream.", contains_gluten: true, contains_beef: true, contains_wheat: true, contains_other: "chicken", contains_dairy: true)
       r.foods << Food.create!(name: "SALMON RANCHERO", description: "Blackened broiled salmon served with rice, corn & zucchini and ranchero sauce.", contains_fish: true, contains_gluten: false, contains_wheat: false)
       q = r.foods.wheat_free
       expect(q.length).to eq(1)
     end
     it "should return foods fitting the food restriction - gluten"do
-      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican")
+      r = Restaurant.create!(name: "La Iguana", url: "http://www.laiguanarestaurant.com/", address: "10 Broad St, Hamilton, NY 13346" , cuisine: "Mexican", latitude: "42.8270", longitude: "75.5446")
       r.foods << Food.create!(name: "NACHOS GRANDES", description: "A mound of our homemade tortilla chips topped with choice of beans (black or refried), melted cheddar and Monterey Jack cheese, pickled jalapeno, homemade guacamole, and sour cream Picadillo beef,Veggie (Corn & Zucchini) or Grilled Southwest Chicken, our homemade guacamole, and sour cream.", contains_gluten: true, contains_beef: true, contains_wheat: true, contains_fish: false, contains_other: "chicken", contains_dairy: true)
       r.foods << Food.create!(name: "SALMON RANCHERO", description: "Blackened broiled salmon served with rice, corn & zucchini and ranchero sauce.", contains_fish: true, contains_gluten: false)
       q = r.foods.fish_free

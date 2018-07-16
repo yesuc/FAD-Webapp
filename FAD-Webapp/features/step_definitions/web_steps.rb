@@ -209,7 +209,8 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should be checked$/ do |label, pa
   with_scope(parent) do
     field_checked = find_field(label)['checked']
     if field_checked.respond_to? :should
-      field_checked.should be_true
+      # field_checked.should be_true
+      field_checked.should be_truthy
     else
       assert field_checked
     end
@@ -230,7 +231,7 @@ end
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
-    current_path.should == path_to(page_name)
+    expect(current_path).to eq(path_to(page_name))
   else
     assert_equal path_to(page_name), current_path
   end
@@ -262,6 +263,37 @@ Given("these Restaurants:") do |table|
     hash['cuisine'] = hash.delete('cuisine')
     Restaurant.create!(hash)
   end
+end
+
+When /^(?:|I )query "([^"]*)"$/ do |input|
+  fill_in('query', :with => input)
+  click_button('submit')
+end
+
+Then /^(?:|I )should see a button titled "([^"]*)"$/ do |title|
+  page.should have_button(title)
+end
+
+Then /each Restaurant should be ordered by name$/ do
+  titles = page.all(:css, "result#title")
+  titles.each_cons(2).all?{|i,j| i.text >= j.name}
+end
+
+Then /each Restaurant should be ordered by distance$/ do
+  # TODO:
+end
+
+Then /each Restaurant should be order by best match/ do
+  # TODO:
+end
+
+Then /^(?:|I )should see a link titled "([^"]*)"$/ do |title|
+  page.find_link(title).visible?
+end
+
+Then /^the "([^"]*)"" field should contain "([^"]*)"$/ do |field, q|
+  sb = page.find_by_id(field)
+  expect(sb.text).to eq(q)
 end
 
 ###############################################################

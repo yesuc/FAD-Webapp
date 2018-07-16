@@ -17,21 +17,13 @@
     =session[:tags]
   %div.row
     .col-md-offset-2
+    .col-sm-8= "#{@restaurant.latitude} N, #{@restaurant.longitude} W"
+  %div.row
+    .col-md-offset-2
       -@foods.each do |f|
         %h4="#{f.name}" + ' ~> ' +  "#{f.description}"
-        -# .col-md-offset-2
-        -# ='Description: '+ "#{f.description}"
         .col-md-offset-2
         ='Ingredients: '+ "#{f.ingredients.titleize}"
         %br
 
-
-
-
-
-
-
-
--# = link_to 'Edit', edit_restaurant_path(@restaurant)
-\|
 = link_to 'Back', restaurants_path

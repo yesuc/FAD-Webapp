@@ -3,10 +3,12 @@ class CreateRestaurants < ActiveRecord::Migration[5.2]
     create_table :restaurants do |t|
       t.string :name, null: false
       t.string :url
-      t.string :address
+      t.text :address
       t.string :cuisine
-      t.string :description
+      t.text :description
       t.boolean :scraped, default: false
+      t.decimal :latitude, precision: 15, scale: 10, null: false
+      t.decimal :longitude, precision: 15, scale: 10, null: false
 
       t.timestamps
     end
