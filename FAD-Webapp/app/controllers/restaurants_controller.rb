@@ -234,40 +234,4 @@ private
   #INIT: (from form) params != nil, session = nil => set session with new params
   #MAINT-1: (from form) params != nil, session != nil => Wipe session and set with new params
   #MAINT-2: (from link) params = order, session != nil => set params using session, wipe session
-  # def set_params_session(parm,sess)
-  #   q_params = ['query', 'query_type', 'query_distance', 'order']
-  #   q_params.each do |param|
-  #    if !params[param].nil?
-  #      session[param] = params[param]
-  #    else
-  #      params[param] = session[param]
-  #    end
-  #   end
-  #   puts("Controller sessions tags before: #{session[:tags]}")
-  #   if session[:tags].length == 0
-  #     Food.generate_tags.each do |tag|
-  #       if params[tag] && !session[:tags].include?(tag)
-  #         session[:tags] << tag
-  #       end
-  #     end
-  #   elsif params[:order]
-  #     session[:tags].each do |tag|
-  #       params[tag] = 'on'
-  #     end
-  #   else
-  #     session[:tags] = []
-  #     params.each do |param|
-  #       if !q_param.include?(param)
-  #          session[:tags] << tag
-  #       end
-  #     end
-  #     # Food.generate_tags.each do |tag|
-  #     #   if !params.include?(tag)
-  #     #     session[:tags].delete(tag)
-  #     #   elsif !session[:tags].include?(tag)
-  #     #     session[:tags] << tag
-  #     #   end
-  #     # end
-  #   end
-
 end
