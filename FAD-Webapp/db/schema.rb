@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2018_07_13_191458) do
   create_table "restaurants", force: :cascade do |t|
     t.string "name", null: false
     t.string "url"
-    t.string "address"
+    t.text "address"
     t.string "cuisine"
     t.text "description"
     t.boolean "scraped", default: false

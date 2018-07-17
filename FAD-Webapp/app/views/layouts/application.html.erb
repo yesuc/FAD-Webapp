@@ -22,12 +22,11 @@
           <li>
             <%=link_to "All Restaurants", restaurants_path%>
           </li>
+          <%= render 'login_items' %>
         </ul>
       </div>
     </div>
     <%= render 'flash_message'%>
-    <%= render 'search_bar'%>
-    <%= render 'login_items' %>
     <%= render(partial: 'search_bar', locals: {q: nil, allergens: nil, q_dist: nil, q_type: nil, order: 'name'}) if request.path != search_restaurants_path%>
     <%= yield %>
   </body>

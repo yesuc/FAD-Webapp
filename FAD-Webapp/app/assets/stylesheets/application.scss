@@ -89,7 +89,25 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
     .attributes{
       background: green;
     }
+    .search_container{
+      background-color: pink;
+      position: relative;
 
+
+      .search_attributes{
+        select{
+          background-color: yellow;
+          vertical-align: middle;
+          position: relative;
+        }
+        label{
+          vertical-align: top;
+          background-color: red;
+          position: absolute;
+          margin-left: 0.5em;
+        }
+      }
+    }
   }
 }
 ul.hmenu {
