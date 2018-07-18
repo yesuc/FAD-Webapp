@@ -21,19 +21,17 @@
             =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20]], local_assigns[:q_dist])
           -else
             =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20]],1)
+          =label_tag :order, "Order By:"
+          =select_tag :order, options_for_select([["Best Match",:best_match],["Name",:name],["Distance",:distance]],local_assigns[:order])
 
       %div.attribute_container
         %span.attribute
           -if local_assigns[:allergens].nil?
             -Food.generate_tags.each do |tag|
-              %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", display: "inline-block"}= "#{tag} free".titleize
+              %input{type: "checkbox", name: "#{tag}", id:"allergen_tag"}= "#{tag} free".titleize
           -else
             -Food.generate_tags.each do |tag|
               -if local_assigns[:allergens].include?(tag)
-                %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", display: "inline-block", checked: "checked"}= "#{tag} free".titleize
+                %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", checked: "checked"}= "#{tag} free".titleize
               -else
-                %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", display: "inline-block"}= "#{tag} free".titleize
-      %div.order_container
-        %span.order_options
-          =label_tag :order, "Order By:"
-          =select_tag :order, options_for_select([["Best Match",:best_match],["Name",:name],["Distance",:distance]],local_assigns[:order])
+                %input{type: "checkbox", name: "#{tag}", id:"allergen_tag"}= "#{tag} free".titleize

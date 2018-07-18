@@ -24,6 +24,8 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
     padding: 0;
     overflow: hidden;
     background-color: #333;
+    font-family: 'Armata';
+    font-size: 12pt;
   }
   .nav_box li{
      float: left;
@@ -74,10 +76,11 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
       font-size: 12pt;
     }
     #submit{
+      border-radius: 5px;
       display: inline-block;
       margin-left: -1%;
       width: 10%;
-      height: 60px;
+      height: 61px;
       padding-top: 4px;
       position: relative;
       border: none;
@@ -89,33 +92,44 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
     .attributes{
       background: green;
     }
-    .search_container{
-      background-color: pink;
-      position: relative;
+    .attribute_container{
+      .attribute{
+        padding-top: 20px;
+        font-family: 'Armata';
+        font-size: 10pt;
+        display: flex;
+        float: left;
 
+      }
+    }
+
+    .order_container{
+      font-family: 'Armata';
+      font-size: 10pt;
+      select{
+        font-family: 'Armata';
+        font-size: 10pt;
+      }
+    }
+    .search_container{
+      position: relative;
+      font-family: 'Armata';
+      font-size: 12pt;
 
       .search_attributes{
         select{
-          background-color: yellow;
-          vertical-align: middle;
+          vertical-align: bottom;
           position: relative;
+          font-family: 'Armata';
+          font-size: 12pt;
         }
         label{
           vertical-align: top;
-          background-color: red;
           position: absolute;
           margin-left: 0.5em;
+          padding-top: 18px;
         }
       }
     }
   }
-}
-ul.hmenu {
-  list-style: none;
-  margin: 0 0 2em;
-  padding: 0;
-}
-
-ul.hmenu li {
-  display: inline;
 }
