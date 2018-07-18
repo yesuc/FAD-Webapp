@@ -1,5 +1,17 @@
-%h1 Listing restaurants
-%body
+%div.bottom
+  %h1 All Restaurants
+  %div.banner
+    %p#banner_description
+      Here are all the Restaurants we currently have in our database! Each Restaurant has had its menu processed and reviewed by our community and by us personally!
+      Feel Free to browse each restaurant and leave a like, comment, or even review the menus we collected. We appreciate and welcome all feedback!
+    %p#banner_invitation
+      Don't see your Restaurant here?
+      %br
+      -if user_signed_in?
+        =link_to "Contribute to our database!", new_restaurant_path
+      -else
+        =link_to "Sign in and contribute to our database!", new_user_session_path
+
   %table
     %thead
       %tr
@@ -24,7 +36,6 @@
           %td= image_tag(restaurant.image.url(:thumb))
 
   %br
-
   = link_to 'New Restaurant', new_restaurant_path
-
-  %div= link_to 'Back to homepage', root_path
+  %br
+  = link_to 'Back to homepage', root_path

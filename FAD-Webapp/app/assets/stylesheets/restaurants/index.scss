@@ -1,0 +1,15 @@
+.banner{
+  column-count: 2;
+  column-gap: normal;
+  #banner_description{
+    display: inline-block;
+    // margin-right: 50%;
+  }
+  #banner_invitation{
+    clear: both;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 1.20em;
+    line-height: 2.0;
+  }
+}
