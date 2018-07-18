@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
-html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
+html, body { height: 100%; width: 100%; margin: 0; background-color: #ffffff}
 .webtitle{
   font-size: 30pt;
 }
@@ -23,7 +23,7 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: #85AC3C;
     font-family: 'Armata';
     font-size: 12pt;
   }
@@ -31,7 +31,7 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
      float: left;
   }
   .nav_box a{
-    color: white;
+    color: #01213C;
     text-align: center;
     text-decoration: none;
     display: block;
@@ -41,13 +41,13 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
 }
 
 .top{
-  background: lightblue;
+  // background: lightblue;
   width: 90%;
   height: 40%;
   margin: auto;
 
   .search_box{
-    background: #baffc9;
+    background: #DAFF90;
     margin: auto;
     display: inline-block;
     white-space: normal;
@@ -87,10 +87,9 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffdfba}
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
 
-      background-color: #bae1ff;
+      background-color: #B7F044;
     }
     .attributes{
-      background: green;
     }
     .attribute_container{
       .attribute{
