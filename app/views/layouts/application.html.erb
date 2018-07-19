@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <!--Required meta tags-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+    <!--Font Awesome Icons and CSS Items-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+    <!--Google API Font for Search Bar  -->
+    <link href='https://fonts.googleapis.com/css?family=Armata' rel='stylesheet'>
+
+    <title>FADWebapp</title>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <h1 class="webtitle">  Eat Safe!</h1>
+    <div class="navigations">
+      <div class="nav_box">
+        <ul>
+          <li>
+            <%=link_to "Home", root_path%>
+          </li>
+          <li>
+            <%=link_to "All Restaurants", restaurants_path%>
+          </li>
+          <%= render 'login_items' %>
+        </ul>
+      </div>
+    </div>
+    <%= render 'flash_message'%>
+    <%= render(partial: 'search_bar', locals: {q: nil, allergens: nil, q_dist: nil, q_type: nil, order: 'name'}) if request.path != search_restaurants_path%>
+    <%= yield %>
+  </body>
+</html>

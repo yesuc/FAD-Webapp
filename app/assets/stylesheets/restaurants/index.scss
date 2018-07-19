@@ -1,0 +1,36 @@
+.bottom h1{
+  font-size: 2em;
+  padding-left: .5em;
+}
+
+.banner{
+  column-count: 2;
+  column-gap: normal;
+  #banner_description{
+    display: inline-block;
+    padding-left: 1em;
+    // margin-right: 50%;
+  }
+  #banner_invitation{
+    clear: both;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 1.20em;
+    line-height: 2.0;
+  }
+}
+
+.restaurants_table{
+  width: 100%;
+  table-layout: fixed;
+  th, td{
+    padding: 15px;
+    text-align: center;
+  }
+  td#description{
+    width: 40%;
+    height: 10%;
+    vertical-align: text-top;
+    text-overflow: ellipsis;
+  }
+}

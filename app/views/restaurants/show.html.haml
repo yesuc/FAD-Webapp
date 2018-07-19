@@ -1,0 +1,17 @@
+
+%div
+  %h3.header= "#{@restaurant.name}"
+%div.u
+  ="#{@restaurant.url}"
+%div.add
+  ="#{@restaurant.address}"
+%div.c
+  ="#{@restaurant.cuisine}"
+%div
+  -@foods.each do |f|
+    %div.name="#{f.name}"
+    %div.description= "#{f.description}"
+    %div.ingredients='Ingredients: '+ "#{f.ingredients.titleize}"
+    %br
+
+= link_to 'Back', restaurants_path

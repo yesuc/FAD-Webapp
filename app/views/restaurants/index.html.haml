@@ -1,0 +1,43 @@
+%head
+  = yield :javascripts
+%div.bottom
+  %h1 All Restaurants
+  %div.banner
+    %p#banner_description
+      Here are all the Restaurants we currently have in our database! Each Restaurant has had its menu processed and reviewed by our community and by us personally!
+      Feel Free to browse each restaurant and leave a like, comment, or even review the menus we collected. We appreciate and welcome all feedback!
+    %p#banner_invitation
+      Don't see your Restaurant here?
+      %br
+      -if user_signed_in?
+        =link_to "Contribute to our database!", new_restaurant_path
+      -else
+        =link_to "Sign in and contribute to our database!", new_user_session_path
+  %hr
+  %table.restaurants_table
+
+    %tbody
+    -if current_user && current_user.admin?
+      -@restaurants.where('admin_approved=?', false).each do |restaurant|
+        %tr
+          %td= link_to "#{restaurant.name}", restaurant_path(restaurant)
+          %td="#{restaurant.cuisine}"
+          %td= image_tag(restaurant.image.url(:thumb))
+          %td= link_to 'Edit', edit_restaurant_path(restaurant)
+          %td= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' }
+    -else
+      -@restaurants.where('admin_approved=?', true).each do |restaurant|
+        %tr
+          %td= image_tag(restaurant.image.url(:thumb))
+          %td= link_to "#{restaurant.name}", restaurant_path(restaurant)
+          %td="#{restaurant.cuisine}"
+          -if restaurant.description.length > 250
+            %td#description
+              =truncate("#{restaurant.description}", length: 100)
+          -else
+            %td#description="#{restaurant.description}"
+  %hr
+  %br
+  = link_to 'New Restaurant', new_restaurant_path
+  %br
+  = link_to 'Back to homepage', root_path

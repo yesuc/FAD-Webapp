@@ -1,0 +1,93 @@
+.top{
+  width: 90%;
+  height: 40%;
+  margin: auto;
+
+  .search_box{
+    background: #baffc9;
+    margin: auto;
+    display: inline-block;
+    white-space: normal;
+    align-content: center;
+    position: relative;
+    padding: 5%;
+
+    .icon{
+      position: absolute;
+      color: #4f5b66;
+    }
+
+    .search_full_width#searchbar{
+      margin: auto;
+      position: relative;
+
+      background: white;
+      border-style: none;
+      border-radius: 5px;
+
+
+      width: 50%;
+      height: 10%;
+      padding: 20px;
+      font-family: 'Armata';
+      font-size: 12pt;
+    }
+    #submit{
+      display: inline-block;
+      margin-left: -1%;
+      width: 10%;
+      height: 60px;
+      padding-top: 4px;
+      position: relative;
+      border: none;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      background-color: #bae1ff;
+    }
+    .attributes{
+      background: green;
+    }
+
+  }
+}
+
+.bottom{
+  background-color: white;
+  margin: auto;
+  width: 90%;
+  height: auto;
+}
+
+.filter_container{
+  background-color: green;
+}
+
+.result#title {
+  font-family: 'Armata';
+  font-size: 1.2em;
+  color: lightblue;
+  text-align: left;
+  padding-bottom: 20px;
+  height: 0;
+  // -webkit-margin-after: -1em;
+}
+.result#url{
+  font-family: 'Armata';
+  font-size: 0.9em;
+  color: black;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.result#cuisine{
+    font-family: 'Armata';
+    font-size: 0.9em;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.result#description{
+  font-family: 'Armata';
+  font-size: 0.9em;
+  text-align: center;
+  padding-bottom: 10px;
+}

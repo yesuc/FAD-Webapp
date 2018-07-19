@@ -1,0 +1,37 @@
+%div.top
+  %div.search_box
+    =form_tag search_restaurants_path, :id =>'search_form', :method => :get do
+      %div.search_container
+        %span.search_attributes
+          -if local_assigns[:q]
+            %input{:class => "search_full_width", :id => "searchbar", :type => "search", :name => "query", :placeholder => "Search Restaurants", :value => local_assigns[:q], :autocomplete => "off", :min => 1}
+          -else
+            %input{:class => "search_full_width", :id => "searchbar", :type => "search", :name => "query", :placeholder => "Search Restaurants", :autocomplete => "off", :min => 1}
+          %button{:type => "submit", :id => "submit"}
+            %i.fas.fa-search
+
+          =label_tag :query_type, "Search by"
+          -if local_assigns[:q_type]
+            =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],local_assigns[:q_type]), required: true
+          -else
+            =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
+
+          =label_tag :query_distance, "Distance"
+          -if local_assigns[:q_dist]
+            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20]], local_assigns[:q_dist])
+          -else
+            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20]],1)
+          =label_tag :order, "Order By:"
+          =select_tag :order, options_for_select([["Best Match",:best_match],["Name",:name],["Distance",:distance]],local_assigns[:order])
+
+      %div.attribute_container
+        %span.attribute
+          -if local_assigns[:allergens].nil?
+            -Food.generate_tags.each do |tag|
+              %input{type: "checkbox", name: "#{tag}", id:"allergen_tag"}= "#{tag} free".titleize
+          -else
+            -Food.generate_tags.each do |tag|
+              -if local_assigns[:allergens].include?(tag)
+                %input{type: "checkbox", name: "#{tag}", id:"allergen_tag", checked: "checked"}= "#{tag} free".titleize
+              -else
+                %input{type: "checkbox", name: "#{tag}", id:"allergen_tag"}= "#{tag} free".titleize

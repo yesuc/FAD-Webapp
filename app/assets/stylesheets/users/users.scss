@@ -1,0 +1,61 @@
+// Place all the styles related to the Users controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+h2{
+  font-family: 'Armata';
+  text-align:center;
+  padding-bottom: 10px;
+}
+h3{
+  font-family: 'Armata';
+  text-align:center;
+}
+  .button_to{
+    display:block;
+    text-align:center;
+    input{
+        font-family: 'Armata';
+        font-size: 10pt;
+    }
+}
+
+table{
+  font-family: 'Armata';
+}
+.field{
+  font-family: 'Armata';
+  font-size: 10pt;
+  display: block;
+  text-align:center;
+  label{
+    text-align:center;
+    font-family: 'Armata';
+    font-size: 10pt;
+  }
+}
+.actions{
+  font-family: 'Armata';
+  font-size: 10pt;
+  text-align:center;
+  label{
+    text-align:center;
+    font-family: 'Armata';
+    font-size: 10pt;
+  }
+  input{
+    font-family: 'Armata';
+    font-size: 15pt;
+  }
+}
+a{
+  text-align:center;
+  display:block;
+  font-family: 'Armata';
+  font-size: 10pt;
+}
+
+p{
+  font-family: 'Armata';
+  font-size: 10pt;
+  text-align:center;
+}

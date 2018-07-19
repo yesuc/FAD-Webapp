@@ -1,0 +1,32 @@
+%h1 Editing restaurant
+
+= form_for @restaurant, :method => :patch do |f|
+  - if @restaurant.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@restaurant.errors.count, "error")} prohibited this restaurant from being saved:"
+      %ul
+        - @restaurant.errors.full_messages.each do |message|
+          %li= message
+  %div.field
+    = f.label :name, "Restaurant Name"
+    = f.text_field :name, :placeholder => "e.g. Restaurant Name", :type => "text", :min => 1
+  %div.field
+    = f.label :url, "Restaurant URL"
+    -# NOTE: type url has automatic validation before form is submitted
+    = f.text_field :url, :placeholder => "e.g. http://www.mydomainname.com/", type: "url"
+  %div.field
+    -# TODO: Find a way to separate address into several inputs, verify structure, and concate together
+    = f.label :address, "Restaurant Address"
+    = f.text_field :address, :placeholder => "e.g. 13 Oak Drive, Hamilton NY, 13346", type: "text"
+  %div.field
+    =f.label :cuisine, "Cuisine Type"
+    -# TODO: Drop Down Menu with user option input
+    =f.select :cuisine, [["Indian","Indian"],["Asian","Asian"],["Mexican","Mexican"],["American","American"]], :prompt => true
+  %div.field
+    =f.label :admin_approved, "Approved?"
+    =f.check_box :admin_approved
+
+  %div.actions
+    = f.submit 'Save'
+
+= link_to 'Back', restaurants_path
