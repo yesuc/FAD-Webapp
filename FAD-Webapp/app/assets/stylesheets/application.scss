@@ -17,25 +17,35 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffffff}
 .webtitle{
   font-size: 30pt;
 }
+.webtitle{
+  text-align: center;
+}
 .navigations{
   .nav_box ul{
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #85AC3C;
+    background-color: #FFC7B7;
     font-family: 'Armata';
     font-size: 12pt;
+    text-align: center;
   }
   .nav_box li{
      float: left;
+     margin-left: 30px;
+     margin-right: 30px;
   }
   .nav_box a{
-    color: #01213C;
+    // color: #01213C;
     text-align: center;
     text-decoration: none;
     display: block;
     padding: 14px 16px;
+    &:hover {
+      color: #fff;
+      background-color: #9B2300;
+    }
 
   }
 }
@@ -47,13 +57,14 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffffff}
   margin: auto;
 
   .search_box{
-    background: #DAFF90;
+    background: #ffffff;
     margin: auto;
     display: inline-block;
     white-space: normal;
     align-content: center;
     position: relative;
     padding: 5%;
+    padding-top: 100px;
 
     .icon{
       position: absolute;
@@ -64,7 +75,7 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffffff}
       margin: auto;
       position: relative;
 
-      background: white;
+      background: #FFC7B7;
       border-style: none;
       border-radius: 5px;
 
@@ -87,7 +98,7 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffffff}
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
 
-      background-color: #B7F044;
+      background-color: #9B2300;
     }
     .attributes{
     }
@@ -97,8 +108,11 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #ffffff}
         font-family: 'Armata';
         font-size: 10pt;
         display: flex;
-        float: left;
+          label{
+            display: inline-block;
+            vertical-align: bottom;
 
+        }
       }
     }
 

@@ -21,9 +21,9 @@
   %div.row
     .col-md-offset-2
       -@foods.each do |f|
-        %h4="#{f.name}" + ' ~> ' +  "#{f.description}"
+        ="#{f.name}" + ' ~> ' +  "#{f.description}"
         .col-md-offset-2
-        ='Ingredients: '+ "#{f.ingredients.titleize}"
+        ='Ingredients: '+ "#{f.ingredients}".titleize
         %br
 
 = link_to 'Back', restaurants_path

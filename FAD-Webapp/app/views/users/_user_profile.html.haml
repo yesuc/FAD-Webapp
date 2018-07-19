@@ -1,69 +1,70 @@
-%h1.header= "Account Details for #{@user.name}"
+#main.container
+  %h1.header= "Account Details for #{@user.name}"
 
-%table.user
-  %tr
-    .user= "Email: "+@user.email
-  %tr
-    .user= "Name: "+@user.name
-  %tr
-  %h1.header= "Allergens & Restrictions"
-  %table.table
-    %thead
-      %tr
-        %th Allergen/ Restriction
-        %th Y/N
+  %table.user
+    %tr
+      .user= "Email: "+@user.email
+    %tr
+      .user= "Name: "+@user.name
+    %tr
+    %h2.header= "Allergens & Restrictions"
+    %table.table
+      %thead
+        %tr
+          %th Allergen/ Restriction
+          %th Y/N
 
-    %tbody
-      %tr
-        %td="Gluten"
-        -@user.gluten == false ? gluten= "No" : gluten = 'Yes'
-        %td.gluten= gluten.to_s
-      %tr
-        %td="Dairy"
-        -@user.dairy == false ? dairy= "No" : dairy = 'Yes'
-        %td.dairy= dairy.to_s
-      %tr
-        %td="Treenuts"
-        -@user.treenuts == false ? treenuts= "No" : treenuts = 'Yes'
-        %td.treenuts= treenuts.to_s
-      %tr
-        %td="Beef"
-        -@user.beef == false ? beef= "No" : beef = 'Yes'
-        %td.beef= beef.to_s
-      %tr
-        %td="Pork"
-        -@user.pork == false ? pork= "No" : pork = 'Yes'
-        %td.pork= pork.to_s
-      %tr
-        %td="Soy"
-        -@user.soy == false ? soy= "No" : soy = 'Yes'
-        %td.soy= soy.to_s
-      %tr
-        %td="Egg"
-        -@user.egg == false ? egg= "No" : egg = 'Yes'
-        %td.egg= egg.to_s
-      %tr
-        %td="Shellfish"
-        -@user.shellfish == false ? shellfish= "No" : shellfish = 'Yes'
-        %td.shellfish= shellfish.to_s
-      %tr
-        %td="Fish"
-        -@user.fish == false ? fish= "No" : fish = 'Yes'
-        %td.fish= fish.to_s
-      %tr
-        %td="Sesame"
-        -@user.sesame == false ? sesame= "No" : sesame = 'Yes'
-        %td.sesame= sesame.to_s
-      %tr
-        %td="Peanuts"
-        -@user.peanut == false ? peanut= "No" : peanut = 'Yes'
-        %td.peanut= peanut.to_s
-      %tr
-        %td="Wheat"
-        -@user.wheat == false ? wheat= "No" : wheat = 'Yes'
-        %td.wheat= wheat.to_s
-      %tr
-        %td="Other"
-        -@user.other == "" ? other= "No" : other = @user.other
-        %td.other= other.to_s
-      %tr
+      %tbody
+        %tr
+          %td="Gluten"
+          -@user.gluten == false ? gluten= "No" : gluten = 'Yes'
+          %td.gluten= gluten.to_s
+        %tr
+          %td="Dairy"
+          -@user.dairy == false ? dairy= "No" : dairy = 'Yes'
+          %td.dairy= dairy.to_s
+        %tr
+          %td="Treenuts"
+          -@user.treenuts == false ? treenuts= "No" : treenuts = 'Yes'
+          %td.treenuts= treenuts.to_s
+        %tr
+          %td="Beef"
+          -@user.beef == false ? beef= "No" : beef = 'Yes'
+          %td.beef= beef.to_s
+        %tr
+          %td="Pork"
+          -@user.pork == false ? pork= "No" : pork = 'Yes'
+          %td.pork= pork.to_s
+        %tr
+          %td="Soy"
+          -@user.soy == false ? soy= "No" : soy = 'Yes'
+          %td.soy= soy.to_s
+        %tr
+          %td="Egg"
+          -@user.egg == false ? egg= "No" : egg = 'Yes'
+          %td.egg= egg.to_s
+        %tr
+          %td="Shellfish"
+          -@user.shellfish == false ? shellfish= "No" : shellfish = 'Yes'
+          %td.shellfish= shellfish.to_s
+        %tr
+          %td="Fish"
+          -@user.fish == false ? fish= "No" : fish = 'Yes'
+          %td.fish= fish.to_s
+        %tr
+          %td="Sesame"
+          -@user.sesame == false ? sesame= "No" : sesame = 'Yes'
+          %td.sesame= sesame.to_s
+        %tr
+          %td="Peanuts"
+          -@user.peanut == false ? peanut= "No" : peanut = 'Yes'
+          %td.peanut= peanut.to_s
+        %tr
+          %td="Wheat"
+          -@user.wheat == false ? wheat= "No" : wheat = 'Yes'
+          %td.wheat= wheat.to_s
+        %tr
+          %td="Other"
+          -@user.other == "" ? other= "No" : other = @user.other
+          %td.other= other.to_s
+        %tr

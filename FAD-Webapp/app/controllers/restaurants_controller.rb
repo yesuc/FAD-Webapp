@@ -22,6 +22,8 @@ class RestaurantsController < ApplicationController
       session[:tags].each do |allergen|
         @foods = @foods.where("contains_#{allergen}".to_sym => false)
       end
+    else
+      @foods =@restaurant.foods
     end
   end
 
@@ -79,9 +81,6 @@ class RestaurantsController < ApplicationController
    # byebug
    params = query_params
    session[:init] = true
-   # puts("Before: Controller params: #{params}")
-   puts("Before: Controller Sessions: #{session[:query]}")
-   puts("Before: Controller sessions: #{session[:tags]}")
    if should_set_session? params, session
      session.clear
      session = set_session(params, session)
@@ -89,8 +88,6 @@ class RestaurantsController < ApplicationController
      params = set_params(params, session)
      session.clear
    end
-   puts("After: Controller params: #{params}")
-   puts("After: Controller sessions:#{session}")
    @query = params[:query]
    @query_type = params[:query_type]
    @query_distance = params[:query_distance]
@@ -121,7 +118,7 @@ class RestaurantsController < ApplicationController
   def scrape_menu
     @url = @restaurant.url
     double_check = {}
-    python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/run_spiders.py #{@url}`
+    python_output = `python app/controllers/run_spiders.py #{@url}`
     file = File.read('menu_data.json')
     menu_hash = JSON.parse(file)
     @restaurant.menu = menu_hash.values
@@ -139,7 +136,7 @@ class RestaurantsController < ApplicationController
 # NOTE: Gets ingredients for all food items by running bing.py
 def get_ingredients_for_all(double_check)
   double_check_values = double_check.values.join(', ').to_json
-  python_output = `python /Users/priyadhawka/Desktop/FAD-Webapp/FAD-Webapp/app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
+  python_output = `python app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
   file = File.read('ingredients_data.json')
   ingredients_hash = JSON.parse(file)
   ingredients_hash = ingredients_hash.values
@@ -247,7 +244,7 @@ private
     end
     return parms
   end
-  
+
   #INIT: (from form) params != nil, session = nil => set session with new params
   #MAINT-1: (from form) params != nil, session != nil => Wipe session and set with new params
   #MAINT-2: (from link) params = order, session != nil => set params using session, wipe session
