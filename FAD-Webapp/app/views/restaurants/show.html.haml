@@ -1,29 +1,17 @@
 
-%body
-  %p#notice= notice
-  %div.row
-    .col-md-offset-1
-    .col-md-4
-      %h3.header.name= "#{@restaurant.name}"
-  %div.row
-    .col-md-offset-2
-    .col-md-8.url= "#{@restaurant.url}"
-  %div.row
-    .col-md-offset-2
-    .col-md-8.address= "#{@restaurant.address}"
-  %div.row
-    .col-md-offset-2
-    .col-md-4= "#{@restaurant.cuisine}"
-    =session[:tags]
-  %div.row
-    .col-md-offset-2
-    .col-sm-8= "#{@restaurant.latitude} N, #{@restaurant.longitude} W"
-  %div.row
-    .col-md-offset-2
-      -@foods.each do |f|
-        ="#{f.name}" + ' ~> ' +  "#{f.description}"
-        .col-md-offset-2
-        ='Ingredients: '+ "#{f.ingredients}".titleize
-        %br
+%div
+  %h3.header= "#{@restaurant.name}"
+%div.u
+  ="#{@restaurant.url}"
+%div.add
+  ="#{@restaurant.address}"
+%div.c
+  ="#{@restaurant.cuisine}"
+%div
+  -@foods.each do |f|
+    %div.name="#{f.name}"
+    %div.description= "#{f.description}"
+    %div.ingredients='Ingredients: '+ "#{f.ingredients.titleize}"
+    %br
 
 = link_to 'Back', restaurants_path

@@ -40,7 +40,7 @@
           -if restaurant.description.length > 250
             %td#description
               =truncate("#{restaurant.description}", length: 100)
-              =link_to '...Read more', '', class:"read-more-#{@restaurant.id}"
+              -# =link_to '...Read more', '', class:"read-more-#{@restaurant.id}"
           -else
             %td#description="#{restaurant.description}"
   %hr

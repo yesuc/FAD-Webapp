@@ -63,16 +63,31 @@
   background-color: green;
 }
 
-.result#title a{
-  font-style: none;
+.result#title {
+  font-family: 'Armata';
   font-size: 1.2em;
-  color: blue;
-  padding: 0;
+  color: lightblue;
+  text-align: left;
+  padding-bottom: 20px;
   height: 0;
-  -webkit-margin-after: -1em;
+  // -webkit-margin-after: -1em;
 }
 .result#url{
-  font-size: 1em;
-  display: block;
-  color: green;
+  font-family: 'Armata';
+  font-size: 0.9em;
+  color: black;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.result#cuisine{
+    font-family: 'Armata';
+    font-size: 0.9em;
+    text-align: center;
+    padding-bottom: 10px;
+}
+.result#description{
+  font-family: 'Armata';
+  font-size: 0.9em;
+  text-align: center;
+  padding-bottom: 10px;
 }
