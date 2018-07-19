@@ -6,7 +6,7 @@ gem 'devise'
 gem 'omniauth'
 gem "omniauth-google-oauth2", "~> 0.2.1"
 gem 'haml'
-gem 'haml-rails', :group => :development
+gem 'haml-rails'
 gem "paperclip", "~> 5.2.1"
 gem 'terrapin', '~> 0.6.0'
 gem 'geocoder'
