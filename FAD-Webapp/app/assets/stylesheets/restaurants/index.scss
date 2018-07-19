@@ -21,8 +21,15 @@
 
 .restaurants_table{
   width: 100%;
+  table-layout: fixed;
   th, td{
     padding: 15px;
     text-align: center;
+  }
+  td#description{
+    width: 40%;
+    height: 10%;
+    vertical-align: text-top;
+    text-overflow: ellipsis;
   }
 }
