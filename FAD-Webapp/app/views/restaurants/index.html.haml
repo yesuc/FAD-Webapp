@@ -1,3 +1,5 @@
+%head
+  = yield :javascripts
 %div.bottom
   %h1 All Restaurants
   %div.banner
@@ -11,12 +13,14 @@
         =link_to "Contribute to our database!", new_restaurant_path
       -else
         =link_to "Sign in and contribute to our database!", new_user_session_path
+  %hr
   %table.restaurants_table
-    %thead
-      %tr
-        %th= 'Restaurant Name'
-        %th= 'Cuisine'
-        %th= 'Image'
+    -# %thead
+    -#   %tr
+    -#     %th= 'Image'
+    -#     %th= 'Restaurant Name'
+    -#     %th= 'Cuisine'
+    -#     %th= 'Description'
 
     %tbody
     -if current_user && current_user.admin?
@@ -30,10 +34,16 @@
     -else
       -@restaurants.where('admin_approved=?', true).each do |restaurant|
         %tr
+          %td= image_tag(restaurant.image.url(:thumb))
           %td= link_to "#{restaurant.name}", restaurant_path(restaurant)
           %td="#{restaurant.cuisine}"
-          %td= image_tag(restaurant.image.url(:thumb))
-
+          -if restaurant.description.length > 250
+            %td#description
+              =truncate("#{restaurant.description}", length: 100)
+              =link_to '...Read more', '', class:"read-more-#{@restaurant.id}"
+          -else
+            %td#description="#{restaurant.description}"
+  %hr
   %br
   = link_to 'New Restaurant', new_restaurant_path
   %br
