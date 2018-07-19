@@ -1,0 +1,63 @@
+.top{
+  width: 90%;
+  height: 40%;
+  margin: auto;
+
+  .search_box{
+    background: #FFC7B7;
+    margin: auto;
+    display: inline-block;
+    white-space: normal;
+    align-content: center;
+    position: relative;
+    padding: 5%;
+
+    .icon{
+      position: absolute;
+      color: #4f5b66;
+    }
+
+    .search_full_width#searchbar{
+      margin: auto;
+      position: relative;
+
+      background: #FFC7B7;
+      border-style: none;
+      border-radius: 5px;
+
+
+      width: 50%;
+      height: 10%;
+      padding: 20px;
+      font-family: 'Armata';
+      font-size: 12pt;
+    }
+    #submit{
+      display: inline-block;
+      margin-left: -1%;
+      width: 10%;
+      height: 60px;
+      padding-top: 4px;
+      position: relative;
+      border: none;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+
+      background-color: #bae1ff;
+    }
+    .attributes{
+    }
+
+  }
+}
+
+.bottom{
+  background-color: white;
+  margin: auto;
+  width: 90%;
+  height: auto;
+}
+
+.filter_container{
+  background-color: green;
+}
