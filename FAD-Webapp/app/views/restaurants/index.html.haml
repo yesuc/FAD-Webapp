@@ -15,12 +15,6 @@
         =link_to "Sign in and contribute to our database!", new_user_session_path
   %hr
   %table.restaurants_table
-    -# %thead
-    -#   %tr
-    -#     %th= 'Image'
-    -#     %th= 'Restaurant Name'
-    -#     %th= 'Cuisine'
-    -#     %th= 'Description'
 
     %tbody
     -if current_user && current_user.admin?
@@ -40,7 +34,6 @@
           -if restaurant.description.length > 250
             %td#description
               =truncate("#{restaurant.description}", length: 100)
-              -# =link_to '...Read more', '', class:"read-more-#{@restaurant.id}"
           -else
             %td#description="#{restaurant.description}"
   %hr
