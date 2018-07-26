@@ -1,17 +1,19 @@
 =render partial:'search_bar', locals: {q: @query, allergens: @allergens, q_dist: @query_distance, q_type: @query_type, order: @query_order}
 %div.bottom
-  %h1= "Search Results for '#{@query}'"
-
-  %div.results_container
+  %h2= "Search Results for '#{@query}'"
+  %div.results_container.container
     -@restaurants.each do |r|
-      %div.result
-        %h3.result#title
+      %div.result.row
+        %div.img-responsive.col-sm
+          = image_tag(r.image.url(:thumb))
+        %div.result.col-sm#title
           =link_to "#{r.name.titleize}", restaurant_path(r)
-        %div.result#url
-          %div="#{r.url}"
-        %div.result#cuisine
-          %div="#{r.cuisine}"
-        %div.result#description
-          %div= "#{r.description}"
+          %div.col-sm#url
+            ="#{r.url}"
+        %div.result.col-sm#cuisine
+          ="#{r.cuisine}"
+        %div.result.col-sm#description
+          =truncate("#{r.description}", length: 150)
+
 
 =link_to "Back to Home Page", root_path
