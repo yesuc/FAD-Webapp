@@ -1,11 +1,13 @@
 %head
   = yield :javascripts
+=render(partial: 'search_bar', locals: {q: nil, allergens: nil, q_dist: nil, q_type: nil, order: 'best_match'})
+
 %div.bottom
-  %h1 All Restaurants
+  %h2 All Restaurants
   %div.banner
     %p#banner_description
       Here are all the Restaurants we currently have in our database! Each Restaurant has had its menu processed and reviewed by our community and by us personally!
-      Feel Free to browse each restaurant and leave a like, comment, or even review the menus we collected. We appreciate and welcome all feedback!
+      Feel free to browse each restaurant and leave a like, comment, or even review the menus we collected. We appreciate and welcome all feedback!
     %p#banner_invitation
       Don't see your Restaurant here?
       %br
@@ -31,11 +33,7 @@
           %td= image_tag(restaurant.image.url(:thumb))
           %td= link_to "#{restaurant.name}", restaurant_path(restaurant)
           %td="#{restaurant.cuisine}"
-          -if restaurant.description.length > 250
-            %td#description
-              =truncate("#{restaurant.description}", length: 100)
-          -else
-            %td#description="#{restaurant.description}"
+          %td#description=truncate("#{restaurant.description}", length: 150)
   %hr
   %br
   = link_to 'New Restaurant', new_restaurant_path

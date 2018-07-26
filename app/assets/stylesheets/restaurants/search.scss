@@ -63,22 +63,21 @@
   background-color: green;
 }
 
-.result#title {
+.result#title a{
   font-family: 'Armata';
   font-size: 1.2em;
-  color: lightblue;
   text-align: left;
   padding-bottom: 20px;
   height: 0;
-  // -webkit-margin-after: -1em;
+  #url{
+    font-family: 'Armata';
+    font-size: 0.8em;
+    color: black;
+    text-align: center;
+    padding-bottom: 10px;
+  }
 }
-.result#url{
-  font-family: 'Armata';
-  font-size: 0.9em;
-  color: black;
-  text-align: center;
-  padding-bottom: 10px;
-}
+
 .result#cuisine{
     font-family: 'Armata';
     font-size: 0.9em;
