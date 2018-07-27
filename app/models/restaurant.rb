@@ -52,7 +52,6 @@ class Restaurant < ApplicationRecord
       end
     end
 
-    puts("Order : #{constraints[:order]}")
     if constraints[:order] == 'name'
       filtered = filtered.reorder(constraints[:order].to_sym => :asc)
     elsif constraints[:order] == 'best_match'

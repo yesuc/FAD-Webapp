@@ -1,6 +1,13 @@
 %head
   = yield :javascripts
-=render(partial: 'search_bar', locals: {q: nil, allergens: nil, q_dist: nil, q_type: nil, order: 'best_match'})
+-if current_user && user_signed_in?
+  -a = []
+  -Food.generate_tags.each do |tag|
+    -if current_user.attributes[tag] == true
+      -a << tag
+  =render(partial: 'search_bar', locals: {q: nil, allergens: a, q_dist: nil, q_type: nil, order: 'best_match'})
+-else
+  =render(partial: 'search_bar', locals: {q: nil, allergens: nil, q_dist: nil, q_type: nil, order: 'best_match'})
 %div.bottom
   %h2 All Restaurants
   %div.banner
