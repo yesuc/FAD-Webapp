@@ -1,0 +1,11 @@
+%div.bottom.container
+  %h2= "Edit Food: #{@food.name}".titleize
+  =form_for @food, method: :patch, url: restaurant_food_path(@food.restaurant_id,@food.id), html: {class: "food_form"} do |f|
+    %div.field
+      =f.label :name, "Food Name"
+      =f.text_field :name, placeholder: "#{@food.name}"
+    %div.field
+      =f.label :description, "Food Description", id: "description_label"
+      =f.text_area :description, cols: 40, rows: 5, placeholder: "#{@food.description}", id: "description_box"
+    %div.field
+      =f.submit 'Save Changes'
