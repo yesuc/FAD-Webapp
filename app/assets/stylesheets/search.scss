@@ -4,24 +4,26 @@
   margin: auto;
 
   .search_box{
-    background: #FFC7B7;
+    width: 100%;
+    background: #e1e1dc;
     margin: auto;
     display: inline-block;
     white-space: normal;
     align-content: center;
     position: relative;
-    padding: 5%;
+    padding-top: 50px;
+    padding:5%;
 
     .icon{
       position: absolute;
-      color: #BF5426;
+      color: #4f5b66;
     }
 
     .search_full_width#searchbar{
       margin: auto;
       position: relative;
 
-      background: #FFC7B7;
+      background: #ffffff;
       border-style: none;
       border-radius: 5px;
 
@@ -33,31 +35,87 @@
       font-size: 12pt;
     }
     #submit{
+      border-radius: 0px;
       display: inline-block;
       margin-left: -1%;
       width: 10%;
       height: 60px;
-      padding-top: 4px;
+      padding-top: 2px;
       position: relative;
       border: none;
-      border-top-right-radius: 5px;
+      border-top-right-radius: 4px;
       border-bottom-right-radius: 5px;
 
-      background-color: #bae1ff;
-    }
-    .attributes{
+      background-color: #D8B25A;
     }
 
+    .attribute_container{
+      .attribute{
+        padding-top: 20px;
+        font-family: 'Armata';
+        font-size: 10pt;
+        display: flex;
+          label{
+            display: inline-block;
+            vertical-align: bottom;
+
+        }
+      }
+    }
+
+    .order_container{
+      font-family: 'Armata';
+      font-size: 10pt;
+      select{
+        font-family: 'Armata';
+        font-size: 10pt;
+      }
+    }
+    .search_container{
+      position: relative;
+      font-family: 'Armata';
+      font-size: 12pt;
+
+      .search_attributes{
+        select{
+          vertical-align: bottom;
+          position: relative;
+          font-family: 'Armata';
+          font-size: 12pt;
+        }
+        label{
+          vertical-align: top;
+          position: absolute;
+          margin-left: 0.5em;
+          padding-top: 18px;
+        }
+      }
+    }
   }
 }
 
-.bottom{
-  background-color: white;
-  margin: auto;
-  width: 90%;
-  height: auto;
-}
+.attribute_button {
+  margin: 4px;
+  border-radius: 4px;
+  border: 1px solid gray;
+  overflow: auto;
+  float: left;
+  text-align: center;
+  display: block;
 
-.filter_container{
-  background-color: green;
+  label span {
+     text-align:center;
+     padding:3px 0px;
+     display:block;
+   }
+  label{
+    float: left;
+    width: 4em;
+  }
+
+  input:checked + span{
+    margin: 4px;
+    background-color: #991111;
+    color:#fff;
+  }
 }
