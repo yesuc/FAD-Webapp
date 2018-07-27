@@ -1,0 +1,92 @@
+%div.bottom_sign_in
+  %table.sign_in
+    %tbody
+      %h2 Create a new Account
+      %p To save your dietary restrictions for easy restaurant browsing, please create an account.
+      =form_for User.new, :method => :post do |f|
+        .field
+          =f.label :name, "Full Name"
+          %br
+          =f.text_field :name, :required => true
+
+        .field
+          =f.label :email, "Email"
+          %br
+          =f.text_field :email, :required => true
+
+        .field
+          =f.label :password, "Password"
+          %br
+          =f.password_field :password, :required => true
+
+        .field
+          =f.label :password_confirmation, "Confirm Password"
+          %br
+          =f.password_field :password_confirmation, :required => true
+
+        .field
+          =f.label :gluten
+          %br
+          =f.check_box :gluten, class: 'form-template'
+
+        .field
+          =f.label :dairy
+          %br
+          =f.check_box :dairy, class: 'form-template'
+
+        .field
+          =f.label :treenuts
+          %br
+          =f.check_box :treenuts, class: 'form-template'
+
+        .field
+          =f.label :beef
+          %br
+          =f.check_box :beef, class: 'form-template'
+
+        .field
+          =f.label :pork
+          %br
+          =f.check_box :pork, class: 'form-template'
+
+        .field
+          =f.label :soy
+          %br
+          =f.check_box :soy, class: 'form-template'
+
+        .field
+          =f.label :egg
+          %br
+          =f.check_box :egg, class: 'form-template'
+
+        .field
+          =f.label :shellfish
+          %br
+          =f.check_box :shellfish, class: 'form-template'
+
+        .field
+          =f.label :peanut
+          %br
+          =f.check_box :peanut, class: 'form-template'
+
+        .field
+          =f.label :fish
+          %br
+          =f.check_box :fish, class: 'form-template'
+
+        .field
+          =f.label :sesame
+          %br
+          =f.check_box :sesame, class: 'form-template'
+
+        .field
+          =f.label :wheat
+          %br
+          =f.check_box :wheat, class: 'form-template'
+        .field
+          =f.label :other
+          %br
+          =f.text_field :other, class: 'form-template'
+
+        .actions
+          =f.submit "Sign Up"

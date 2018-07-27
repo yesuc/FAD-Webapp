@@ -39,26 +39,33 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   # protected
-
-  def destroy
-       @user = User.find(current_user.id)
-       if @user.destroy_with_password(params[:user][:delete_account_password])
-         flash[:notice] = "Account Successfully Deleted"
-         redirect_to root_path
-       else
-          flash[:warning] = "Please Enter Correct Account Password to Delete Account"
-          redirect_to edit_user_registration_path(current_user.id)
-       end
-   end
+  def update_resource(resource, params)
+      if current_user.provider == "google_oauth2"
+        params.delete("current_password")
+        resource.update_without_password(params)
+      else
+        resource.update_with_password(params)
+      end
+    end
+  # def destroy
+  #      @user = User.find(current_user.id)
+  #      if @user.destroy_with_password(params[:user][:delete_account_password])
+  #        flash[:notice] = "Account Successfully Deleted"
+  #        redirect_to root_path
+  #      else
+  #         flash[:warning] = "Please Enter Correct Account Password to Delete Account"
+  #         redirect_to edit_user_registration_path(current_user.id)
+  #      end
+  #  end
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    attrs = [:name, :provider, :uid, :email]
+    attrs = [:name, :provider, :uid, :email, :gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat, :other]
     devise_parameter_sanitizer.permit(:sign_up, keys: attrs)
   end
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    attrs = [:name, :provider, :uid, :email]
+    attrs = [:name, :provider, :uid, :email, :gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat, :other]
     devise_parameter_sanitizer.permit(:account_update, keys: attrs)
   end
 
