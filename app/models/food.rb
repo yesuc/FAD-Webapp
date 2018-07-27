@@ -1,4 +1,6 @@
 class Food < ApplicationRecord
+  belongs_to :restaurant, optional: true
+  # Optional required to be set to true (is automatically false) under rails 5, otherwise parent object is invalid
 
   @@allergens = {
   :gluten => ['buns','bread','wheat', 'wheat flour','barley', 'rye', 'oats', 'malt', 'brewer’s yeast', 'triticale', 'wheatberies', 'durum', 'emmer', 'semolina', 'spelt', 'farina', 'farro', 'graham', 'einkorn wheat','pastas','raviolis','dumplings', 'couscous', 'gnocchi','noodles', 'ramen', 'udon', 'soba', 'chow mein', 'egg noodles','croissants', 'pita', 'naan', 'bagels', 'flatbreads', 'cornbread', 'potato bread', 'muffins', 'donuts', 'rolls', 'flour tortillas','cakes', 'cookies', 'pie crusts', 'brownies','cereal', 'granola', 'corn flakes', 'rice puffs','pancakes', 'waffles', 'french toast', 'crepes', 'biscuits','panko breadcrumbs', 'croutons', 'stuffings', 'dressings', 'soy sauce', 'roux','beer', 'flour'],
@@ -14,9 +16,6 @@ class Food < ApplicationRecord
   :sesame=>['benne', 'benne seed', 'benniseed', 'gingelly', 'gingelly oil', 'halvah', 'sesame flour', 'sesame salt', 'sesamol', 'sesamum indicum', 'sesemolina','sim sim', 'tahini','tahina', 'tehina','til','sesame seeds','sesame paste', 'sesame oil', 'falafel','goma-dofu', 'pasteli', 'tempeh'],
   :wheat=>['bread','bread crumbs', 'bulgur', 'cereal extract', 'club wheat', 'couscous','cracker meal','durum','einkorn','emmer','farina','flour','hydrolyzed wheat protein','Kamut','matzoh','matzo', 'matzah', 'pasta', 'seitan', 'semolina', 'spelt', 'sprouted wheat', 'triticale', 'vital wheat gluten', 'bran', 'wheat germ', 'wheat grass', 'wheat malt', 'wheat sprouts', 'wheat starch', 'wheat', 'wheat flour', 'wheat germ oil', 'wheat protein isolate', 'whole wheat berries', 'glucose syrup', 'oats', 'soy sauce', 'surimi', 'starch', 'bread']
   }
-
-  belongs_to :restaurant, optional: true
-  # Optional required to be set to true (is automatically false) under rails 5, otherwise parent object is invalid
 
   scope :gluten_free, -> { where contains_gluten: false }
   scope :dairy_free, -> { where contains_dairy: false}

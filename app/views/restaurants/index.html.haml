@@ -1,7 +1,6 @@
 %head
   = yield :javascripts
 =render(partial: 'search_bar', locals: {q: nil, allergens: nil, q_dist: nil, q_type: nil, order: 'best_match'})
-
 %div.bottom
   %h2 All Restaurants
   %div.banner
@@ -27,13 +26,13 @@
           %td= image_tag(restaurant.image.url(:thumb))
           %td= link_to 'Edit', edit_restaurant_path(restaurant)
           %td= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' }
-    -else
-      -@restaurants.where('admin_approved=?', true).each do |restaurant|
-        %tr
-          %td= image_tag(restaurant.image.url(:thumb))
-          %td= link_to "#{restaurant.name}", restaurant_path(restaurant)
-          %td="#{restaurant.cuisine}"
-          %td#description=truncate("#{restaurant.description}", length: 150)
+      %hr
+    -@restaurants.where('admin_approved=?', true).each do |restaurant|
+      %tr
+        %td= image_tag(restaurant.image.url(:thumb))
+        %td= link_to "#{restaurant.name}", restaurant_path(restaurant)
+        %td="#{restaurant.cuisine}"
+        %td#description=truncate("#{restaurant.description}", length: 150)
   %hr
   %br
   = link_to 'New Restaurant', new_restaurant_path

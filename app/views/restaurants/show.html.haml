@@ -1,4 +1,3 @@
-
 %div
   %h3.header= "#{@restaurant.name}"
 %div.u
@@ -9,7 +8,10 @@
   ="#{@restaurant.cuisine}"
 %div
   -@foods.each do |f|
-    %div.name="#{f.name}"
+    -if current_user && current_user.admin?
+      =link_to "#{f.name}", edit_restaurant_food_path(@restaurant.id, f.id), class: "name"
+    -else
+      %div.name="#{f.name}"
     %div.description= "#{f.description}"
     %div.ingredients='Ingredients: '+ "#{f.ingredients.titleize}"
     %br
