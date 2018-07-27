@@ -8,4 +8,10 @@
       =f.label :description, "Food Description", id: "description_label"
       =f.text_area :description, cols: 40, rows: 5, placeholder: "#{@food.description}", id: "description_box"
     %div.field
+      =f.label :ingredients, "Food Ingredients", id: "ingredients_label"
+      =f.text_area :ingredients, cols: 40, rows: 5, placeholder: "#{@food.ingredients}", id: "ingredients_box"
+    %div.field
       =f.submit 'Save Changes'
+  =form_for @food, method: :delete, url: restaurant_food_path(@food.restaurant_id,@food.id), html: {class: "food_form"} do |f|
+    %div.field
+      =f.submit 'Delete Food Item', data: { confirm: "Are you sure?" }

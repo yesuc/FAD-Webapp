@@ -17,9 +17,17 @@ class FoodsController < ApplicationController
       redirect_to edit_restaurant_food_path(@food.id) and return
     end
   end
+  
+  def destroy
+    @food = Food.find(params[:id])
+    @food.destroy
+    flash[:notice] = "Food Successfully Deleted!"
+    redirect_to restaurant_path(@food.restaurant.id) and return
+  end
+
 
 private
   def create_update_params
-    params.require(:food).permit(:name,:description)
+    params.require(:food).permit(:name,:description, :ingredients)
   end
 end
