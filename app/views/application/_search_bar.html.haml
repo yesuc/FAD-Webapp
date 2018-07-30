@@ -10,19 +10,19 @@
           %button{:type => "submit", :id => "submit"}
             %i.fas.fa-search
 
-          =label_tag :query_type, "Search by"
+          =label_tag :query_type, "Search by:"
           -if local_assigns[:q_type]
-            =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],local_assigns[:q_type]), required: true
+            =select_tag :query_type, options_for_select([["Anything", "all"],["Restaurant Name","name"],["Restaurant URL", "url"]],local_assigns[:q_type]), required: true
           -else
-            =select_tag :query_type, options_for_select([["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
+            =select_tag :query_type, options_for_select([["Anything", "all"],["Restaurant Name","name"],["Restaurant URL", "url"]],1), required: true
 
-          =label_tag :query_distance, "Distance"
+          =label_tag :query_distance, "Distance:"
           -if local_assigns[:q_dist]
-            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20]], local_assigns[:q_dist])
+            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20], ["20 miles or more",0]], local_assigns[:q_dist])
           -else
-            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20]],1)
+            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20], ["20 miles or more",0]],1)
 
-          =label_tag :order, "Order By:"
+          =label_tag :order, "Order by:"
           =select_tag :order, options_for_select([["Best Match",:best_match],["Name",:name],["Distance",:distance]],local_assigns[:order])
 
 

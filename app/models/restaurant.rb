@@ -13,12 +13,29 @@ class Restaurant < ApplicationRecord
   # ex: Restaurant.all.allergen_free("dairy")
 
   def self.query_on_constraints(constraints)
+    # filtered = Restaurant.where('false')
     # Filter by Name/URL
     if constraints[:query] == ""
       filtered = Restaurant.all
     else
       # % - indicates wildcard -- substrings
-      if constraints[:query_type] == "name"
+      if constraints[:query_type] == "all"
+        filtered = Restaurant.where("name LIKE ? OR url LIKE ? OR description LIKE ? OR cuisine LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%")
+        # Restaurant.all.each do |r|
+        #   if r.foods.where("name LIKE ? OR description LIKE ?", "%#{constraints[:query]}%", "%#{constraints[:query]}%").length < 1
+        #     if filtered.nil?
+        #       filtered.or(r)
+        #     else
+        #       filtered.or(r)
+        #     end
+        #   end
+        # end
+        # filtered.or(Restaurant.where("name LIKE ? OR url LIKE ? OR description LIKE ? OR cuisine LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%"))
+        # filtered.distinct
+        # filtered.or(Restaurant.joins(:foods).where(foods: {name: constraints[:query], description: constraints[:query], ingredients: constraints[:query]}))
+        # filtered = Restaurant.where("name LIKE ? or ")
+        # filtered.or(Restaurant.where("name LIKE ? OR ingredients LIKE ? OR description LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%",  "%#{constraints[:query]}%" ))
+      elsif constraints[:query_type] == "name"
         filtered = Restaurant.where("name LIKE ?", "%#{constraints[:query]}%")
       else
         filtered = Restaurant.where("url LIKE ?", "%#{constraints[:query]}%")
@@ -27,19 +44,22 @@ class Restaurant < ApplicationRecord
 
     # Filter by Distance
     if constraints[:order] == 'distance'
-      if Rails.env.development? || Rails.env.test?
-        filtered = filtered.near('149.43.121.139', constraints[:query_distance], order: 'distance')
-      else
-        filtered = filtered.near(request.remote_ip, constraints[:query_distance], order: 'distance')
+      if constraints[:query_distance] != "0"
+        if Rails.env.development? || Rails.env.test?
+          filtered = filtered.near('149.43.121.139', constraints[:query_distance], order: 'distance')
+        else
+          filtered = filtered.near(request.remote_ip, constraints[:query_distance], order: 'distance')
+        end
       end
     else
-      if Rails.env.development? || Rails.env.test?
-        filtered = filtered.near('149.43.121.139', constraints[:query_distance])
-      else
-        filtered = filtered.near(request.remote_ip, constraints[:query_distance])
+      if constraints[:query_distance] != "0"
+        if Rails.env.development? || Rails.env.test?
+          filtered = filtered.near('149.43.121.139', constraints[:query_distance])
+        else
+          filtered = filtered.near(request.remote_ip, constraints[:query_distance])
+        end
       end
     end
-
     constraints.delete(:query)
     constraints.delete(:query_type)
     constraints.delete(:query_distance)
@@ -52,7 +72,6 @@ class Restaurant < ApplicationRecord
       end
     end
 
-    puts("Order : #{constraints[:order]}")
     if constraints[:order] == 'name'
       filtered = filtered.reorder(constraints[:order].to_sym => :asc)
     elsif constraints[:order] == 'best_match'

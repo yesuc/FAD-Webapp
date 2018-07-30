@@ -78,7 +78,6 @@ class RestaurantsController < ApplicationController
 
  # GET /restaurant/search
  def search
-   # byebug
    params = query_params
    session[:init] = true
    if should_set_session? params, session
