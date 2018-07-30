@@ -20,21 +20,14 @@ class Restaurant < ApplicationRecord
     else
       # % - indicates wildcard -- substrings
       if constraints[:query_type] == "all"
-        filtered = Restaurant.where("name LIKE ? OR url LIKE ? OR description LIKE ? OR cuisine LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%")
-        # Restaurant.all.each do |r|
-        #   if r.foods.where("name LIKE ? OR description LIKE ?", "%#{constraints[:query]}%", "%#{constraints[:query]}%").length < 1
-        #     if filtered.nil?
-        #       filtered.or(r)
-        #     else
-        #       filtered.or(r)
-        #     end
-        #   end
-        # end
-        # filtered.or(Restaurant.where("name LIKE ? OR url LIKE ? OR description LIKE ? OR cuisine LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%","%#{constraints[:query]}%"))
-        # filtered.distinct
-        # filtered.or(Restaurant.joins(:foods).where(foods: {name: constraints[:query], description: constraints[:query], ingredients: constraints[:query]}))
-        # filtered = Restaurant.where("name LIKE ? or ")
-        # filtered.or(Restaurant.where("name LIKE ? OR ingredients LIKE ? OR description LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%",  "%#{constraints[:query]}%" ))
+        filtered = Restaurant.joins(:foods)
+        filtered = filtered.where("restaurants.name LIKE ? OR restaurants.url LIKE ? OR restaurants.description LIKE ? OR restaurants.cuisine LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%",  "%#{constraints[:query]}%", "%#{constraints[:query]}")
+        if filtered == []
+          filtered = Restaurant.joins(:foods).where("foods.name LIKE ? OR foods.ingredients LIKE ? OR foods.description LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%",  "%#{constraints[:query]}%" )
+        else
+          filtered.or(filtered.where("foods.name LIKE ? OR foods.ingredients LIKE ? OR foods.description LIKE ?", "%#{constraints[:query]}%","%#{constraints[:query]}%",  "%#{constraints[:query]}%" ))
+        end
+        filtered = filtered.distinct
       elsif constraints[:query_type] == "name"
         filtered = Restaurant.where("name LIKE ?", "%#{constraints[:query]}%")
       else
@@ -63,15 +56,17 @@ class Restaurant < ApplicationRecord
     constraints.delete(:query)
     constraints.delete(:query_type)
     constraints.delete(:query_distance)
-
+    puts(filtered.length)
+    filtered = filtered.joins(:foods)
+    puts(filtered.length)
     # Filter by Allergens
     constraints.each_pair do |sym,val|
       if sym.to_s == 'order'; next; end
       if filtered.length > 0
-        filtered = filtered.where(allergen_free(sym))
+        filtered = filtered.where(foods: {"contains_#{sym.to_s}".to_sym => false})
       end
     end
-
+    filtered = filtered.distinct
     if constraints[:order] == 'name'
       filtered = filtered.reorder(constraints[:order].to_sym => :asc)
     elsif constraints[:order] == 'best_match'

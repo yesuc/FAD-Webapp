@@ -9,6 +9,7 @@ class RestaurantsController < ApplicationController
 
   # GET /restaurants/1
   def show
+    puts("session: #{session.inspect}")
     @restaurant = Restaurant.find(params[:id])
     @foods = @restaurant.foods
     if !@restaurant.scraped
@@ -21,9 +22,11 @@ class RestaurantsController < ApplicationController
       end
       session[:tags].each do |allergen|
         @foods = @foods.where("contains_#{allergen}".to_sym => false)
+        @foods.distinct
       end
     else
-      @foods =@restaurant.foods
+      @foods.distinct
+      # @foods =@restaurant.foods
     end
   end
 
