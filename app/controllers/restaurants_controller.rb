@@ -81,11 +81,11 @@ class RestaurantsController < ApplicationController
    params = query_params
    session[:init] = true
    if should_set_session? params, session
-     session.clear
+     session = clear_session_query_attr
      session = set_session(params, session)
    elsif should_set_params? params
      params = set_params(params, session)
-     session.clear
+     session = clear_session_query_attr
    end
    @query = params[:query]
    @query_type = params[:query_type]
@@ -198,9 +198,7 @@ private
 
   def should_set_session?(parms,sess)
     if !parms[:order] || !parms[:query].nil?
-      # if !sess[:query]
         return true
-      # end
     else
       return false
     end
@@ -223,6 +221,9 @@ private
     return b
   end
 
+  # PARAMS: Params and Session Hash
+  # Sets/Overwrites the Sessions Hash with query attributes from params
+  # RETURNS: Params Hash with query attributes and allergen tags set from sessions
   def set_session(parms,sess)
     sess = set_query_attributes(parms,sess)
     ignore = ['query', 'query_type', 'query_distance', 'order']
@@ -235,6 +236,23 @@ private
     return sess
   end
 
+
+  # Removes Allergen tags and query attributes from session
+  # RETURNS: Session Hash with query attributes and allergen tags removed
+  def clear_session_query_attr
+    tags = Food.generate_tags
+    q_params = ['query', 'query_type', 'query_distance', 'order']
+    session.each do |a|
+      if tags.include?(a) || q_params.include?(a)
+        session.delete(a)
+      end
+    end
+    return session
+  end
+
+  # PARAMS: Params and Session Hash
+  # Sets/Overwrites the params query attributes with those from sess
+  # RETURNS: Params with new query attributes set
   def set_params(parms,sess)
     parms = set_query_attributes(sess,parms)
     ignore = ['query', 'query_type', 'query_distance', 'order']
@@ -244,6 +262,7 @@ private
     return parms
   end
 
+  # => Search Bar Session + Params Management
   #INIT: (from form) params != nil, session = nil => set session with new params
   #MAINT-1: (from form) params != nil, session != nil => Wipe session and set with new params
   #MAINT-2: (from link) params = order, session != nil => set params using session, wipe session
