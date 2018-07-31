@@ -56,15 +56,11 @@ class Restaurant < ApplicationRecord
     constraints.delete(:query)
     constraints.delete(:query_type)
     constraints.delete(:query_distance)
-    puts(filtered.length)
     filtered = filtered.joins(:foods)
-    puts(filtered.length)
     # Filter by Allergens
     constraints.each_pair do |sym,val|
       if sym.to_s == 'order'; next; end
-      if filtered.length > 0
-        filtered = filtered.where(foods: {"contains_#{sym.to_s}".to_sym => false})
-      end
+      filtered = filtered.where(foods: {"contains_#{sym.to_s}".to_sym => false})
     end
     filtered = filtered.distinct
     if constraints[:order] == 'name'

@@ -2,31 +2,30 @@ require 'json'
 class RestaurantsController < ApplicationController
 
   # GET /restaurants
-  @@tags = Food.generate_tags
   def index
     @restaurants = Restaurant.all
   end
 
   # GET /restaurants/1
   def show
-    puts("session: #{session.inspect}")
+    @tags = Food.generate_tags
+    @tags.delete('other')
     @restaurant = Restaurant.find(params[:id])
     @foods = @restaurant.foods
     if !@restaurant.scraped
         get_menu_and_food_ingredients
-        @restaurant.save
+        @tags.each do |t|
+          check_food_for_allergens(@restaurant.foods, t.to_sym)
+        end
+        @restaurant.save!
     end
     if session[:tags]
-      session[:tags].each do |t|
-        check_food_for_allergens(@restaurant.foods, t.to_sym)
-      end
       session[:tags].each do |allergen|
         @foods = @foods.where("contains_#{allergen}".to_sym => false)
         @foods.distinct
       end
     else
       @foods.distinct
-      # @foods =@restaurant.foods
     end
   end
 
@@ -44,11 +43,16 @@ class RestaurantsController < ApplicationController
   def create
     @restaurant = Restaurant.new(create_update_params)
     get_menu_and_food_ingredients
-    if session[:tags]
-      session[:tags].each do |t|
-        check_food_for_allergens(@restaurant.foods, t.to_sym)
-      end
+    @tags = Food.generate_tags
+    @tags.delete('other')
+    @tags.each do |t|
+      check_food_for_allergens(@restaurant.foods, t.to_sym)
     end
+    # if session[:tags]
+    #   session[:tags].each do |t|
+    #     check_food_for_allergens(@restaurant.foods, t.to_sym)
+    #   end
+    # end
     if @restaurant.save
       if @restaurant.admin_approved
         flash[:success] = "New restaurant \'#{@restaurant.name}\' created and added to the page"
@@ -102,9 +106,7 @@ class RestaurantsController < ApplicationController
    @restaurants = Restaurant.query_on_constraints(params)
  end
 
-
-
-
+#Calls scrape_menu to get an array of all foods from a specific restaurant & gets ingredients for all foods in double check
   def get_menu_and_food_ingredients
     double_check = scrape_menu
     if !double_check.empty?
