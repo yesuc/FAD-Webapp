@@ -46,11 +46,6 @@ class RestaurantsController < ApplicationController
     @tags.each do |t|
       check_food_for_allergens(@restaurant.foods, t.to_sym)
     end
-    # if session[:tags]
-    #   session[:tags].each do |t|
-    #     check_food_for_allergens(@restaurant.foods, t.to_sym)
-    #   end
-    # end
     if @restaurant.save
       if @restaurant.admin_approved
         flash[:success] = "New restaurant \'#{@restaurant.name}\' created and added to the page"
