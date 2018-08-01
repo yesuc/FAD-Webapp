@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 2018_07_13_191458) do
     t.boolean "contains_fish"
     t.boolean "contains_sesame"
     t.boolean "contains_wheat"
-    t.string "contains_other"
     t.string "ingredients"
     t.string "name", null: false
     t.text "description"
@@ -82,7 +81,6 @@ ActiveRecord::Schema.define(version: 2018_07_13_191458) do
     t.boolean "fish", default: false
     t.boolean "sesame", default: false
     t.boolean "wheat", default: false
-    t.string "other", default: ""
     t.boolean "admin"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

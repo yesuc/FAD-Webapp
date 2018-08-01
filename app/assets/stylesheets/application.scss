@@ -15,10 +15,11 @@
  */
 html, body { height: 100%; width: 100%; margin: 0; background-color: #862633}
 .webtitle{
-  font-size: 30pt;
-}
-.webtitle{
+  font-size: 35pt;
   text-align: center;
+  color: #D8B25A;
+  padding-top: .15em;
+  margin-bottom: .1em;
 }
 .navigations{
   .nav_box ul{
@@ -30,6 +31,7 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #862633}
     font-family: 'Armata';
     font-size: 12pt;
     text-align: center;
+    padding-left: 2.6em;
   }
   .nav_box li{
      float: left;
@@ -37,7 +39,6 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #862633}
      margin-right: 30px;
   }
   .nav_box a{
-    // color: #01213C;
     text-align: center;
     text-decoration: none;
     display: block;

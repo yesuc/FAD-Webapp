@@ -15,6 +15,5 @@ class AddColumnsToUsers < ActiveRecord::Migration[5.2]
     add_column :users, :fish, :boolean, default: false
     add_column :users, :sesame, :boolean, default: false
     add_column :users, :wheat, :boolean, default: false
-    add_column :users, :other, :string, default: ""
   end
 end
