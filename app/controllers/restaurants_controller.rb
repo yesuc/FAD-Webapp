@@ -140,7 +140,8 @@ class RestaurantsController < ApplicationController
 # NOTE: Gets ingredients for all food items by running bing.py
 def get_ingredients_for_all(double_check)
   double_check_values = double_check.values.join(', ').to_json
-  python_output = `python app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
+  puthon_output = `python app/controllers/webcrawler/webcrawler/spiders/edamam.py #{double_check_values}`
+  # python_output = `python app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
   file = File.read('ingredients_data.json')
   ingredients_hash = JSON.parse(file)
   ingredients_hash = ingredients_hash.values
