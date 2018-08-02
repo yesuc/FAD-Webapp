@@ -22,7 +22,6 @@ def find_common_ingredients(query_string_array):
     clean_recipe_ingredients = {}
     while q < len(array):
         query_string = array[q]
-        print(query_string)
         browser.get('https://www2.bing.com/search?q=' + '%20'.join(query_string.split()) +'%20Recipe')
         ingredients = []
         #Check if bing results are in the expected layout
