@@ -18,6 +18,6 @@ class UsersController < ApplicationController
   end
   private
   def create_update_params
-    params.require(:user).permit(:gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat, :other)
+    params.require(:user).permit(:gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat)
   end
 end

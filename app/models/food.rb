@@ -29,7 +29,7 @@ class Food < ApplicationRecord
   scope :fish_free, -> { where contains_fish: false }
   scope :sesame_free, -> { where contains_sesame: false }
   scope :wheat_free, -> { where contains_wheat: false}
-  # TODO: scope for "other"_free foods
+
 
   def self.check_restrictions(food_text, restriction)
     allergen = @@allergens[restriction]

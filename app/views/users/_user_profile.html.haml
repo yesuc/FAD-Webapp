@@ -54,8 +54,4 @@
         -@user.wheat == false ? wheat= "No" : wheat = 'Yes'
         %td.wheat= wheat.to_s
       %tr
-        %td="Other"
-        -@user.other == "" ? other= "No" : other = @user.other
-        %td.other= other.to_s
-      %tr
         %td.btn=link_to('Edit Account Details', edit_user_registration_path(@user))
