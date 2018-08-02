@@ -59,13 +59,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #  end
   # If you have extra params to permit, append them to the sanitizer.
   def configure_sign_up_params
-    attrs = [:name, :provider, :uid, :email, :gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat, :other]
+    attrs = [:name, :provider, :uid, :email, :gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat]
     devise_parameter_sanitizer.permit(:sign_up, keys: attrs)
   end
 
   # If you have extra params to permit, append them to the sanitizer.
   def configure_account_update_params
-    attrs = [:name, :provider, :uid, :email, :gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat, :other]
+    attrs = [:name, :provider, :uid, :email, :gluten, :dairy, :treenuts, :beef, :pork, :soy, :egg, :fish, :shellfish, :peanuts, :sesame, :wheat]
     devise_parameter_sanitizer.permit(:account_update, keys: attrs)
   end
 
