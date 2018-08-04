@@ -20,7 +20,7 @@
           -if local_assigns[:q_dist]
             =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20], ["20 miles or more",0]], local_assigns[:q_dist])
           -else
-            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20], ["20 miles or more",0]],1)
+            =select_tag :query_distance, options_for_select([["5 miles",5],["10 miles",10],["20 miles", 20], ["20 miles or more",0]],0)
 
           =label_tag :order, "Order by:"
           =select_tag :order, options_for_select([["Best Match",:best_match],["Name",:name],["Distance",:distance]],local_assigns[:order])
