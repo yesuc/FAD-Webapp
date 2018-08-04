@@ -21,7 +21,7 @@ def find_menu_page(home_url):
     # NOTE: Experiencing "errno 54 connection reset by peer selenium." Set load time helps prevent error
     browser.set_page_load_timeout(60)
     # Key words that may indicate a link leading to menu -- ordered in most 'popular' usage
-    key_words = ['Menus', 'Dining','Food', 'Dinner','Lunch', 'Sandwiches', 'Breakfast', 'Soups', 'Pastries','Take Out']
+    key_words = ['Menus', 'Dining','Food', 'Dinner','Lunch', 'Sandwiches', 'Breakfast', 'Soups', 'Pastries','Take Out','Menu']
     # flag indcates whether successfully found a link using key_words
     i = 0
     followed_link = False
@@ -66,13 +66,11 @@ def find_menu_pdf(url):
     browser.get(url)
     while i < len(key_words):
         try:
-            # link_matches = browser.find_elements_by_partial_link_text(key_words[i])
             link_matches = browser.find_elements_by_tag_name('a')
             j = 0
             while j < len(link_matches):
                 link = link_matches[j]
                 link_href = link.get_attribute('href')
-                # print("Link href is " + link_href)
                 if link_href is not None and link_href != url and key_words[i].lower() in link_href.lower():
                     for key in ['pdf','download']:
                         if key in link_href and link_href not in pdf_urls:
@@ -113,5 +111,3 @@ def find_menu_image(url):
             pass
     browser.close()
     return img_urls
-# print(find_menu_page("https://www.innatcolgate.com/"))
-# print(find_menu_pdf("https://www.innatcolgate.com/drinks--dining"))

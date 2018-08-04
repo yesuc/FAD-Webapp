@@ -115,21 +115,18 @@ class RestaurantsController < ApplicationController
   def scrape_menu
     @url = @restaurant.url
     double_check = {}
-    File.delete("menu_data.json") if File.exist?("menu_data.json")
+    # File.delete("menu_data.json") if File.exist?("menu_data.json")
     python_output = `python app/controllers/run_spiders.py #{@url}`
     i = 0
+    # byebug
     while File.exist?("menu_data#{i}.json")
-      byebug
       file = File.read("menu_data#{i}.json")
       menu_hash = JSON.parse(file)
-      @restaurant.menu << menu_hash.values.to_s
       @menu = menu_hash
         @menu.each do |item|
-          item.each do |i|
-            @food = Food.create!(:name => i[0], :description => i[1])
+            @food = Food.create!(:name => item[0], :description => item[1])
             @restaurant.foods << @food
             double_check[@food] = @food.name
-          end
       end
       File.delete("menu_data#{i}.json") if File.exist?("menu_data#{i}.json")
       i+=1
@@ -140,7 +137,6 @@ class RestaurantsController < ApplicationController
 # NOTE: Gets ingredients for all food items by running bing.py
 def get_ingredients_for_all(double_check)
   double_check_values = double_check.values.join(', ').to_json
-  # puthon_output = `python app/controllers/webcrawler/webcrawler/spiders/edamam.py #{double_check_values}`
   File.delete("ingredients_data.json") if File.exist?("ingredients_data.json")
   python_output = `python app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
   file = File.read('ingredients_data.json')
@@ -162,7 +158,7 @@ def check_food_for_allergens(foods, restriction)
       food_name = food.name.downcase
       food_description = food.description.downcase
       food_ingredients = food.ingredients
-      if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction) || Food.check_restrictions(food_ingredients.downcase.split(', '), restriction)
+      if Food.check_restrictions(food_description.split(), restriction) || Food.check_restrictions(food_name.split(), restriction) || Food.check_restrictions(food_ingredients.to_s.downcase.split(', '), restriction)
         food[contains]= true
         food.save!
       else
