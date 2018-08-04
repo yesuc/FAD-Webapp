@@ -12,8 +12,8 @@ Integrates Python based web crawlers constructed using Python Scrapy, Selenium, 
 # App Features
   Search Bar
     * Search restaurants with foods corresponding to the twelve listed allergens.
-    *  Search restaurants by restaurant name or url or by distance from user's location.
-    *  Order search results by best match, by name or by distance with default distance being set as within 20 miles or more.
+    * Search restaurants by restaurant name or url or by distance from user's location.
+    * Order search results by best match, by name or by distance with default distance being set as within 20 miles or more.
     
   User Account
     * Create an account on the website or sign in using Gmail.
