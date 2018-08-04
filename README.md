@@ -11,4 +11,18 @@ Integrates Python based web crawlers constructed using Python Scrapy, Selenium, 
  * bing.py - Uses Bing Search Engine to query restaurant food items and compare ingredients with similar recipes online to determine common ingredients that are not declared in original food item description.
 # App Features
   Search Bar
-    *  [sdf]
+    * Search restaurants with foods corresponding to the twelve listed allergens.
+    *  Search restaurants by restaurant name or url or by distance from user's location.
+    *  Order search results by best match, by name or by distance with default distance being set as within 20 miles or more.
+    
+  User Account
+    * Create an account on the website or sign in using Gmail.
+    * Save allergens in user profile to set default allergens when searching for restaurants.
+    * Edit user profile details such as name, email and allergens.
+    * Create restaurant to be added to the database if said restaurant is not on the site.
+    
+   Admin
+    * Edit menu item names, descriptions and ingredients as required.
+    * Approve user created restaurants after verifying said restaurant details.
+ 
+   
