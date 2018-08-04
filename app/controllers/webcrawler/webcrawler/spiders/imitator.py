@@ -33,8 +33,8 @@ def find_menu_page(home_url):
             while not followed_link and j < len(link_matches):
                 link = link_matches[j]
                 link_href = link.get_attribute('href')
-                if link_href is not None and key_words[i].lower() in link_href:
-                    browser.get(link)
+                if link_href is not None and key_words[i].lower() in link_href.lower():
+                    browser.get(link_href)
                     # In case request incomplete, link is not immediately returned
                     followed_link = True
                 j+=1
@@ -66,15 +66,18 @@ def find_menu_pdf(url):
     browser.get(url)
     while i < len(key_words):
         try:
-            link_matches = browser.find_elements_by_partial_link_text(key_words[i])
+            # link_matches = browser.find_elements_by_partial_link_text(key_words[i])
+            link_matches = browser.find_elements_by_tag_name('a')
             j = 0
             while j < len(link_matches):
                 link = link_matches[j]
                 link_href = link.get_attribute('href')
-                if link_href is not None:
+                # print("Link href is " + link_href)
+                if link_href is not None and link_href != url and key_words[i].lower() in link_href.lower():
                     for key in ['pdf','download']:
                         if key in link_href and link_href not in pdf_urls:
                             pdf_urls[link.text] = link_href
+                            print(link.text)
                 j+=1
         except:  #catch error or exception
             pass
@@ -110,3 +113,5 @@ def find_menu_image(url):
             pass
     browser.close()
     return img_urls
+# print(find_menu_page("https://www.innatcolgate.com/"))
+# print(find_menu_pdf("https://www.innatcolgate.com/drinks--dining"))

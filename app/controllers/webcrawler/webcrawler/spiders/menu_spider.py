@@ -109,10 +109,13 @@ class MenuSpider(scrapy.Spider):
             text = process_html(soup)
             return_items[page] = chunker.parse_chunk(text)
         # chunker.clean_menu(return_items)
-        filename = 'menu_data.json'
-        with open(filename, 'w') as f:
-            json.dump(return_items, f)
-        # return return_items
+        i = 0
+        for k in return_items.keys():
+            filename = 'menu_data' + str(i) + '.json'
+            with open(filename, 'w') as f:
+                json.dump(return_items[k], f)
+            i+=1
+
 
 def spiderCrawl(urls):
     settings = get_project_settings()

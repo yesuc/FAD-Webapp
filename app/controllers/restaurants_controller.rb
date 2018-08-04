@@ -115,17 +115,24 @@ class RestaurantsController < ApplicationController
   def scrape_menu
     @url = @restaurant.url
     double_check = {}
+    File.delete("menu_data.json") if File.exist?("menu_data.json")
     python_output = `python app/controllers/run_spiders.py #{@url}`
-    file = File.read('menu_data.json')
-    menu_hash = JSON.parse(file)
-    @restaurant.menu = menu_hash.values
-    @menu = menu_hash.values
-      @menu.each do |item|
-        item.each do |i|
-          @food = Food.create!(:name => i[0], :description => i[1])
-          @restaurant.foods << @food
-          double_check[@food] = @food.name
-        end
+    i = 0
+    while File.exist?("menu_data#{i}.json")
+      byebug
+      file = File.read("menu_data#{i}.json")
+      menu_hash = JSON.parse(file)
+      @restaurant.menu << menu_hash.values.to_s
+      @menu = menu_hash
+        @menu.each do |item|
+          item.each do |i|
+            @food = Food.create!(:name => i[0], :description => i[1])
+            @restaurant.foods << @food
+            double_check[@food] = @food.name
+          end
+      end
+      File.delete("menu_data#{i}.json") if File.exist?("menu_data#{i}.json")
+      i+=1
     end
     return double_check
   end
@@ -134,6 +141,7 @@ class RestaurantsController < ApplicationController
 def get_ingredients_for_all(double_check)
   double_check_values = double_check.values.join(', ').to_json
   # puthon_output = `python app/controllers/webcrawler/webcrawler/spiders/edamam.py #{double_check_values}`
+  File.delete("ingredients_data.json") if File.exist?("ingredients_data.json")
   python_output = `python app/controllers/webcrawler/webcrawler/spiders/bing.py #{double_check_values}`
   file = File.read('ingredients_data.json')
   ingredients_hash = JSON.parse(file)
