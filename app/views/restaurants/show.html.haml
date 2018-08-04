@@ -13,6 +13,6 @@
     -else
       %div.name="#{f.name}"
     %div.description= "#{f.description}"
-    %div.ingredients='Ingredients: '+ "#{f.ingredients.titleize}"
+    %div.ingredients='Ingredients: '+ "#{f.ingredients.to_s.titleize}"
 
 = link_to 'Back', restaurants_path
