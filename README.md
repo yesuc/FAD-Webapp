@@ -10,4 +10,5 @@ Integrates Python based web crawlers constructed using Python Scrapy, Selenium, 
  * chunker.py - Python NLTK file processes menu text using NLTK chunking. Removes extraneous information like prices, returns a standardized menu food item name & description. Extracts menu item ingredients.
  * bing.py - Uses Bing Search Engine to query restaurant food items and compare ingredients with similar recipes online to determine common ingredients that are not declared in original food item description.
 # App Features
-  To be updated soon...
+  Search Bar
+    *  [sdf]
