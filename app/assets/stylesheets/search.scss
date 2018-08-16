@@ -90,15 +90,17 @@
     font-family: 'Armata';
     display: flex;
       label{
+        height: 100%;
         display: inline-block;
         vertical-align: bottom;
-        font-size: .5em;
+        font-size: .67em;
         margin: 0;
     }
   }
 }
 
 .attribute_button {
+  width: -webkit-fill-available;
   margin: 4px;
   border-radius: 4px;
   border: 1px solid gray;
@@ -108,13 +110,15 @@
   display: block;
 
   label span {
+      height: 100%;
+      width: -webkit-fill-available;
      text-align:center;
      padding:3px 0px;
      display:block;
    }
   label{
     float: left;
-    width: auto;
+    width: -webkit-fill-available;
   }
 
   input:checked + span{
