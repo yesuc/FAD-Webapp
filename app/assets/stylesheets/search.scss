@@ -2,6 +2,8 @@
   width: 90%;
   height: 40%;
   margin: auto;
+  padding-left: 0;
+  padding-right: 0;
 
   .search_box{
     width: 100%;
@@ -28,7 +30,7 @@
       border-radius: 5px;
 
 
-      width: 50%;
+      width: 45%;
       height: 10%;
       padding: 20px;
       font-family: 'Armata';
@@ -49,20 +51,6 @@
       background-color: #D8B25A;
     }
 
-    .attribute_container{
-      .attribute{
-        padding-top: 20px;
-        font-family: 'Armata';
-        font-size: 10pt;
-        display: flex;
-          label{
-            display: inline-block;
-            vertical-align: bottom;
-
-        }
-      }
-    }
-
     .order_container{
       font-family: 'Armata';
       font-size: 10pt;
@@ -78,18 +66,34 @@
 
       .search_attributes{
         select{
-          vertical-align: bottom;
+          vertical-align: middle;
           position: relative;
           font-family: 'Armata';
-          font-size: 12pt;
+          font-size: 0.8em;
         }
         label{
+          font-size: 1em;
           vertical-align: top;
           position: absolute;
-          margin-left: 0.5em;
-          padding-top: 18px;
+          text-align: left;
         }
       }
+    }
+  }
+}
+
+
+.attribute_container{
+  .attribute{
+    width: 100%;
+    padding-top: 20px;
+    font-family: 'Armata';
+    display: flex;
+      label{
+        display: inline-block;
+        vertical-align: bottom;
+        font-size: .5em;
+        margin: 0;
     }
   }
 }
@@ -110,11 +114,10 @@
    }
   label{
     float: left;
-    width: 4em;
+    width: auto;
   }
 
   input:checked + span{
-    margin: 4px;
     background-color: #991111;
     color:#fff;
   }

@@ -22,20 +22,22 @@ html, body { height: 100%; width: 100%; margin: 0; background-color: #862633}
   margin-bottom: .1em;
 }
 .navigations{
+  .nav_box{
+    background-color:  #01232D;
+  }
   .nav_box ul{
+    width: 90%;
+    align-content: center;
     list-style-type: none;
-    margin: 0;
+    margin: auto;
     padding: 0;
     overflow: hidden;
-    background-color: #01232D;
     font-family: 'Armata';
     font-size: 12pt;
     text-align: center;
-    padding-left: 2.6em;
   }
   .nav_box li{
      float: left;
-     margin-left: 30px;
      margin-right: 30px;
   }
   .nav_box a{

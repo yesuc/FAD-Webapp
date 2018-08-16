@@ -8,23 +8,26 @@
           - @restaurant.errors.full_messages.each do |message|
             %li= message
     %div.field
-      = f.label :name, "Restaurant Name"
-      = f.text_field :name, :placeholder => "e.g. Restaurant Name", :type => "text", :min => 1
+      %div= f.label :name, "Restaurant Name:"
+      %div= f.text_field :name, :placeholder => "e.g. Restaurant Name", :type => "text", :min => 1
     %div.field
-      = f.label :url, "Restaurant URL"
-      -# NOTE: type url has automatic validation before form is submitted
-      = f.text_field :url, :placeholder => "e.g. http://www.mydomainname.com/", type: "url"
+      %div= f.label :url, "Restaurant URL:"
+      %div= f.text_field :url, :placeholder => "e.g. http://www.mydomainname.com/", type: "url"
     %div.field
-      -# TODO: Find a way to separate address into several inputs, verify structure, and concate together
-      = f.label :address, "Restaurant Address"
-      = f.text_field :address, :placeholder => "e.g. 13 Oak Drive, Hamilton NY, 13346", type: "text"
+      %div= f.label :address, "Restaurant Address:"
+      %div= f.text_field :address, :placeholder => "e.g. 13 Oak Drive, Hamilton NY, 13346", type: "text"
     %div.field
-      =f.label :cuisine, "Cuisine Type"
-      -# TODO: Drop Down Menu with user option input
-      =f.select :cuisine, [["Indian","Indian"],["Asian","Asian"],["Mexican","Mexican"],["American","American"]], :prompt => true
-
+      %div=f.label :cuisine, "Cuisine Type:"
+      %div=f.select :cuisine, [["Indian","Indian"],["Asian","Asian"],["Mexican","Mexican"],["American","American"]], :prompt => true
+    %div.field
+      %div=f.label :image, "Image:"
+      %div=f.file_field :image
+    %div.field
+      %div=f.label :description, "Description:"
+      %div=f.text_area :description, size: "40x20"
     %div.actions
-      = f.submit 'Save'
+      = f.submit 'Create!'
 
-
+  %hr
   = link_to 'Back to restaurants page', restaurants_path
+  %br

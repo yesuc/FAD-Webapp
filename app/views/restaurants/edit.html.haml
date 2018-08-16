@@ -23,6 +23,9 @@
     -# TODO: Drop Down Menu with user option input
     =f.select :cuisine, [["Indian","Indian"],["Asian","Asian"],["Mexican","Mexican"],["American","American"]], :prompt => true
   %div.field
+    =f.label :image, "Image"
+    =f.file_field :image
+  %div.field
     =f.label :admin_approved, "Approved?"
     =f.check_box :admin_approved
 

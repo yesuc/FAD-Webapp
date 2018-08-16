@@ -1,0 +1,18 @@
+label {
+  text-align: center
+}
+select{
+  display: inline-block;
+  text-align: center;
+}
+
+#restaurant_image{
+  align-items: center;
+  display: inline-block;
+  overflow: hidden;
+  padding-left: 10em;
+  padding-right: 2em;
+  &:hover{
+    background-color: inherit;
+  }
+}

@@ -52,4 +52,16 @@ class Food < ApplicationRecord
     return tags
   end
 
+  def self.get_allergen_Acr(f)
+    allergens = []
+    f.attributes.each do |tag,val|
+      if tag =~ /^contains/
+        if val == false
+          allergens << tag[tag.index('_')+1..-1].capitalize + " Free"
+        end
+      end
+    end
+    return allergens
+  end
+
 end

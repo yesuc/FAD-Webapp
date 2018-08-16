@@ -1,14 +1,21 @@
+.main{
+  background-color: white;
+  width: 90%;
+}
 .header{
-  padding-top: 10px;
-    background-color: white;
+    padding-top: 10px;
     text-align: center;
     font-size: 2em;
     padding-bottom: 10px;
     color: #D8B25A;
     font-weight: bold;
+    margin-bottom: 0;
+    a {
+      font-size: 1.2em;
+    }
 }
 .name{
-  text-align: center;
+  text-align: left;
   font-size: 1em;
   padding-bottom: 10px;
   color: #D8B25A;
@@ -16,7 +23,7 @@
 }
 
 .description{
-  text-align: center;
+  text-align: left;
   font-size: 1em;
   padding-bottom: 10px;
   background-color: white;
@@ -24,25 +31,31 @@
 .ingredients{
   font-size: 1em;
   padding-bottom: 10px;
-  text-align: center;
+  text-align: left;
   color: #070404;
   background-color: white;
 }
 .c{
   font-size: 1.2em;
   padding-bottom: 10px;
-  text-align: center;
   background-color: white;
 }
 .add{
   font-size: 1.2em;
   padding-bottom: 10px;
-  text-align: center;
   background-color: white;
 }
 .u{
   font-size: 1.2em;
   padding-bottom: 10px;
-  text-align: center;
   background-color: white;
+}
+#image img{
+  width: 100%;
+  height: auto;
+}
+.acronyms{
+  font-size: .9em;
+  padding-bottom: 10px;
+  color: green;
 }

@@ -16,6 +16,13 @@
   }
 }
 
+.bottom.container{
+  width: 90%;
+  height: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .restaurants_table{
   width: 100%;
   table-layout: fixed;
@@ -28,5 +35,9 @@
     height: 10%;
     vertical-align: text-top;
     text-overflow: ellipsis;
+  }
+  #image img{
+    width: 100%;
+    height: auto;
   }
 }

@@ -3,6 +3,7 @@ class RestaurantsController < ApplicationController
 
   # GET /restaurants
   def index
+    session.delete(:tags) if session[:tags]
     @restaurants = Restaurant.all
   end
 
@@ -115,10 +116,8 @@ class RestaurantsController < ApplicationController
   def scrape_menu
     @url = @restaurant.url
     double_check = {}
-    # File.delete("menu_data.json") if File.exist?("menu_data.json")
     python_output = `python app/controllers/run_spiders.py #{@url}`
     i = 0
-    # byebug
     while File.exist?("menu_data#{i}.json")
       file = File.read("menu_data#{i}.json")
       menu_hash = JSON.parse(file)
@@ -182,7 +181,7 @@ end
 private
   # Filter Params for creating and updating restaurant objects
   def create_update_params
-    params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu, :admin_approved, :description, :scraped)
+    params.require(:restaurant).permit(:name, :url, :address, :cuisine, :menu, :admin_approved, :description, :scraped, :image)
   end
 
 
