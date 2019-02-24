@@ -13,7 +13,16 @@ gem 'haml-rails'
 gem "paperclip", "~> 5.2.1"
 gem 'terrapin', '~> 0.6.0'
 gem 'geocoder'
-gem 'bootstrap'
+
+# Updated Dependencies 2/24/19
+gem "bootstrap", ">= 4.3.1"
+gem "nokogiri", ">= 1.8.5"
+gem "activejob", ">= 5.2.1.1"
+gem "activestorage", ">= 5.2.1.1"
+gem "rack", ">= 2.0.6"
+gem "rubyzip", ">= 1.2.2"
+gem "loofah", ">= 2.2.3"
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.0'
 # Use Puma as the app server
